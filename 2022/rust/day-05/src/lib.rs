@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, ops::Range};
 
 use nom::{
     bytes::complete::tag, character::complete, multi::separated_list1, sequence::separated_pair,
@@ -34,18 +34,27 @@ pub fn process_part1(input: &str) -> String {
             }
 
             let (_, crate_obj) = crate_item(trimmed_chunk).unwrap();
-            let stack = crate_hash.get_mut(&(i as u32)).unwrap();
-
-            stack.crates.push(crate_obj);
-            dbg!(stack);
+            let stack = crate_hash.get_mut(&((i+1) as u32)).unwrap();
+            stack.push(crate_obj);
         }
+    }
+    for stack in crate_hash.values_mut() {
+        stack.reverse();
     }
 
     let movements_instructions = split.next().unwrap();
     let (_, moves) =
         separated_list1(complete::newline, move_procedure)(movements_instructions).unwrap();
 
-    "0".to_string()
+    let mut warehouse = Warehouse {
+        stacks: crate_hash,
+    };
+
+    for step in moves {
+        warehouse.move_crates(&step);
+    }
+
+    warehouse.get_top_crates().into_iter().collect()
 }
 
 fn an_integer(input: &str) -> IResult<&str, u32> {
@@ -80,6 +89,55 @@ struct CrateStack {
     name: u32,
     crates: Vec<char>,
 }
+
+impl CrateStack {
+    fn pop(&mut self) -> Option<char> {
+        self.crates.pop()
+    }
+    fn push(&mut self, item: char) {
+        self.crates.push(item);
+    }
+    fn peek(&self) -> Option<&char> {
+        self.crates.last()
+    }
+    fn len(&self) -> usize {
+        self.crates.len()
+    }
+    fn reverse(&mut self) {
+        self.crates.reverse();
+    }
+}
+
+#[derive(Debug)]
+struct Warehouse {
+    stacks: HashMap<u32, CrateStack>,
+}
+
+impl Warehouse {
+    fn new(stacks: HashMap<u32, CrateStack>) -> Self {
+        Self {
+            stacks,
+        }
+    }
+
+    fn move_crates(&mut self, move_procedure: &MoveProcedure) {
+        for _i in 0..move_procedure.qty{
+            let from_stack = self.stacks.get_mut(&move_procedure.from).unwrap();
+            let item = from_stack.pop().unwrap();
+            let to_stack = self.stacks.get_mut(&move_procedure.to).unwrap();
+            to_stack.push(item);
+        }
+    }
+
+    fn get_top_crates(&self) -> Vec<char> {
+        let mut top_crates = vec![];
+        for stack in self.stacks.values() {
+            top_crates.push(stack.peek().unwrap().clone());
+        }
+        top_crates
+    }
+}
+
 
 #[derive(Debug)]
 struct MoveProcedure {
