@@ -10,7 +10,17 @@ pub fn process_part1(input: &str) -> String {
     let (moves, mut warehouse) = parse_warehouse(input);
 
     for step in moves {
-        warehouse.move_crates(&step);
+        warehouse.move_crates_9000(&step);
+    }
+
+    warehouse.get_top_crates().into_iter().collect()
+}
+
+pub fn process_part2(input: &str) -> String {
+    let (moves, mut warehouse) = parse_warehouse(input);
+
+    for step in moves {
+        warehouse.move_crates_9001(&step);
     }
 
     warehouse.get_top_crates().into_iter().collect()
@@ -68,10 +78,6 @@ fn an_integer(input: &str) -> IResult<&str, u32> {
     Ok((input, num))
 }
 
-pub fn process_part2(input: &str) -> String {
-    "0".to_string()
-}
-
 fn move_procedure(input: &str) -> IResult<&str, MoveProcedure> {
     let (input, _) = tag("move ")(input)?;
     let (input, qty) = complete::u32(input)?;
@@ -103,11 +109,19 @@ impl CrateStack {
     fn push(&mut self, item: char) {
         self.crates.push(item);
     }
+    fn push_n(&mut self, items: Vec<char>) {
+        for item in items {
+            self.push(item);
+        }
+    }
     fn peek(&self) -> Option<&char> {
         self.crates.last()
     }
     fn reverse(&mut self) {
         self.crates.reverse();
+    }
+    fn pop_many(&mut self, n: usize) -> Vec<char> {
+        self.crates.drain((self.crates.len()-n)..).collect()
     }
 }
 
@@ -117,13 +131,21 @@ struct Warehouse {
 }
 
 impl Warehouse {
-    fn move_crates(&mut self, move_procedure: &MoveProcedure) {
+    fn move_crates_9000(&mut self, move_procedure: &MoveProcedure) {
         for _i in 0..move_procedure.qty{
             let from_stack = self.stacks.get_mut(&move_procedure.from).unwrap();
             let item = from_stack.pop().unwrap();
             let to_stack = self.stacks.get_mut(&move_procedure.to).unwrap();
             to_stack.push(item);
         }
+    }
+
+    fn move_crates_9001(&mut self, move_procedure: &MoveProcedure) {
+        let qty = move_procedure.qty;
+        let from_stack = self.stacks.get_mut(&move_procedure.from).unwrap();
+        let items = from_stack.pop_many(qty as usize);
+        let to_stack = self.stacks.get_mut(&move_procedure.to).unwrap();
+        to_stack.push_n(items);
     }
 
     fn get_top_crates(&self) -> Vec<char> {
@@ -163,9 +185,8 @@ move 1 from 1 to 2";
     }
 
     #[test]
-    #[ignore]
     fn part2_works() {
         let result = process_part2(INPUT);
-        assert_eq!(result, "45000");
+        assert_eq!(result, "MCD");
     }
 }
