@@ -7,6 +7,16 @@ use nom::{
 };
 
 pub fn process_part1(input: &str) -> String {
+    let (moves, mut warehouse) = parse_warehouse(input);
+
+    for step in moves {
+        warehouse.move_crates(&step);
+    }
+
+    warehouse.get_top_crates().into_iter().collect()
+}
+
+fn parse_warehouse(input: &str) -> (Vec<MoveProcedure>, Warehouse) {
     let split = &mut input.split("\n\n");
     let crate_state_lines = split.next().unwrap().lines().collect::<Vec<_>>();
 
@@ -50,12 +60,7 @@ pub fn process_part1(input: &str) -> String {
     let mut warehouse = Warehouse {
         stacks: crate_hash,
     };
-
-    for step in moves {
-        warehouse.move_crates(&step);
-    }
-
-    warehouse.get_top_crates().into_iter().collect()
+    (moves, warehouse)
 }
 
 fn an_integer(input: &str) -> IResult<&str, u32> {
