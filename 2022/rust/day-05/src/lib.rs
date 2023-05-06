@@ -1,7 +1,8 @@
-use std::{collections::HashMap, ops::Range};
+use std::{collections::HashMap};
 
+use itertools::Itertools;
 use nom::{
-    bytes::complete::tag, character::complete, multi::separated_list1, sequence::separated_pair,
+    bytes::complete::tag, character::complete, multi::separated_list1,
     IResult,
 };
 
@@ -100,9 +101,6 @@ impl CrateStack {
     fn peek(&self) -> Option<&char> {
         self.crates.last()
     }
-    fn len(&self) -> usize {
-        self.crates.len()
-    }
     fn reverse(&mut self) {
         self.crates.reverse();
     }
@@ -114,12 +112,6 @@ struct Warehouse {
 }
 
 impl Warehouse {
-    fn new(stacks: HashMap<u32, CrateStack>) -> Self {
-        Self {
-            stacks,
-        }
-    }
-
     fn move_crates(&mut self, move_procedure: &MoveProcedure) {
         for _i in 0..move_procedure.qty{
             let from_stack = self.stacks.get_mut(&move_procedure.from).unwrap();
@@ -131,8 +123,8 @@ impl Warehouse {
 
     fn get_top_crates(&self) -> Vec<char> {
         let mut top_crates = vec![];
-        for stack in self.stacks.values() {
-            top_crates.push(stack.peek().unwrap().clone());
+        for k in self.stacks.keys().sorted() {
+            top_crates.push(self.stacks.get(k).unwrap().peek().unwrap().clone());
         }
         top_crates
     }
