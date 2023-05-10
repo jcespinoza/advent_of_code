@@ -1,22 +1,62 @@
 use std::collections::BTreeMap;
 
+use itertools::Itertools;
 use nom::{
     branch::alt,
-    bytes::complete::{tag, take_until1},
-    character::complete::{alpha1, newline},
+    bytes::complete::{tag, is_a},
+    character::{complete::{alpha1, newline}},
     multi::separated_list1,
     sequence::separated_pair,
     IResult,
 };
 
 pub fn process_part1(input: &str) -> u32 {
-    let (input, cmds) = commands_parser(input).unwrap();
-dbg!(input);
+    let (_, cmds) = commands_parser(input).unwrap();
+
     let filesystem = build_filesystem(cmds);
 
     let dir_sizes = filesystem.dir_sizes();
 
-    0
+    let sum_of_sizes = sum_dir_sizes_under(dir_sizes, 100000);
+
+    sum_of_sizes
+}
+
+pub fn process_part2(input: &str) -> u32 {
+  let disk_size:u32 = 70000000;
+  let update_size: u32 = 30000000;
+
+  let (_, cmds) = commands_parser(input).unwrap();
+
+  let filesystem = build_filesystem(cmds);
+
+  let dir_sizes = filesystem.dir_sizes();
+  let used_space = dir_sizes.get ("").unwrap();
+  
+  let unused_size = disk_size - used_space;
+  let target_size = update_size - unused_size;
+  let candidate_dir_sizes = dir_sizes_over(dir_sizes, target_size);
+  
+    candidate_dir_sizes[0]
+}
+
+fn sum_dir_sizes_under(dir_sizes: BTreeMap<String, u32>, max_size: u32) -> u32 {
+    let  sum_of_sizes:u32 =dir_sizes
+    .iter()
+    .filter(|(_,&size)| size < max_size)
+    .map(|(_,size)| size)
+    .sum();
+    sum_of_sizes
+}
+
+fn dir_sizes_over(dir_sizes: BTreeMap<String, u32>, max_size: u32) -> Vec<u32> {
+    let  target_sizes = dir_sizes
+    .iter()
+    .filter(|(_,&size)| size >= max_size)
+    .map(|(_,&size)| size)
+    .sorted().collect::<Vec<u32>>();
+
+    target_sizes
 }
 
 fn build_filesystem(cmds: Vec<Command>) -> FileSystem {
@@ -81,10 +121,6 @@ impl FileSystem<'_> {
     }
 }
 
-pub fn process_part2(input: &str) -> u32 {
-    0
-}
-
 fn commands_parser(input: &str) -> IResult<&str, Vec<Command>> {
     let (input, cmds) = separated_list1(newline, alt((ls_parser, cd_parser)))(input)?;
 
@@ -106,7 +142,7 @@ fn ls_parser(input: &str) -> IResult<&str, Command> {
     let (input, _) = tag("$ ls")(input)?;
     let (input, _) = newline(input)?;
     let (input, files) = separated_list1(newline, alt((file_parser, dir_parser)))(input)?;
-    // dbg!(input, &files);
+
     Ok((input, Command::Ls(files)))
 }
 
@@ -117,7 +153,8 @@ fn file_parser(input: &str) -> IResult<&str, LsResult> {
 }
 
 fn filename_parser(input: &str) -> IResult<&str, &str> {
-    let (input, name) = take_until1("\n")(input)?;
+    let (input, name) = 
+    is_a("qwertyuiopasdfghjklzxcvbnm.")(input)?;
 
     Ok((input, name))
 }
@@ -187,9 +224,8 @@ $ ls
     }
 
     #[test]
-    #[ignore]
     fn part2_works() {
         let result = process_part2(INPUT);
-        assert_eq!(result, 45000);
+        assert_eq!(result, 24933642);
     }
 }
