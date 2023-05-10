@@ -9,7 +9,6 @@ fn count_visible_trees(grid_of_trees: TreeGrid) -> u32 {
 
     for row in 1..grid_of_trees.rows - 1 {
         for col in 1..grid_of_trees.columns - 1 {
-            // println!("____________________");
             let current_tree = grid_of_trees.trees[row as usize][col as usize];
 
             if
@@ -19,7 +18,6 @@ fn count_visible_trees(grid_of_trees: TreeGrid) -> u32 {
             || is_visible_from_right(col, &grid_of_trees, row, current_tree) 
             {
                 interior_visible_trees += 1;
-                // println!("Tree at {},{} {} is visible", row, col, current_tree);
             }
         }
     }
@@ -28,54 +26,42 @@ fn count_visible_trees(grid_of_trees: TreeGrid) -> u32 {
 }
 
 fn is_visible_from_above(row: u32, grid_of_trees: &TreeGrid, col: u32, current_tree: u32) -> bool {
-    // check up
     for row_offset in 0..row {
         let top_tree = grid_of_trees.trees[row_offset as usize][col as usize];
-        // println!("Comparing {} to {} from above ({},{}) and ({},{})", top_tree, current_tree, row_offset, col, row, col);
         if top_tree >= current_tree {
             return false;
         }
     }
-    // println!("Visible from Above");
     true
 }
 
 fn is_visible_from_below(row: u32, grid_of_trees: &TreeGrid, col: u32, current_tree: u32) -> bool{
-    // check down
     for row_offset in (row + 1)..grid_of_trees.rows {
         let bottom_tree = grid_of_trees.trees[row_offset as usize][col as usize];
-        // println!("Comparing {} to {} from above ({},{}) and ({},{})", bottom_tree, current_tree, row_offset, col, row, col);
         if bottom_tree >= current_tree {
             return false;
         }
     }
-    // println!("Visible from Below");
     true
 }
 
 fn is_visible_from_left(col: u32, grid_of_trees: &TreeGrid, row: u32, current_tree: u32) -> bool {
-    // check left
     for col_offset in 0..col {
         let left_tree = grid_of_trees.trees[row as usize][col_offset as usize];
-        // println!("Comparing {} to {} from above ({},{}) and ({},{})", left_tree, current_tree, row, col_offset, row, col);
         if left_tree >= current_tree {
             return false;
         }
     }
-    // println!("Visible from Left");
     true
 }
 
 fn is_visible_from_right(col: u32, grid_of_trees: &TreeGrid, row: u32, current_tree: u32) -> bool {
-    // check right
     for col_offset in (col + 1)..grid_of_trees.columns {
         let right_tree = grid_of_trees.trees[row as usize][col_offset as usize];
-        // println!("Comparing {} to {} from above ({},{}) and ({},{})", right_tree, current_tree, row, col_offset, row, col);
         if right_tree >= current_tree {
             return false;
         }
     }
-    // println!("Visible from Right");
     true
 }
 
