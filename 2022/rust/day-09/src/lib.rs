@@ -1,11 +1,31 @@
+use std::collections::HashSet;
+
 use nom::{multi::separated_list1, character::complete::{newline, self}, sequence::separated_pair, bytes::complete::tag};
 
 pub fn process_part1(input: &str) -> u32 {
   let motions = parse_motions(input);
 
+  let mut visited_positions: HashSet<Position> = HashSet::new();
 
-  println!("{:?}", motions);
+  let mut head_position = Position { x: 0, y: 0 };
+  let mut tail_position = head_position.clone();
 
+  for motion in motions {
+    for _  in 0..motion.qty {
+      let target_position = head_position.move_in_direction_by_copy(&motion.direction);
+      if !positions_are_adjacent(&target_position, &tail_position) {
+        tail_position = head_position.clone();
+      }
+      head_position.move_in_direction(&motion.direction);
+      
+      visited_positions.insert(tail_position.clone());
+    }
+  }
+
+  visited_positions.len() as u32
+}
+
+pub fn process_part2(input: &str) -> u32 {
   0
 }
 
@@ -14,8 +34,11 @@ fn parse_motions(input: &str) -> Vec<Motion> {
     motions
 }
 
-pub fn process_part2(input: &str) -> u32 {
-  0
+fn positions_are_adjacent(pos_1: &Position, pos_2: &Position) -> bool {
+    pos_1.x == pos_2.x && (pos_1.y - pos_2.y).abs() == 1
+    || pos_1.y == pos_2.y && (pos_1.x - pos_2.x).abs() == 1
+    || (pos_1.x - pos_2.x).abs() == 1 && (pos_1.y - pos_2.y).abs() == 1
+    || pos_1.x == pos_2.x && pos_1.y == pos_2.y
 }
 
 fn motion_parser(input: &str) -> nom::IResult<&str, Motion> {
@@ -44,10 +67,26 @@ enum Direction {
   Right
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Eq, Hash)]
 struct Position {
   x: i32,
   y: i32
+}
+
+impl Position {
+  fn move_in_direction(&mut self, direction: &Direction) {
+    match direction {
+      Direction::Up => self.y += 1,
+      Direction::Down => self.y -= 1,
+      Direction::Left => self.x -= 1,
+      Direction::Right => self.x += 1
+    }
+  }
+  fn move_in_direction_by_copy(&self, direction: &Direction) -> Position {
+    let mut position = self.clone();
+    position.move_in_direction(direction);
+    position
+  }
 }
 
 #[cfg(test)]
@@ -65,7 +104,7 @@ R 2";
   #[test]
   fn part1_works() {
     let result = process_part1(INPUT);
-    assert_eq!(result, 24000);
+    assert_eq!(result, 13);
   }
 
   #[test]
