@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+use itertools::Itertools;
 use nom::{
     branch::alt,
     bytes::complete::tag,
@@ -18,8 +19,39 @@ pub fn process_part1(input: &str) -> u32 {
     x_values.iter().sum::<i32>() as u32
 }
 
-pub fn process_part2(input: &str) -> u32 {
-    0
+pub fn process_part2(input: &str) -> String {
+    let (_, instructions) = parse_instructions(input).unwrap();
+    let mut x_value: i32 = 1;
+    let mut cycle_count: u32 = 0;
+    let mut crt_pixels: String = "".to_string();
+
+    for instruction in instructions.iter() {
+        for duration in 0..instruction.duration() {
+            let pixel_id = (cycle_count as i32 + duration as i32) % 40;
+
+            if ((x_value - 1)..=(x_value + 1)).contains(&pixel_id) {
+                crt_pixels.push_str("#");
+            } else {
+                crt_pixels.push_str(".");
+            }            
+        }
+
+        cycle_count += instruction.duration();
+
+        match instruction {
+            Instruction::Noop => {},
+            Instruction::Addx(value) => {
+                x_value += value;
+            }
+        };
+    }
+
+    crt_pixels
+        .chars()
+        .chunks(40)
+        .into_iter()
+        .map(|chunk| chunk.collect::<String>())
+        .join("\n")
 }
 
 pub fn get_register_x_at_cycle(instructions: Vec<Instruction>) -> Vec<i32> {
@@ -240,6 +272,13 @@ noop
 noop
 noop";
 
+    const OUTPUT: &str = "##..##..##..##..##..##..##..##..##..##..
+###...###...###...###...###...###...###.
+####....####....####....####....####....
+#####.....#####.....#####.....#####.....
+######......######......######......####
+#######.......#######.......#######.....";
+
     #[test]
     // #[ignore]
     fn part1_2_works() {
@@ -248,9 +287,10 @@ noop";
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn part2_2_works() {
         let result = process_part2(INPUT_2);
-        assert_eq!(result, 45000);
+        println!("{}", result);
+        assert_eq!(result, OUTPUT);
     }
 }
