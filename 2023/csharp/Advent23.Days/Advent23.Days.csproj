@@ -25,10 +25,4 @@
     <ProjectReference Include="..\AdventOfCode.Commons\AdventOfCode.Commons.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="WithLocalInput\input.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

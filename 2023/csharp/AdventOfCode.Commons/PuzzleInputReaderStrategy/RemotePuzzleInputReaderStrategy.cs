@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using dotenv.net;
+using System.Net;
 
 namespace AdventOfCode.Commons.PuzzleInputReaderStrategy;
 
@@ -50,6 +51,8 @@ public class RemotePuzzleInputReaderStrategy : IPuzzleInputReaderStrategy
     /// </exception>
     private static CookieContainer GetCookieContainer()
     {
+        DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false, probeForEnv: true, probeLevelsToSearch: 4));
+
         var container = new CookieContainer();
 
         container.Add(new Cookie
