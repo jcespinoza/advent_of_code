@@ -29,7 +29,14 @@ public abstract class TestEngine<TSolver, TInput, TResult>
     /// </para>
     /// </summary>
     public record Example
-    {
+    {  /// <summary>
+       /// The input you would like to test the parser with
+       /// </summary>
+       /// <remarks>
+       /// Leave empty if yuo do not wish to test the parsing
+       /// </remarks>
+        public string[] RawInput { get; init; } = [];
+
         /// <summary>
         /// The data of the input mentionned in the example, in the same form as the
         /// <see cref="Solver{TInput, TResult}.PuzzleInput"/>
@@ -61,6 +68,11 @@ public abstract class TestEngine<TSolver, TInput, TResult>
         public required Example Example { get; init; }
 
         /// <summary>
+        /// The <see cref="Example"/>s to use to test <see cref="Solver{TInput, TResult}"/>
+        /// </summary>
+        public Example[] Examples { get; set; } = [];
+
+        /// <summary>
         /// The expected solution for the puzzle
         /// </summary>
         public required TResult Solution { get; init; }
@@ -77,6 +89,24 @@ public abstract class TestEngine<TSolver, TInput, TResult>
 
     public abstract Puzzle PartOne { get; }
 
+    [SkippableFact(DisplayName = "Part One - Parsing")]
+    public void PartOneParsingTest()
+    {
+        var shouldBeSkipped = PartOne.ShouldSkipTests
+            || PartOne.Example.RawInput.Length == 0;
+
+        Skip.If(shouldBeSkipped, "Puzzle.ShouldSkipTests has been set to true or no raw input provided, test skipped");
+
+        // Arrange
+        var input = PartOne.Example.RawInput;
+
+        // Act
+        var result = _solver.ParseInput(input);
+
+        // Assert
+        result.Should().BeEquivalentTo(PartOne.Example.Input);
+    }
+
     [SkippableFact(DisplayName = "Part One - Example")]
     public void PartOneExampleTest()
     {
@@ -90,6 +120,24 @@ public abstract class TestEngine<TSolver, TInput, TResult>
 
         // Assert
         result.Should().Be(PartOne.Example.Result);
+    }
+
+    [SkippableFact(DisplayName = "Part One - Examples")]
+    public void PartOneExamplesTest()
+    {
+        Skip.If(PartOne.ShouldSkipTests, "Puzzle.ShouldSkipTests has been set to true, test skipped");
+
+        foreach (var example in PartOne.Examples)
+        {
+            // Arrange
+            var input = example.Input;
+
+            // Act
+            var result = _solver.PartOne(input);
+
+            // Assert
+            result.Should().Be(example.Result);
+        }
     }
 
     [SkippableFact(DisplayName = "Part One - Solution")]
@@ -113,6 +161,24 @@ public abstract class TestEngine<TSolver, TInput, TResult>
 
     public abstract Puzzle PartTwo { get; }
 
+    [SkippableFact(DisplayName = "Part Two - Parsing")]
+    public void PartTwoParsingTest()
+    {
+        var shouldBeSkipped = PartTwo.ShouldSkipTests
+            || PartTwo.Example.RawInput.Length == 0;
+
+        Skip.If(shouldBeSkipped, "Puzzle.ShouldSkipTests has been set to true or no raw input provided, test skipped");
+
+        // Arrange
+        var input = PartTwo.Example.RawInput;
+
+        // Act
+        var result = _solver.ParseInput(input);
+
+        // Assert
+        result.Should().BeEquivalentTo(PartTwo.Example.Input);
+    }
+
     [SkippableFact(DisplayName = "Part Two - Example")]
     public void PartTwoExampleTest()
     {
@@ -126,6 +192,24 @@ public abstract class TestEngine<TSolver, TInput, TResult>
 
         // Assert
         result.Should().Be(PartTwo.Example.Result);
+    }
+
+    [SkippableFact(DisplayName = "Part Two - Examples")]
+    public void PartTwoExamplesTest()
+    {
+        Skip.If(PartTwo.ShouldSkipTests, "Puzzle.ShouldSkipTests has been set to true, test skipped");
+
+        foreach (var example in PartTwo.Examples)
+        {
+            // Arrange
+            var input = example.Input;
+
+            // Act
+            var result = _solver.PartTwo(input);
+
+            // Assert
+            result.Should().Be(example.Result);
+        }
     }
 
     [SkippableFact(DisplayName = "Part Two - Solution")]
