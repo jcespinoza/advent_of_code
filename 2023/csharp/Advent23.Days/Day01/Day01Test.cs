@@ -1,11 +1,12 @@
 ﻿using AdventOfCode.Commons;
 using dotenv.net;
 
-namespace Advent23.Days.Day01
+namespace Advent23.Days
 {
     public class Day01Test : TestEngine<Day01Solver, string[], long>
     {
         private const int EXPECTED_SOLUTION_PART_2 = 54_431;
+        private const int EXPECTED_SOLUTION_PART_1 = 55_477;
 
         public Day01Test()
         {
@@ -26,7 +27,7 @@ namespace Advent23.Days.Day01
                 ],
                 Result = 142,
             },
-            Solution = 55_477,
+            Solution = EXPECTED_SOLUTION_PART_1,
         };
 
         public override Puzzle PartTwo => new()
@@ -50,12 +51,12 @@ namespace Advent23.Days.Day01
                 new()
                 {
                     Input = ["bpk1prxsj"],
-                    Result = 151,
+                    Result = 11,
                 },
                 new()
                 {
                     Input = ["2s"],
-                    Result = 282,
+                    Result = 22,
                 },
             ],
             Solution = EXPECTED_SOLUTION_PART_2,
