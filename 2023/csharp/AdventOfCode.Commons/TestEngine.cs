@@ -93,7 +93,8 @@ public abstract class TestEngine<TSolver, TInput, TResult>
     public void PartOneParsingTest()
     {
         var shouldBeSkipped = PartOne.ShouldSkipTests
-            || PartOne.Example.RawInput.Length == 0;
+            || PartOne.Example.RawInput.Length == 0
+            || PartOne.Example.Input == null;
 
         Skip.If(shouldBeSkipped, "Puzzle.ShouldSkipTests has been set to true or no raw input provided, test skipped");
 
@@ -107,13 +108,35 @@ public abstract class TestEngine<TSolver, TInput, TResult>
         result.Should().BeEquivalentTo(PartOne.Example.Input);
     }
 
+    [SkippableFact(DisplayName = "Part One - Parsings")]
+    public void PartOneParsingTests()
+    {
+        foreach (var example in PartOne.Examples)
+        {
+            var shouldBeSkipped = PartOne.ShouldSkipTests
+            || example.RawInput.Length == 0
+            || example.Input == null;
+
+            Skip.If(shouldBeSkipped, "Puzzle.ShouldSkipTests has been set to true or no raw input provided, test skipped");
+
+            // Arrange
+            var input = example.RawInput;
+
+            // Act
+            var result = _solver.ParseInput(input);
+
+            // Assert
+            result.Should().BeEquivalentTo(example.Input);
+        }
+    }
+
     [SkippableFact(DisplayName = "Part One - Example")]
     public void PartOneExampleTest()
     {
         Skip.If(PartOne.ShouldSkipTests, "Puzzle.ShouldSkipTests has been set to true, test skipped");
 
         // Arrange
-        var input = PartOne.Example.Input;
+        var input = PartOne.Example.Input ?? _solver.ParseInput(PartOne.Example.RawInput);
 
         // Act
         var result = _solver.PartOne(input);
@@ -130,7 +153,7 @@ public abstract class TestEngine<TSolver, TInput, TResult>
         foreach (var example in PartOne.Examples)
         {
             // Arrange
-            var input = example.Input;
+            var input = example.Input ?? _solver.ParseInput(example.RawInput);
 
             // Act
             var result = _solver.PartOne(input);
@@ -165,7 +188,8 @@ public abstract class TestEngine<TSolver, TInput, TResult>
     public void PartTwoParsingTest()
     {
         var shouldBeSkipped = PartTwo.ShouldSkipTests
-            || PartTwo.Example.RawInput.Length == 0;
+            || PartTwo.Example.RawInput.Length == 0
+            || PartTwo.Example.Input == null;
 
         Skip.If(shouldBeSkipped, "Puzzle.ShouldSkipTests has been set to true or no raw input provided, test skipped");
 
@@ -179,13 +203,35 @@ public abstract class TestEngine<TSolver, TInput, TResult>
         result.Should().BeEquivalentTo(PartTwo.Example.Input);
     }
 
+    [SkippableFact(DisplayName = "Part Two - Parsings")]
+    public void PartTwoParsingTests()
+    {
+        foreach (var example in PartTwo.Examples)
+        {
+            var shouldBeSkipped = PartOne.ShouldSkipTests
+            || example.RawInput.Length == 0
+            || example.Input == null;
+
+            Skip.If(shouldBeSkipped, "Puzzle.ShouldSkipTests has been set to true or no raw input provided, test skipped");
+
+            // Arrange
+            var input = example.RawInput;
+
+            // Act
+            var result = _solver.ParseInput(input);
+
+            // Assert
+            result.Should().BeEquivalentTo(example.Input);
+        }
+    }
+
     [SkippableFact(DisplayName = "Part Two - Example")]
     public void PartTwoExampleTest()
     {
         Skip.If(PartTwo.ShouldSkipTests, "Puzzle.ShouldSkipTests has been set to true, test skipped");
 
         // Arrange
-        var input = PartTwo.Example.Input;
+        var input = PartTwo.Example.Input ?? _solver.ParseInput(PartTwo.Example.RawInput);
 
         // Act
         var result = _solver.PartTwo(input);
@@ -202,7 +248,7 @@ public abstract class TestEngine<TSolver, TInput, TResult>
         foreach (var example in PartTwo.Examples)
         {
             // Arrange
-            var input = example.Input;
+            var input = example.Input ?? _solver.ParseInput(example.RawInput);
 
             // Act
             var result = _solver.PartTwo(input);
