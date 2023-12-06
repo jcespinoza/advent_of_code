@@ -6,7 +6,7 @@ namespace Advent23.Days
 {
     public class Day04Test : TestEngine<Day04Solver, ScratchCard[], long>
     {
-        private const int EXPECTED_SOLUTION_PART_1 = 123;
+        private const int EXPECTED_SOLUTION_PART_1 = 20107;
         private const int EXPECTED_SOLUTION_PART_2 = 123;
 
         public Day04Test()
@@ -27,7 +27,7 @@ namespace Advent23.Days
                     "Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36",
                     "Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11",
                 ],
-                Result = 8,
+                Result = 13,
             },
             Examples = [
                 new()
@@ -42,7 +42,8 @@ namespace Advent23.Days
                             Winners = [41, 48, 83, 86, 17],
                             Possesion = [83, 86, 6, 31, 17, 9, 48, 53],
                         }
-                    ]
+                    ],
+                    Result = 8,
                 }
             ],
             Solution = EXPECTED_SOLUTION_PART_1,
