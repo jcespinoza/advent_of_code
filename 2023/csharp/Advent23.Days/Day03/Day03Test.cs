@@ -6,7 +6,7 @@ namespace Advent23.Days
     public class Day03Test : TestEngine<Day03Solver, string[], long>
     {
         private const int EXPECTED_SOLUTION_PART_1 = 527446;
-        private const int EXPECTED_SOLUTION_PART_2 = 123;
+        private const int EXPECTED_SOLUTION_PART_2 = 73201705;
 
         public Day03Test()
         {
@@ -194,10 +194,22 @@ namespace Advent23.Days
 
         public override Puzzle PartTwo => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
-                Result = 8,
+                Input = [
+                    "467..114..",
+                    "...*......",
+                    "..35..633.",
+                    "......#...",
+                    "617*......",
+                    ".....+.58.",
+                    "..592.....",
+                    "......755.",
+                    "...$.*....",
+                    ".664.598..",
+                ],
+                Result = 467835,
             },
             Solution = EXPECTED_SOLUTION_PART_2,
         };
