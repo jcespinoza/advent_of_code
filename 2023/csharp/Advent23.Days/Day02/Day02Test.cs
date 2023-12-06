@@ -1,4 +1,5 @@
-﻿using AdventOfCode.Commons;
+﻿using Advent23.Days.Day02;
+using AdventOfCode.Commons;
 using dotenv.net;
 
 namespace Advent23.Days

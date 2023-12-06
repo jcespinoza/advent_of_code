@@ -1,4 +1,4 @@
-﻿namespace Advent23.Days
+﻿namespace Advent23.Days.Day03
 {
     public record MachinePart
     {
