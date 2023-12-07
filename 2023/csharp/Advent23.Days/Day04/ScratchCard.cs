@@ -6,6 +6,7 @@ namespace Advent23.Days.Day04
         public int Number { get; init; }
         public required int[] Winners { get; init; } = [];
         public int[] Possesion { get; init; } = [];
+        public int InstanceCount { get; set; }
 
         public static ScratchCard Parse(string input)
         {
@@ -32,7 +33,8 @@ namespace Advent23.Days.Day04
             {
                 Number = cardNumber,
                 Winners = winners,
-                Possesion = possesion
+                Possesion = possesion,
+                InstanceCount = 1,
             };
             return card;
         }

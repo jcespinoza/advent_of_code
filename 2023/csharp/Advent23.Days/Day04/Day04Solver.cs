@@ -32,7 +32,23 @@ namespace Advent23.Days
 
         public override long PartTwo(ScratchCard[] input)
         {
-            throw new NotImplementedException();
+            for (int index = 0; index < input.Length; index++)
+            {
+                var card = input[index];
+                var matchCount = card.Winners.Intersect(card.Possesion).Count();
+                for (int otherIndex = 0; otherIndex < matchCount; otherIndex++)
+                {
+                    int targetIndex = index + 1 + otherIndex;
+
+                    if (targetIndex >= input.Length) break;
+
+                    ScratchCard target = input[targetIndex];
+                    target.InstanceCount += card.InstanceCount;
+                }
+            }
+            var sumOfCopies = input.Sum(c => c.InstanceCount);
+
+            return sumOfCopies;
         }
     }
 }
