@@ -13,36 +13,41 @@ namespace Advent23.Days
 
         public override long PartOne(Almanac input)
         {
-            List<FarmingSetting> farmingSettings = ComputeSettings(input);
-            return farmingSettings.Select(f => f.Location).Min();
+            var location = ComputeLowestLocation(input, useRanges: false);
+            return location;
         }
 
-        private List<FarmingSetting> ComputeSettings(Almanac almanac)
+        private long ComputeLowestLocation(Almanac almanac, bool useRanges)
         {
             var settings = new List<FarmingSetting>();
-            foreach (var seed in almanac.Seeds)
+            long[] seedList = useRanges ? GetSeedsAsRanges(almanac.Seeds) : almanac.Seeds;
+            long lowest = long.MaxValue;
+            foreach (var seed in seedList)
             {
-                long soil = GetMapping(almanac.Seed_Soil, seed);
-                long fertilizer = GetMapping(almanac.Soil_Fert, soil);
-                long water = GetMapping(almanac.Fert_Water, fertilizer);
-                long light = GetMapping(almanac.Water_Light, water);
-                long temperature = GetMapping(almanac.Light_Temp, light);
-                long humidity = GetMapping(almanac.Temp_Humid, temperature);
-                long location = GetMapping(almanac.Humid_Loc, humidity);
-                var setting = new FarmingSetting
+                long location = GetLocation(almanac, seed);
+                if(location < lowest)
                 {
-                    Seed = seed,
-                    Soil = soil,
-                    Fertilizer = fertilizer,
-                    Water = water,
-                    Light = light,
-                    Temperature = temperature,
-                    Humidity = humidity,
-                    Location = location
-                };
-                settings.Add(setting);
+                    lowest = location;
+                }
             }
-            return settings;
+            return lowest;
+        }
+
+        private long[] GetSeedsAsRanges(long[] seeds)
+        {
+            throw new NotImplementedException();
+        }
+
+        private long GetLocation(Almanac almanac, long seed)
+        {
+            long soil = GetMapping(almanac.Seed_Soil, seed);
+            long fertilizer = GetMapping(almanac.Soil_Fert, soil);
+            long water = GetMapping(almanac.Fert_Water, fertilizer);
+            long light = GetMapping(almanac.Water_Light, water);
+            long temperature = GetMapping(almanac.Light_Temp, light);
+            long humidity = GetMapping(almanac.Temp_Humid, temperature);
+            long location = GetMapping(almanac.Humid_Loc, humidity);
+            return location;
         }
 
         private long GetMapping(FarmingMap[] mappings, long sourceValue)
@@ -63,7 +68,7 @@ namespace Advent23.Days
 
         public override long PartTwo(Almanac input)
         {
-            throw new NotImplementedException();
+            return ComputeLowestLocation(input, useRanges: true);
         }
     }
 }
