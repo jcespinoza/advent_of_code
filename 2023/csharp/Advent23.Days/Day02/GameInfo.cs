@@ -1,5 +1,5 @@
 ﻿
-namespace Advent23.Days
+namespace Advent23.Days.Day02
 {
     public record GameInfo
     {
