@@ -6,7 +6,7 @@ namespace Advent23.Days
 {
     public class Day05Test : TestEngine<Day05Solver, Almanac, long>
     {
-        private const int EXPECTED_SOLUTION_PART_1 = 35;
+        private const int EXPECTED_SOLUTION_PART_1 = 313_045_984;
         private const int EXPECTED_SOLUTION_PART_2 = 123;
 
         public Day05Test()
@@ -54,7 +54,7 @@ namespace Advent23.Days
                     "60 56 37",
                     "56 93 4",
                 ],
-                Result = 8,
+                Result = 35,
             },
             Solution = EXPECTED_SOLUTION_PART_1,
         };
