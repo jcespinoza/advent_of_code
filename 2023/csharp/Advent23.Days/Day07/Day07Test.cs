@@ -124,10 +124,17 @@ namespace Advent23.Days
 
         public override Puzzle PartTwo => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
-                Result = 8,
+                RawInput = [
+                    "32T3K 765",
+                    "T55J5 684",
+                    "KK677 28",
+                    "KTJJT 220",
+                    "QQQJA 483",
+                ],
+                Result = 5905,
             },
             Solution = EXPECTED_SOLUTION_PART_2,
         };

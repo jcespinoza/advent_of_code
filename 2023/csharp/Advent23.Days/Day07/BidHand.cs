@@ -25,6 +25,7 @@ namespace Advent23.Days.Day07
         public required string Hand { get; set; }
         public required int BidAmt { get; init; }
         public required HandType HandType { get; set; }
+        public int IntHandType => (int)HandType;
 
         public static BidHand Parse(string line)
         {
@@ -41,7 +42,7 @@ namespace Advent23.Days.Day07
             };
         }
 
-        private static HandType ComputeHandType(string handStr)
+        public static HandType ComputeHandType(string handStr)
         {
             var groups = handStr.GroupBy(s => s);
             
@@ -79,6 +80,37 @@ namespace Advent23.Days.Day07
                 }
             }
             return line;
+        }
+
+
+        /*
+        AAAAJ
+        AAAJJ
+        AAAJQ
+        AAJQQ
+        AA
+         */
+
+        public static string ComputeBestHand(string handStr)
+        {
+            char jokenSymbol = CARD_NAMES['J'];
+            if (!handStr.Contains(jokenSymbol)) return handStr;
+
+            var nonJokerLabels = handStr.Where(c => c != jokenSymbol).ToList();
+            if (!nonJokerLabels.Any())
+            {
+                return handStr.Replace(jokenSymbol, CARD_NAMES['2']);
+            }
+
+            var groups = nonJokerLabels.GroupBy(s => s).OrderByDescending(s => s.Count()).ThenByDescending(s => s.Key);
+
+            var firstGroup = groups.First().ToList();
+            if (firstGroup.Count() > 1)
+            {
+                var newHandStr = handStr.Replace(jokenSymbol, firstGroup.First());
+                return newHandStr;
+            }
+            return handStr;
         }
     }
 }
