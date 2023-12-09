@@ -22,9 +22,9 @@ namespace Advent23.Days.Day07
             { '2', 'L' },
         };
 
-        public required string Hand { get; init; }
+        public required string Hand { get; set; }
         public required int BidAmt { get; init; }
-        public required HandType HandType { get; init; }
+        public required HandType HandType { get; set; }
 
         public static BidHand Parse(string line)
         {

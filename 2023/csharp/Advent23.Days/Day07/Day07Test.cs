@@ -116,6 +116,7 @@ namespace Advent23.Days
                             HandType = HandType.HighCard,
                         },
                     ],
+                    Result= 28,
                 },
             ],
             Solution = EXPECTED_SOLUTION_PART_1,
