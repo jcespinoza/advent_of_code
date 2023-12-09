@@ -1,9 +1,10 @@
-﻿using AdventOfCode.Commons;
+﻿using Advent23.Days.Day08;
+using AdventOfCode.Commons;
 using dotenv.net;
 
 namespace Advent23.Days
 {
-    public class Day08Test : TestEngine<Day08Solver, object[], long>
+    public class Day08Test : TestEngine<Day08Solver, DesertMap, long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 123;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
@@ -15,14 +16,34 @@ namespace Advent23.Days
 
         public override Puzzle PartOne => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
                 RawInput = [
+                    "RL",
+                    "",
+                    "AAA = (BBB, CCC)",
+                    "BBB = (DDD, EEE)",
+                    "CCC = (ZZZ, GGG)",
+                    "DDD = (DDD, DDD)",
+                    "EEE = (EEE, EEE)",
+                    "GGG = (GGG, GGG)",
+                    "ZZZ = (ZZZ, ZZZ)",
                 ],
-                Result = 8,
+                Result = 2,
             },
             Examples = [
+                new()
+                {
+                    RawInput = [
+                        "LLR",
+                        "",
+                        "AAA = (BBB, BBB)",
+                        "BBB = (AAA, ZZZ)",
+                        "ZZZ = (ZZZ, ZZZ)",
+                    ],
+                    Result = 6,
+                },
             ],
             Solution = EXPECTED_SOLUTION_PART_1,
         };
@@ -33,6 +54,15 @@ namespace Advent23.Days
             Example = new()
             {
                 RawInput = [
+                    "RL",
+                    "",
+                    "AAA = (BBB, CCC)",
+                    "BBB = (DDD, EEE)",
+                    "CCC = (ZZZ, GGG)",
+                    "DDD = (DDD, DDD)",
+                    "EEE = (EEE, EEE)",
+                    "GGG = (GGG, GGG)",
+                    "ZZZ = (ZZZ, ZZZ)",
                 ],
                 Result = 8,
             },
