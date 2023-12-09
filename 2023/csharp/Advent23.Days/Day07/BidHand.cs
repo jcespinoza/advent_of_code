@@ -82,15 +82,6 @@ namespace Advent23.Days.Day07
             return line;
         }
 
-
-        /*
-        AAAAJ
-        AAAJJ
-        AAAJQ
-        AAJQQ
-        AA
-         */
-
         public static string ComputeBestHand(string handStr)
         {
             char jokenSymbol = CARD_NAMES['J'];
@@ -104,13 +95,11 @@ namespace Advent23.Days.Day07
 
             var groups = nonJokerLabels.GroupBy(s => s).OrderByDescending(s => s.Count()).ThenByDescending(s => s.Key);
 
-            var firstGroup = groups.First().ToList();
-            if (firstGroup.Count() > 1)
-            {
-                var newHandStr = handStr.Replace(jokenSymbol, firstGroup.First());
-                return newHandStr;
-            }
-            return handStr;
+            var firstGroup = groups.First();
+
+            var newHandStr = handStr.Replace(jokenSymbol, firstGroup.First());
+
+            return newHandStr;
         }
     }
 }

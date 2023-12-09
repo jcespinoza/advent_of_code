@@ -7,7 +7,7 @@ namespace Advent23.Days
     public class Day07Test : TestEngine<Day07Solver, BidHand[], long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 253_933_213;
-        private const long EXPECTED_SOLUTION_PART_2 = 123;
+        private const long EXPECTED_SOLUTION_PART_2 = 253_473_930;
 
         public Day07Test()
         {
