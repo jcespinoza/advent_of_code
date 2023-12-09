@@ -3,12 +3,12 @@ using dotenv.net;
 
 namespace Advent23.Days
 {
-    public class Day00Test : TestEngine<Day00Solver, object[], long>
+    public class Day07Test : TestEngine<Day07Solver, object[], long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 123;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
 
-        public Day00Test()
+        public Day07Test()
         {
             DotEnv.Load();
         }
@@ -19,8 +19,13 @@ namespace Advent23.Days
             Example = new()
             {
                 RawInput = [
+                    "32T3K 765",
+                    "T55J5 684",
+                    "KK677 28",
+                    "KTJJT 220",
+                    "QQQJA 483",
                 ],
-                Result = 8,
+                Result = 6440,
             },
             Examples = [
             ],
@@ -32,8 +37,6 @@ namespace Advent23.Days
             ShouldSkipTests = true,
             Example = new()
             {
-                RawInput = [
-                ],
                 Result = 8,
             },
             Solution = EXPECTED_SOLUTION_PART_2,
