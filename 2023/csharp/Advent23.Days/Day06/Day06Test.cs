@@ -7,7 +7,7 @@ namespace Advent23.Days
     public class Day06Test : TestEngine<Day06Solver, RaceRecord[], long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 2_612_736L;
-        private const long EXPECTED_SOLUTION_PART_2 = 123;
+        private const long EXPECTED_SOLUTION_PART_2 = 29_891_250;
 
         public Day06Test()
         {
@@ -49,10 +49,14 @@ namespace Advent23.Days
 
         public override Puzzle PartTwo => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
-                Result = 8,
+                RawInput = [
+                    "Time:      7  15   30",
+                    "Distance:  9  40  200",
+                ],
+                Result = 71503,
             },
             Solution = EXPECTED_SOLUTION_PART_2,
         };

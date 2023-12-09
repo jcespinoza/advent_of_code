@@ -17,25 +17,43 @@ namespace Advent23.Days
             var product = 1L;
             foreach (var race in input)
             {
-                long ways = 0;
-                for (int tOffset = 1; tOffset < race.Time; tOffset++)
-                {
-                    var timeHeld = tOffset;
-                    var timeRaced = (race.Time - timeHeld);
-                    var distance = timeHeld * timeRaced;
-                    if(distance > race.Distance)
-                    {
-                        ways++;
-                    }
-                }
+                long ways = GetHoldingArrangements(race);
                 product *= ways;
             }
             return product;
         }
 
+        private long GetHoldingArrangements(RaceRecord race)
+        {
+            long ways = 0;
+            for (long tOffset = 1; tOffset < race.Time; tOffset++)
+            {
+                var timeHeld = tOffset;
+                var timeRaced = (race.Time - timeHeld);
+                var distance = timeHeld * timeRaced;
+                if (distance > race.Distance)
+                {
+                    ways++;
+                }
+            }
+            return ways;
+        }
+
         public override long PartTwo(RaceRecord[] input)
         {
-            throw new NotImplementedException();
+            RaceRecord race = MergeRecords(input);
+
+            long arrangements = GetHoldingArrangements(race);
+
+            return arrangements;
+        }
+
+        private RaceRecord MergeRecords(RaceRecord[] races)
+        {
+            var timeStr = string.Concat(races.Select(r => $"{r.Time}"));
+            var distanceStr = string.Concat(races.Select(r => $"{r.Distance}"));
+
+            return new() { Time = long.Parse(timeStr), Distance = long.Parse(distanceStr) };
         }
     }
 }
