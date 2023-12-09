@@ -18,6 +18,8 @@ namespace Advent23.Days
             ShouldSkipTests = true,
             Example = new()
             {
+                RawInput = [
+                ],
                 Result = 8,
             },
             Examples = [
@@ -30,6 +32,8 @@ namespace Advent23.Days
             ShouldSkipTests = true,
             Example = new()
             {
+                RawInput = [
+                ],
                 Result = 8,
             },
             Solution = EXPECTED_SOLUTION_PART_2,
