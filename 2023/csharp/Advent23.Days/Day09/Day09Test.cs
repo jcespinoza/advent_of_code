@@ -6,7 +6,7 @@ namespace Advent23.Days
 {
     public class Day09Test : TestEngine<Day09Solver, HistoryLine[], long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 123; //NOT 1_969_958_228;
+        private const long EXPECTED_SOLUTION_PART_1 = 1969958987; //NOT 1_969_958_228;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
 
         public Day09Test()

@@ -35,7 +35,7 @@ namespace Advent23.Days.Day09
         public long Extrapolate()
         {
             long[] currentDifferences = GetDifferences();
-            if (currentDifferences.Sum() == 0)
+            if (currentDifferences.All(d => d == 0))
             {
                 return (Prediction = PastRecords.Last());
             }
@@ -48,7 +48,7 @@ namespace Advent23.Days.Day09
                 intermediaryLines.Add(newLine);
 
                 currentDifferences = newLine.GetDifferences();
-                if (currentDifferences.Sum() == 0)
+                if (currentDifferences.All(d => d == 0))
                 {
                     newLine.Prediction = newLine.PastRecords.Last();
                     break;
