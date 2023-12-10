@@ -17,16 +17,21 @@ namespace Advent23.Days
             long sumOfExtrapolations = 0;
             foreach (var line in historyLines)
             {
-                var extrapolation = line.Extrapolate();
+                var extrapolation = line.ExtrapolateFuture();
                 sumOfExtrapolations += extrapolation;
             }
-            Debug.Assert(historyLines.Sum(h => h.Prediction) == sumOfExtrapolations);
             return sumOfExtrapolations;
         }
 
-        public override long PartTwo(HistoryLine[] input)
+        public override long PartTwo(HistoryLine[] historyLines)
         {
-            throw new NotImplementedException();
+            long sumOfExtrapolations = 0;
+            foreach (var line in historyLines)
+            {
+                var extrapolation = line.ExtrapolatePast();
+                sumOfExtrapolations += extrapolation;
+            }
+            return sumOfExtrapolations;
         }
     }
 }

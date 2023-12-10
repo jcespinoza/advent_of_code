@@ -5,6 +5,7 @@ namespace Advent23.Days.Day09
     {
         public required long[] PastRecords { get; init; }
         public long Prediction { get; set; }
+        public long BackPrediction { get; set; }
 
         public long[] GetDifferences()
         {
@@ -32,7 +33,7 @@ namespace Advent23.Days.Day09
             return historyLine;
         }
 
-        public long Extrapolate()
+        public long ExtrapolateFuture()
         {
             long[] currentDifferences = GetDifferences();
             if (currentDifferences.All(d => d == 0))
@@ -40,7 +41,7 @@ namespace Advent23.Days.Day09
                 return (Prediction = PastRecords.Last());
             }
 
-            List<HistoryLine> intermediaryLines = new();
+            List<HistoryLine> intermediaryLines = [];
             int levels = 0;
             while (true) {
                 levels++;
@@ -68,6 +69,44 @@ namespace Advent23.Days.Day09
             }
 
             return (Prediction = PastRecords.Last() + intermediaryLines.First().Prediction);
+        }
+
+        public long ExtrapolatePast()
+        {
+            long[] currentDifferences = GetDifferences();
+            if (currentDifferences.All(d => d == 0))
+            {
+                return (BackPrediction = PastRecords.First());
+            }
+
+            List<HistoryLine> intermediaryLines = [];
+            int levels = 0;
+            while (true) {
+                levels++;
+                var newLine = new HistoryLine { PastRecords = currentDifferences };
+                intermediaryLines.Add(newLine);
+
+                currentDifferences = newLine.GetDifferences();
+                if (currentDifferences.All(d => d == 0))
+                {
+                    newLine.BackPrediction = newLine.PastRecords.First();
+                    break;
+                }
+            }
+            if (levels == 1)
+            {
+                return BackPrediction = PastRecords.First() - intermediaryLines.First().BackPrediction;
+            }
+
+            for (int index = levels-1; index >= 0; index--)
+            {
+                if (index - 1 < 0) break;
+                var aboveLine = intermediaryLines[index - 1];
+                var lowLine = intermediaryLines[index];
+                aboveLine.BackPrediction = aboveLine.PastRecords.First() - lowLine.BackPrediction;
+            }
+
+            return BackPrediction = PastRecords.First() - intermediaryLines.First().BackPrediction;
         }
     }
 }
