@@ -3,18 +3,18 @@ namespace Advent23.Days.Day08
 {
     public record DesertMap
     {
-        public required string Directions { get; init; }
-        public required Dictionary<string, DessertNode> Nodes { get; init; }
+        public required Direction[] Directions { get; init; }
+        public required Dictionary<string, DesertNode> Nodes { get; init; }
 
         public static DesertMap Parse(IEnumerable<string> input)
         {
             var lines = input.ToArray();
-            var directions = lines[0];
+            var directions = lines[0].Select(s => s == 'L' ? Direction.Left : Direction.Right).ToArray();
 
-            var nodes = new Dictionary<string, DessertNode>();
+            var nodes = new Dictionary<string, DesertNode>();
             for (int index = 2; index < lines.Length; index++)
             {
-                DessertNode node = DessertNode.Parse(lines[index]);
+                DesertNode node = DesertNode.Parse(lines[index]);
                 nodes[node.Name] = node;
             }
             return new() { Directions = directions, Nodes = nodes };

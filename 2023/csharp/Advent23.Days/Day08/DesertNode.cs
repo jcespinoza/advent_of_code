@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Advent23.Days.Day08
 {
-    public record DessertNode
+    public record DesertNode
     {
         public required string Name { get; init; }
         public required string RightName { get; init; }
         public required string LeftName { get; init; }
 
-        public static DessertNode Parse(string line)
+        public static DesertNode Parse(string line)
         {
             var parts = line
                 .Split('=', StringSplitOptions.RemoveEmptyEntries);
@@ -22,7 +22,7 @@ namespace Advent23.Days.Day08
             var leftValue = pairStr[0];
             var rightValue = pairStr[1];
 
-            DessertNode node = new() {
+            DesertNode node = new() {
                 Name = name, 
                 LeftName = leftValue, 
                 RightName = rightValue 

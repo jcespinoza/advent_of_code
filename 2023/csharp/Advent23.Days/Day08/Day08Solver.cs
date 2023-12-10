@@ -5,6 +5,9 @@ namespace Advent23.Days
 {
     public class Day08Solver : Solver<DesertMap, long>
     {
+        private const string START_KEY = "AAA";
+        private const string TARGET_KEY = "ZZZ";
+
         public Day08Solver() : base(2023, 08) { }
 
         public override DesertMap ParseInput(IEnumerable<string> input)
@@ -13,18 +16,18 @@ namespace Advent23.Days
         public override long PartOne(DesertMap dessertMap)
         {
             int steps = 0;
-            var currentNode = dessertMap.Nodes["AAA"];
+            var currentNode = dessertMap.Nodes[START_KEY];
             
             for (int index = 0; index < dessertMap.Directions.Length; index++)
             {
                 var direction = dessertMap.Directions[index];
 
-                if(currentNode.Name == "ZZZ")
+                if(currentNode.Name == TARGET_KEY)
                 {
                     break;
                 }
 
-                if(direction == 'L')
+                if(direction == Direction.Left)
                 {
                     currentNode = dessertMap.Nodes[currentNode.LeftName];
                 }else
