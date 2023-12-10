@@ -6,7 +6,7 @@ namespace Advent23.Days
 {
     public class Day08Test : TestEngine<Day08Solver, DesertMap, long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 123;
+        private const long EXPECTED_SOLUTION_PART_1 = 13_939;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
 
         public Day08Test()

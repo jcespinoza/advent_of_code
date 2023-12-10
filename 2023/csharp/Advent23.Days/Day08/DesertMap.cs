@@ -10,6 +10,7 @@ namespace Advent23.Days.Day08
         {
             var lines = input.ToArray();
             var directions = lines[0];
+
             var nodes = new Dictionary<string, DessertNode>();
             for (int index = 2; index < lines.Length; index++)
             {
