@@ -1,26 +1,27 @@
 ﻿using Advent23.Days.Day08;
 using AdventOfCode.Commons;
+using System.Reflection.Metadata;
 
 namespace Advent23.Days
 {
     public class Day08Solver : Solver<DesertMap, long>
     {
-        private const string START_KEY = "AAA";
-        private const string TARGET_KEY = "ZZZ";
+
 
         public Day08Solver() : base(2023, 08) { }
 
         public override DesertMap ParseInput(IEnumerable<string> input)
             => DesertMap.Parse(input);
 
-        public override long PartOne(DesertMap dessertMap)
-        {
+        public override long PartOne(DesertMap desertMap)
+        {   const string START_KEY = "AAA";
+            const string TARGET_KEY = "ZZZ";
             int steps = 0;
-            var currentNode = dessertMap.Nodes[START_KEY];
+            var currentNode = desertMap.Nodes[START_KEY];
             
-            for (int index = 0; index < dessertMap.Directions.Length; index++)
+            for (int index = 0; index < desertMap.Directions.Length; index++)
             {
-                var direction = dessertMap.Directions[index];
+                var direction = desertMap.Directions[index];
 
                 if(currentNode.Name == TARGET_KEY)
                 {
@@ -29,13 +30,13 @@ namespace Advent23.Days
 
                 if(direction == Direction.Left)
                 {
-                    currentNode = dessertMap.Nodes[currentNode.LeftName];
+                    currentNode = desertMap.Nodes[currentNode.LeftName];
                 }else
                 {
-                    currentNode = dessertMap.Nodes[currentNode.RightName];
+                    currentNode = desertMap.Nodes[currentNode.RightName];
                 }
 
-                if(index == dessertMap.Directions.Length - 1)
+                if(index == desertMap.Directions.Length - 1)
                 {
                     index = -1;
                 }
@@ -45,9 +46,52 @@ namespace Advent23.Days
             return steps;
         }
 
-        public override long PartTwo(DesertMap input)
+        public override long PartTwo(DesertMap desertMap)
         {
-            throw new NotImplementedException();
+            var currentNodes = desertMap.Nodes.Where(n => n.Key.EndsWith('A')).Select(n => n.Value).ToArray();
+
+            // There are cycles in the paths
+            // Find the minimum steps required per node indvidually first
+            var steps = currentNodes.Select(node => StepsUntilTarget(desertMap, node)).ToArray();
+
+            // Find the lest common multiple for the minimum number of steps for all nodes
+            var aggregatedSteps = steps.LeastCommonMultiple();
+
+            return aggregatedSteps;
+        }
+
+        private long StepsUntilTarget(DesertMap desertMap, DesertNode startNode)
+        {
+            long steps = 0;
+            var dirIndex = 0;
+            var currentNode = startNode;
+
+            while (!currentNode.Name.EndsWith('Z'))
+            {
+                var direction = desertMap.Directions[dirIndex];
+
+                if (direction == Direction.Left)
+                {
+                    currentNode = desertMap.Nodes[currentNode.LeftName];
+                }
+                else
+                {
+                    currentNode = desertMap.Nodes[currentNode.RightName];
+                }
+
+                if (dirIndex == desertMap.Directions.Length - 1)
+                {
+                    dirIndex = 0;
+                }
+                else
+                {
+                    dirIndex++;
+                }
+
+                steps++;
+            }
+
+            return steps;
         }
     }
 }

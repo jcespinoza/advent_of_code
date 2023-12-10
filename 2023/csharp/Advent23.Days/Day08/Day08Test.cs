@@ -7,7 +7,7 @@ namespace Advent23.Days
     public class Day08Test : TestEngine<Day08Solver, DesertMap, long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 13_939;
-        private const long EXPECTED_SOLUTION_PART_2 = 123;
+        private const long EXPECTED_SOLUTION_PART_2 = 8_906_539_031_197;
 
         public Day08Test()
         {
@@ -50,21 +50,22 @@ namespace Advent23.Days
 
         public override Puzzle PartTwo => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
                 RawInput = [
-                    "RL",
+                    "LR",
                     "",
-                    "AAA = (BBB, CCC)",
-                    "BBB = (DDD, EEE)",
-                    "CCC = (ZZZ, GGG)",
-                    "DDD = (DDD, DDD)",
-                    "EEE = (EEE, EEE)",
-                    "GGG = (GGG, GGG)",
-                    "ZZZ = (ZZZ, ZZZ)",
+                    "11A = (11B, XXX)",
+                    "11B = (XXX, 11Z)",
+                    "11Z = (11B, XXX)",
+                    "22A = (22B, XXX)",
+                    "22B = (22C, 22C)",
+                    "22C = (22Z, 22Z)",
+                    "22Z = (22B, 22B)",
+                    "XXX = (XXX, XXX)",
                 ],
-                Result = 8,
+                Result = 6,
             },
             Solution = EXPECTED_SOLUTION_PART_2,
         };
