@@ -4,7 +4,8 @@
     {
         public required int RowIndex { get; init;  }
         public required int ColIndex { get; init;}
-        public required SegmentType SegmentType { get; init;}
+        public required SegmentType SegmentType { get; init; }
+        public bool Visited { get; set; }
 
         public (Direction primary, Direction secondary) GetDirections()
         {

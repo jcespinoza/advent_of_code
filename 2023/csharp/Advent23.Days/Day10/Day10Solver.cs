@@ -13,8 +13,17 @@ namespace Advent23.Days
 
         public override long PartOne(PipeMap pipeMap)
         {
+            var stepsUntilFurthestPoint = TraversePipe(pipeMap);
+            return stepsUntilFurthestPoint;
+        }
+
+        private static long TraversePipe(PipeMap pipeMap)
+        {
             int steps = 0;
             var start = pipeMap.GetStartingCoordinates();
+
+            pipeMap.MarkVisited(start);
+
             Point prevSegA = start;
             Point prevSegB = start;
 
@@ -25,6 +34,8 @@ namespace Advent23.Days
             do
             {
                 steps++;
+                pipeMap.MarkVisited(currentSegmentA);
+                pipeMap.MarkVisited(currentSegmentB);
 
                 if (start != currentSegmentA && currentSegmentA == currentSegmentB) break;
                 var backupA = currentSegmentA;
@@ -39,9 +50,15 @@ namespace Advent23.Days
             return steps;
         }
 
-        public override long PartTwo(PipeMap input)
+        public override long PartTwo(PipeMap pipeMap)
         {
-            throw new NotImplementedException();
+            _ = TraversePipe(pipeMap);
+
+            List<PipeSegment> notVisitedNodes = pipeMap.GetNotVisitedSegments();
+            var containedSegments = notVisitedNodes
+                                    .Where(s => pipeMap.GetEdgeObstructions() % 2 != 0);
+
+            return containedSegments.Count();
         }
     }
 }

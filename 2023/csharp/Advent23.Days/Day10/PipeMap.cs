@@ -110,6 +110,21 @@ namespace Advent23.Days.Day10
             target = Segments[rowIndex][colIndex];
             return true;
         }
+
+        public void MarkVisited(Point location)
+        {
+            Segments[location.Row][location.Col].Visited = true;
+        }
+
+        internal int GetEdgeObstructions()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal List<PipeSegment> GetNotVisitedSegments()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public enum Direction
