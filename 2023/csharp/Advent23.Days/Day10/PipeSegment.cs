@@ -4,7 +4,7 @@
     {
         public required int RowIndex { get; init;  }
         public required int ColIndex { get; init;}
-        public required SegmentType SegmentType { get; init; }
+        public required SegmentType SegmentType { get; set; }
         public bool Visited { get; set; }
 
         public (Direction primary, Direction secondary) GetDirections()
@@ -82,6 +82,36 @@
                 default:
                     throw new Exception("Invalid visit direction");
             }
+        }
+
+        public static SegmentType BuildFromDirections(Direction[] directions)
+        {
+            if (directions.Intersect([Direction.North, Direction.South]).Count() == 2)
+            {
+                return SegmentType.LineNS;
+            }
+            if (directions.Intersect([Direction.East, Direction.West]).Count() == 2)
+            {
+                return SegmentType.LineEW;
+            }
+            if (directions.Intersect([Direction.North, Direction.East]).Count() == 2)
+            {
+                return SegmentType.AngleNE;
+            }
+            if (directions.Intersect([Direction.North, Direction.West]).Count() == 2)
+            {
+                return SegmentType.AngleNW;
+            }
+            if (directions.Intersect([Direction.South, Direction.West]).Count() == 2)
+            {
+                return SegmentType.AngleSW;
+            }
+            if (directions.Intersect([Direction.South, Direction.East]).Count() == 2)
+            {
+                return SegmentType.AngleSE;
+            }
+            
+            throw new ArgumentOutOfRangeException("Direction pair invalid");
         }
 
         public bool IsTraversable => SegmentType != SegmentType.Start

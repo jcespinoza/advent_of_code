@@ -27,9 +27,12 @@ namespace Advent23.Days
             Point prevSegA = start;
             Point prevSegB = start;
 
-            Tuple<PipeSegment, PipeSegment> firstSegs = pipeMap.GetFirstSteps(start);
+            Tuple<PipeSegment, PipeSegment, Direction, Direction> firstSegs = pipeMap.GetFirstSteps(start);
             Point currentSegmentA = new(firstSegs.Item1.ColIndex, firstSegs.Item1.RowIndex);
             Point currentSegmentB = new(firstSegs.Item2.ColIndex, firstSegs.Item2.RowIndex);
+            
+            var startingSegType = PipeSegment.BuildFromDirections([firstSegs.Item3, firstSegs.Item4]);
+            pipeMap.MutateSegmentWithType(start, startingSegType);
 
             do
             {
@@ -54,11 +57,24 @@ namespace Advent23.Days
         {
             _ = TraversePipe(pipeMap);
 
-            List<PipeSegment> notVisitedNodes = pipeMap.GetNotVisitedSegments();
-            var containedSegments = notVisitedNodes
-                                    .Where(s => pipeMap.GetEdgeObstructions() % 2 != 0);
+            var notVisitedSegments = pipeMap.GetNotVisitedSegments()
+                                    .Where(s => s.ColIndex != 0  && s.RowIndex != 0
+                                        && s.RowIndex < pipeMap.Segments.Length - 1
+                                        && s.ColIndex < pipeMap.Segments[s.RowIndex].Length - 1
+                                    );
 
-            return containedSegments.Count();
+            var containedSegments = 0;
+            foreach (var nvSegment in notVisitedSegments)
+            {
+                var obstructionArray = pipeMap.GetEdgeObstructions(nvSegment);
+                var oddObstructions = obstructionArray.Where(o => o % 2 != 0);
+                if(oddObstructions.Any())
+                {
+                    containedSegments++;
+                }
+            }
+            
+            return containedSegments;
         }
     }
 }
