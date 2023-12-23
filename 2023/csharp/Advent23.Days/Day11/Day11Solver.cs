@@ -18,9 +18,11 @@ namespace Advent23.Days
             return sum;
         }
 
-        public override long PartTwo(SpaceMap input)
+        public override long PartTwo(SpaceMap spaceMap)
         {
-            throw new NotImplementedException();
+            List<GalaxyPair> distances = spaceMap.GetDistances(1_000_000);
+            long sum = distances.Sum(p => p.Steps);
+            return sum;
         }
     }
 }

@@ -4,44 +4,41 @@ namespace Advent23.Days.Day11
     public record SpaceMap
     {
         public required List<Galaxy> Galaxies { get; init; }
+        public required List<int> EmptyRows { get; init; }
+        public required List<int> EmptyCols { get; init; }
 
         public static SpaceMap Parse(string[] input)
-        {
-            string[] expanded = ExpandUniverse(input);
-            List<Galaxy> galaxies = new();
-            int counter = 1;
-            for (int row = 0; row < expanded.Length; row++)
+        {            
+            List<Galaxy> galaxies = [];
+            int galaxyCounter = 1;
+            for (int row = 0; row < input.Length; row++)
             {
-                for (int col = 0; col < expanded[row].Length; col++)
+                for (int col = 0; col < input[row].Length; col++)
                 {
-                    char symbol = expanded[row][col];
+                    char symbol = input[row][col];
                     if (symbol == '#')
                     {
-                        var galaxy = new Galaxy { Code = counter, Row = row, Col = col };
+                        var galaxy = new Galaxy { Code = galaxyCounter, Row = row, Col = col };
                         galaxies.Add(galaxy);
-                        counter++;
+                        galaxyCounter++;
                     }
                 }
             }
+            List<int> emptyRows = GetEmptyRows(input);
+            List<int> emptyCols = GetEmptyCols(input);
             var spaceMap = new SpaceMap()
             {
-                Galaxies = galaxies
+                Galaxies = galaxies,
+                EmptyRows = emptyRows,
+                EmptyCols = emptyCols
             };
 
             return spaceMap;
         }
 
-        private static string[] ExpandUniverse(string[] input)
+        private static List<int> GetEmptyCols(string[] input)
         {
-            var emptyRows = new Stack<int>();
-            var emptyCols = new Stack<int>();
-            for (int row = 0; row < input.Length; row++)
-            {
-                if (!input[row].Contains('#'))
-                {
-                    emptyRows.Push(row);
-                }
-            }
+            var emptyCols = new List<int>();
             for (int col = 0; col < input[0].Length; col++)
             {
                 bool foundGalaxy = false;
@@ -55,30 +52,28 @@ namespace Advent23.Days.Day11
                 }
                 if (!foundGalaxy)
                 {
-                    emptyCols.Push(col);
+                    emptyCols.Add(col);
                 }
             }
-
-            while (emptyCols.Count != 0)
-            {
-                var index = emptyCols.Pop();
-                for (int row = 0; row < input.Length; row++)
-                {
-                    input[row] = input[row].Insert(index, ".");
-                }
-            }
-            var newLines = input.ToList();
-            while (emptyRows.Count != 0)
-            {
-                var index = emptyRows.Pop();
-                newLines.Insert(index, input[index]);
-            }
-            return [.. newLines];
+            return emptyCols;
         }
 
-        public List<GalaxyPair> GetDistances()
+        private static List<int> GetEmptyRows(string[] input)
         {
-            var stepsDict = new Dictionary<Tuple<int, int>, int?>();
+            var emptyRows = new List<int>();
+            for (int row = 0; row < input.Length; row++)
+            {
+                if (!input[row].Contains('#'))
+                {
+                    emptyRows.Add(row);
+                }
+            }
+            return emptyRows;
+        }
+
+        public List<GalaxyPair> GetDistances(int expansionFactor = 1)
+        {
+            var stepsDict = new Dictionary<Tuple<int, int>, long?>();
             foreach (var galaxySrc in Galaxies)
             {
                 foreach (var galaxyTrg in Galaxies)
@@ -91,7 +86,7 @@ namespace Advent23.Days.Day11
 
                     if (stepsDict.ContainsKey(dictKey)) continue;
 
-                    int steps = ComputeManhattanFor(galaxySrc, galaxyTrg);
+                    long steps = ComputeManhattanFor(galaxySrc, galaxyTrg, expansionFactor);
                     stepsDict[dictKey] = steps;
                 }
             }
@@ -104,12 +99,27 @@ namespace Advent23.Days.Day11
             return pairs;
         }
 
-        private static int ComputeManhattanFor(Galaxy galaxySrc, Galaxy galaxyTrg)
+        private int ComputeManhattanFor(Galaxy galaxySrc, Galaxy galaxyTrg, int expansionFactor)
         {
+            int minCol = Math.Min(galaxySrc.Col, galaxyTrg.Col);
+            int minRow = Math.Min(galaxySrc.Row, galaxyTrg.Row);
+            int maxCol = Math.Max(galaxySrc.Col, galaxyTrg.Col);
+            int maxRow = Math.Max(galaxySrc.Row, galaxyTrg.Row);
+
+            int emptyRows = EmptyRows.Count(r => r > minRow && r < maxRow);
+            int emptyCols = EmptyCols.Count(r => r > minCol && r < maxCol);
+            
+            int rowExpansion = emptyRows * expansionFactor;
+            int colExpansion = emptyCols * expansionFactor;
+
             int deltaX = Math.Abs(galaxyTrg.Col - galaxySrc.Col);
             int deltaY = Math.Abs(galaxyTrg.Row - galaxySrc.Row);
 
-            return deltaX + deltaY;
+            var rawDistance = deltaX + deltaY;
+
+            var finalResult = rawDistance + colExpansion + rowExpansion;
+
+            return finalResult;
         }
     }
 }

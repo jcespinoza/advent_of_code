@@ -11,6 +11,6 @@
     {
         public required int Source { get; init; }
         public required int Target { get; init; }
-        public required int Steps { get; init; }
+        public required long Steps { get; init; }
     }
 }
