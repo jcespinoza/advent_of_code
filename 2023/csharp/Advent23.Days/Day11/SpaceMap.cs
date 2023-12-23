@@ -71,7 +71,7 @@ namespace Advent23.Days.Day11
             return emptyRows;
         }
 
-        public List<GalaxyPair> GetDistances(int expansionFactor = 1)
+        public List<GalaxyPair> GetDistances(int expansionFactor = 2)
         {
             var stepsDict = new Dictionary<Tuple<int, int>, long?>();
             foreach (var galaxySrc in Galaxies)
@@ -106,20 +106,26 @@ namespace Advent23.Days.Day11
             int maxCol = Math.Max(galaxySrc.Col, galaxyTrg.Col);
             int maxRow = Math.Max(galaxySrc.Row, galaxyTrg.Row);
 
-            int emptyRows = EmptyRows.Count(r => r > minRow && r < maxRow);
-            int emptyCols = EmptyCols.Count(r => r > minCol && r < maxCol);
-            
-            int rowExpansion = emptyRows * expansionFactor;
-            int colExpansion = emptyCols * expansionFactor;
+            var steps = 0;
 
-            int deltaX = Math.Abs(galaxyTrg.Col - galaxySrc.Col);
-            int deltaY = Math.Abs(galaxyTrg.Row - galaxySrc.Row);
+            for (int row = minRow+1; row <= maxRow; row++)
+            {
+                steps++;
+                if (EmptyRows.Contains(row))
+                {
+                    steps += expansionFactor - 1;
+                }
+            }
+            for (int col = minCol+1; col <= maxCol; col++)
+            {
+                steps++;
+                if (EmptyCols.Contains(col))
+                {
+                    steps += expansionFactor - 1;
+                }
+            }
 
-            var rawDistance = deltaX + deltaY;
-
-            var finalResult = rawDistance + colExpansion + rowExpansion;
-
-            return finalResult;
+            return steps;
         }
     }
 }

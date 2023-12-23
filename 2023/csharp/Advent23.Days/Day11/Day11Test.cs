@@ -7,7 +7,7 @@ namespace Advent23.Days
     public class Day11Test : TestEngine<Day11Solver, SpaceMap, long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 10_289_334;
-        private const long EXPECTED_SOLUTION_PART_2 = 123;
+        private const long EXPECTED_SOLUTION_PART_2 = 649_862_989_626;
 
         public Day11Test()
         {
@@ -99,7 +99,8 @@ namespace Advent23.Days
                     ".......#..",
                     "#...#.....",
                 ],
-                Result = 1030,
+                //Result = 1030, // If expansion factor was 10
+                Result = 82000210,
             },
             Solution = EXPECTED_SOLUTION_PART_2,
         };
