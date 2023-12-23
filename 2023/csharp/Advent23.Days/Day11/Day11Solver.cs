@@ -1,21 +1,24 @@
-﻿using AdventOfCode.Commons;
+﻿using Advent23.Days.Day11;
+using AdventOfCode.Commons;
 
 namespace Advent23.Days
 {
-    public class Day11Solver : Solver<object[], long>
+    public class Day11Solver : Solver<SpaceMap, long>
     {
         public Day11Solver() : base(2023, 11) { }
 
-        public override object[] ParseInput(IEnumerable<string> input)
-            => input.ToArray();
+        public override SpaceMap ParseInput(IEnumerable<string> input)
+            => SpaceMap.Parse(input.ToArray());
 
 
-        public override long PartOne(object[] input)
+        public override long PartOne(SpaceMap spaceMap)
         {
-            throw new NotImplementedException();
+            List<GalaxyPair> distances = spaceMap.GetDistances();
+            var sum = distances.Sum(p => p.Steps);
+            return sum;
         }
 
-        public override long PartTwo(object[] input)
+        public override long PartTwo(SpaceMap input)
         {
             throw new NotImplementedException();
         }
