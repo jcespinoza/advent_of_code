@@ -36,7 +36,7 @@ namespace Advent23.Days.Day12
             }
 
             // Are we skipping any "#"
-            if (text.Take(text.Length - start).Contains('#'))
+            if (text.Substring(0, start).Contains('#'))
             {
                 return false;
             }

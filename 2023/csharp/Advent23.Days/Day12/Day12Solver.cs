@@ -15,26 +15,19 @@ namespace Advent23.Days
         public override long PartOne(ConditionRecord[] conditionRecords)
         {
             long sumOfArrangements = 0;
-            Dictionary<ConditionRecord, long> cache = new();
             foreach (var line in conditionRecords)
             {
                 var arrangements = GetPossibleArrangements(new ConditionRecord { 
                     Text = $".{line.Text}.", Sizes = line.Sizes 
-                    }, cache);
+                    });
                 sumOfArrangements += arrangements;
             }
 
             return sumOfArrangements;
         }
 
-        private long GetPossibleArrangements(ConditionRecord line, 
-            Dictionary<ConditionRecord, long> cache)
+        private long GetPossibleArrangements(ConditionRecord line)
         {
-            if (cache.TryGetValue(line, out long arrangements))
-            {
-                return arrangements;
-            }
-
             if (line.Sizes.Length == 0)
             {
                 return line.Text.Contains('#') ? 0 : 1;
@@ -59,12 +52,11 @@ namespace Advent23.Days
                         new() {
                             Text = line.Text.Substring(end + 1),
                             Sizes = groups
-                        }, cache
+                        }
                     );
                 }
             }
 
-            cache[line] = result;
             return result;
         }
 

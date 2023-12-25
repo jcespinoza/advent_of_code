@@ -5,7 +5,8 @@ def part_one(lines) -> int:
   for line in lines:
     text, sizes = parse_condition_record(line)
     text = "."+text+"."
-    total += get_possible_arrangements(text, sizes)
+    arrangements = get_possible_arrangements(text, sizes)
+    total += arrangements
   
   return total
 
@@ -47,8 +48,22 @@ def segment_fits(text: str, start: int, end: int) -> bool:
     
   return True
 
-lines = []
-with open("./day12/puzzle_input.txt", "r") as f:
-  lines = f.read().splitlines()
+def part_one_solution():
+  lines = []
+  with open("./day12/puzzle_input.txt", "r") as f:
+    lines = f.read().splitlines()
 
-print(part_one(lines))
+  print(part_one(lines))
+  
+def part_one_example1():
+  lines = [
+    "???.### 1,1,3",
+    ".??..??...?##. 1,1,3",
+    "?#?#?#?#?#?#?#? 1,3,1,6",
+    "????.#...#... 4,1,1",
+    "????.######..#####. 1,6,5",
+    "?###???????? 3,2,1",
+  ]
+  print(part_one(lines))
+  
+part_one_example1()
