@@ -1,3 +1,4 @@
+from functools import cache
 import sys
 
 def part_one(lines) -> int:
@@ -10,12 +11,25 @@ def part_one(lines) -> int:
   
   return total
 
+def part_two(lines) -> int:
+  total = 0
+  for line in lines:
+    text, sizes = parse_condition_record(line)
+    text = "?".join([text]*5)
+    text = "."+text+"."
+    sizes *= 5
+    arrangements = get_possible_arrangements(text, sizes)
+    total += arrangements
+  
+  return total
+
 def parse_condition_record(line: str) -> tuple[str,tuple[int]]:
   text, sizes = line.split(" ")
   sizes = tuple(map(int, sizes.split(",")))
   
   return text, sizes
 
+@cache
 def get_possible_arrangements(text: str, sizes: tuple[int]) -> int:
   if not sizes:
     return 0 if "#" in text else 1
@@ -53,7 +67,13 @@ def part_one_solution():
   with open("./day12/puzzle_input.txt", "r") as f:
     lines = f.read().splitlines()
 
-  print(part_one(lines))
+def part_two_solution():
+  lines = []
+  with open("./day12/puzzle_input.txt", "r") as f:
+    lines = f.read().splitlines()
+
+  print(part_two(lines))
+  
   
 def part_one_example1():
   lines = [
@@ -66,4 +86,6 @@ def part_one_example1():
   ]
   print(part_one(lines))
   
-part_one_example1()
+# part_one_example1()
+# part_one_solution()
+part_two_solution()
