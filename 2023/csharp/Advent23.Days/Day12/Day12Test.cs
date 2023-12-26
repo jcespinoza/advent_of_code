@@ -78,13 +78,63 @@ namespace Advent23.Days
 
         public override Puzzle PartTwo => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
                 RawInput = [
+                    "???.### 1,1,3",
+                    ".??..??...?##. 1,1,3",
+                    "?#?#?#?#?#?#?#? 1,3,1,6",
+                    "????.#...#... 4,1,1",
+                    "????.######..#####. 1,6,5",
+                    "?###???????? 3,2,1",
                 ],
-                Result = 8,
+                Result = 525152,
             },
+            Examples = [
+                new()
+                {
+                    RawInput = [
+                        "???.### 1,1,3",
+                    ],
+                    Result = 1,
+                },
+                new()
+                {
+                    RawInput = [
+                        ".??..??...?##. 1,1,3",
+                    ],
+                    Result = 16384,
+                },
+                new()
+                {
+                    RawInput = [
+                        "?#?#?#?#?#?#?#? 1,3,1,6",
+                    ],
+                    Result = 1,
+                },
+                new()
+                {
+                    RawInput = [
+                        "????.######..#####. 1,6,5",
+                    ],
+                    Result = 2500,
+                },
+                new()
+                {
+                    RawInput = [
+                        "????.#...#... 4,1,1",
+                    ],
+                    Result = 16,
+                },
+                new()
+                {
+                    RawInput = [
+                        "?###???????? 3,2,1",
+                    ],
+                    Result = 506250,
+                },
+            ],
             Solution = EXPECTED_SOLUTION_PART_2,
         };
     }

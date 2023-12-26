@@ -1,6 +1,8 @@
 ﻿using Advent23.Days.Day12;
 using AdventOfCode.Commons;
 using FluentAssertions.Formatting;
+using System.Security.AccessControl;
+using System.Text;
 
 namespace Advent23.Days
 {
@@ -14,20 +16,23 @@ namespace Advent23.Days
 
         public override long PartOne(ConditionRecord[] conditionRecords)
         {
+            Dictionary<ConditionRecord, long> cache = new();
             long sumOfArrangements = 0;
             foreach (var line in conditionRecords)
             {
                 var arrangements = GetPossibleArrangements(new ConditionRecord { 
                     Text = $".{line.Text}.", Sizes = line.Sizes 
-                    });
+                    }, cache);
                 sumOfArrangements += arrangements;
             }
 
             return sumOfArrangements;
         }
 
-        private long GetPossibleArrangements(ConditionRecord line)
+        private long GetPossibleArrangements(ConditionRecord line, Dictionary<ConditionRecord, long> cache)
         {
+            if (cache.ContainsKey(line)) return cache[line];
+
             if (line.Sizes.Length == 0)
             {
                 return line.Text.Contains('#') ? 0 : 1;
@@ -52,17 +57,43 @@ namespace Advent23.Days
                         new() {
                             Text = line.Text.Substring(end + 1),
                             Sizes = groups
-                        }
+                        },
+                        cache
                     );
                 }
             }
 
+            cache[line] = result;
             return result;
         }
 
         public override long PartTwo(ConditionRecord[] input)
         {
-            throw new NotImplementedException();
+            ConditionRecord[] conditionRecords = ExpandRecords(input);
+            Dictionary<ConditionRecord, long> cache = new();
+            long sumOfArrangements = 0;
+            foreach (var line in conditionRecords)
+            {
+                var arrangements = GetPossibleArrangements(new ConditionRecord
+                {
+                    Text = $".{line.Text}.",
+                    Sizes = line.Sizes
+                }, cache);
+                sumOfArrangements += arrangements;
+            }
+
+            return sumOfArrangements;
+        }
+
+        private ConditionRecord[] ExpandRecords(ConditionRecord[] input)
+        {
+            return input.Select(line =>
+            {
+                return new ConditionRecord {
+                    Text = string.Join('?',Enumerable.Repeat(line.Text, 5)),
+                    Sizes = Enumerable.Repeat(line.Sizes, 5).SelectMany(a => a).ToArray()
+                };
+            }).ToArray();
         }
     }
 }
