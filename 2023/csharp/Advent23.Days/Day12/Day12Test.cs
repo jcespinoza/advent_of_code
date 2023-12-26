@@ -6,8 +6,8 @@ namespace Advent23.Days
 {
     public class Day12Test : TestEngine<Day12Solver, ConditionRecord[], long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 7771;
-        private const long EXPECTED_SOLUTION_PART_2 = 123;
+        private const long EXPECTED_SOLUTION_PART_1 = 7_771;
+        private const long EXPECTED_SOLUTION_PART_2 = 10_861_030_975_833;
 
         public Day12Test()
         {
