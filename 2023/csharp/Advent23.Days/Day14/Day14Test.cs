@@ -1,11 +1,12 @@
-﻿using AdventOfCode.Commons;
+﻿using Advent23.Days.Day14;
+using AdventOfCode.Commons;
 using dotenv.net;
 
 namespace Advent23.Days
 {
-    public class Day14Test : TestEngine<Day14Solver, object[], long>
+    public class Day14Test : TestEngine<Day14Solver, Dish, long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 123;
+        private const long EXPECTED_SOLUTION_PART_1 = 103_614;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
 
         public Day14Test()
