@@ -6,7 +6,7 @@ namespace Advent23.Days
     public class Day15Test : TestEngine<Day15Solver, string, long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 513_214;
-        private const long EXPECTED_SOLUTION_PART_2 = 123;
+        private const long EXPECTED_SOLUTION_PART_2 = 258_826;
 
         public Day15Test()
         {
@@ -37,12 +37,13 @@ namespace Advent23.Days
 
         public override Puzzle PartTwo => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
                 RawInput = [
+                    "rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"
                 ],
-                Result = 8,
+                Result = 145,
             },
             Solution = EXPECTED_SOLUTION_PART_2,
         };
