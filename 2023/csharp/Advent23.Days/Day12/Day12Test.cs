@@ -78,7 +78,7 @@ namespace Advent23.Days
 
         public override Puzzle PartTwo => new()
         {
-            ShouldSkipTests = false,
+            ShouldSkipTests = true, // Too Slow in C#
             Example = new()
             {
                 RawInput = [

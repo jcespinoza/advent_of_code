@@ -8,42 +8,26 @@ namespace Advent23.Days
         public Day13Solver() : base(2023, 13) { }
 
         public override TerrainPattern[] ParseInput(IEnumerable<string> input)
-            => ParseLines(input);
+            => TerrainPattern.ParsePatternGroups(input);
 
-        private TerrainPattern[] ParseLines(IEnumerable<string> lines)
+        public override long PartOne(TerrainPattern[] patterns)
         {
-            var patterns = new List<TerrainPattern>();
-            var patternLines = new List<string>();
-            foreach (var line in lines)
+            long totalSummary = 0;
+            foreach (var pattern in patterns)
             {
-                if (string.IsNullOrWhiteSpace(line))
-                {
-                    var newPattern = new TerrainPattern
-                    {
-                        Lines = patternLines.ToArray(),
-                    };
-                    patterns.Add(newPattern);
-                    patternLines = [];
-                    continue;
-                }
-                patternLines.Add(line);
+                pattern.HMirrorIndexes = TerrainPattern.ComputeHMirrorIndexes(pattern);
+
+                pattern.VMirrorIndexes = TerrainPattern.ComputeVMirrorIndexes(pattern);
+
+                int hReflectedLines = TerrainPattern.ComputeHReflectedLines(pattern);
+                int vReflectedLines = TerrainPattern.ComputeVReflectedLines(pattern);
+
+                int hCount = 100 * hReflectedLines;
+                int patternSummary = vReflectedLines + hCount;
+
+                totalSummary += patternSummary;
             }
-
-            if (patternLines.Any())
-            {
-                var newPattern = new TerrainPattern
-                {
-                    Lines = patternLines.ToArray(),
-                };
-                patterns.Add(newPattern);
-            }
-
-            return patterns.ToArray();
-        }
-
-        public override long PartOne(TerrainPattern[] input)
-        {
-            throw new NotImplementedException();
+            return totalSummary;
         }
 
         public override long PartTwo(TerrainPattern[] input)

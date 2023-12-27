@@ -6,7 +6,7 @@ namespace Advent23.Days
 {
     public class Day13Test : TestEngine<Day13Solver, TerrainPattern[], long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 123;
+        private const long EXPECTED_SOLUTION_PART_1 = 30_535;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
 
         public Day13Test()
