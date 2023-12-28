@@ -108,7 +108,7 @@ namespace Advent23.Days.Day10
                 || colIndex >= Segments[rowIndex].Length
                 )
             {
-                target = null;
+                target = new PipeSegment {ColIndex = -1, RowIndex = -1,SegmentType = SegmentType.Start };
                 return false;
             }
 

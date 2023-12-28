@@ -3,7 +3,6 @@ namespace Advent23.Days.Day16
 {
     public record Contraption
     {
-        private readonly Tuple<Step?, Step?> defaultSteps = Tuple.Create<Step?, Step?>(null, null);
         public required Tile[][] Grid { get; init; }
         public static Contraption Parse(string[] lines)
         {
@@ -69,6 +68,24 @@ namespace Advent23.Days.Day16
         public long GetEnergizedBeams()
         {
             return Grid.SelectMany(r => r).Count(t => t.IsEnergized);
+        }
+
+        public Contraption Duplicate()
+        {
+            var rows = new Tile[Grid.Length][];
+            for (int row = 0; row < Grid.Length; row++)
+            {
+                Tile[] sRow = Grid[row];
+                Tile[] col = sRow.Select(t => new Tile
+                {
+                    Col = t.Col,
+                    Row = t.Row,
+                    Type = t.Type,
+                }).ToArray();
+                rows[row] = col;
+            }
+
+            return new() { Grid = rows };
         }
     }
 

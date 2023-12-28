@@ -26,9 +26,39 @@ namespace Advent23.Days
             return energizedBeams;
         }
 
-        public override long PartTwo(Contraption input)
+        public override long PartTwo(Contraption original)
         {
-            throw new NotImplementedException();
+            long maxEnergizedBeams = 0;
+            for (int row = 0; row < original.Grid.Length; row++)
+            {
+                Contraption test = original.Duplicate();
+                test.BeamWalk(new Step { Col = 0, Row = row, Towards = Direction.East});
+                maxEnergizedBeams = Math.Max(maxEnergizedBeams, test.GetEnergizedBeams());
+
+
+                test = original.Duplicate();
+                test.BeamWalk(new Step { 
+                        Col = test.Grid[row].Length - 1, Row = row, Towards = Direction.West 
+                    });
+                maxEnergizedBeams = Math.Max(maxEnergizedBeams, test.GetEnergizedBeams());
+            }
+            
+            for (int col = 0; col < original.Grid[0].Length; col++)
+            {
+                Contraption test = original.Duplicate();
+                test.BeamWalk(new Step { Col = col, Row = 0, Towards = Direction.South});
+                maxEnergizedBeams = Math.Max(maxEnergizedBeams, test.GetEnergizedBeams());
+
+
+                test = original.Duplicate();
+                test.BeamWalk(new Step { 
+                        Col = col, Row = test.Grid.Length - 1, Towards = Direction.North 
+                    });
+                maxEnergizedBeams = Math.Max(maxEnergizedBeams, test.GetEnergizedBeams());
+            }
+
+
+            return maxEnergizedBeams;
         }
     }
 }
