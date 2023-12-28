@@ -1,11 +1,12 @@
-﻿using AdventOfCode.Commons;
+﻿using Advent23.Days.Day16;
+using AdventOfCode.Commons;
 using dotenv.net;
 
 namespace Advent23.Days
 {
-    public class Day16Test : TestEngine<Day16Solver, object[], long>
+    public class Day16Test : TestEngine<Day16Solver, Contraption, long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 123;
+        private const long EXPECTED_SOLUTION_PART_1 = 7_242;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
 
         public Day16Test()
@@ -33,6 +34,24 @@ namespace Advent23.Days
                 Result = 46,
             },
             Examples = [
+                 new()
+                 {
+                     RawInput = [
+                        @".|...\..",
+                        @"|.-.\...",
+                        @".....|-.",
+                     ],
+                     Result = 4,
+                 },
+                new()
+                {
+                    RawInput = [
+                        @".|...\..",
+                        @"|.-.\...",
+                        @".\./.|-.",
+                    ],
+                    Result = 8,
+                },
             ],
             Solution = EXPECTED_SOLUTION_PART_1,
         };
