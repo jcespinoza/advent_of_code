@@ -2,9 +2,9 @@
 
 namespace Advent24.Days
 {
-    public class Day00Solver : Solver<object[], long>
+    public class Day01Solver : Solver<object[], long>
     {
-        public Day00Solver() : base(2024, 00) { }
+        public Day01Solver() : base(2024, 00) { }
 
         public override object[] ParseInput(IEnumerable<string> input)
             => input.ToArray();
