@@ -51,17 +51,17 @@ public class RemotePuzzleInputReaderStrategy : IPuzzleInputReaderStrategy
     /// </exception>
     private static CookieContainer GetCookieContainer()
     {
-        DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false, probeForEnv: true, probeLevelsToSearch: 4));
-
         var container = new CookieContainer();
+
+        string? cookieValue = Configuration.CookieValue;
 
         container.Add(new Cookie
         {
             Name = "session",
             Domain = ".adventofcode.com",
-            Value = string.IsNullOrEmpty(Configuration.CookieValue)
+            Value = string.IsNullOrEmpty(cookieValue)
                 ? throw new Exception("You need to specify your cookie in order to get your input puzzle")
-                : Configuration.CookieValue,
+                : cookieValue,
         });
 
         return container;
@@ -70,13 +70,33 @@ public class RemotePuzzleInputReaderStrategy : IPuzzleInputReaderStrategy
     /// <inheritdoc />
     public IEnumerable<string> ReadInput()
     {
+        if (Day <= 0) throw new InvalidOperationException("Day must be a positive integer");
+
         var task = Task.Run(async () =>
         {
+            DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false, probeForEnv: true, probeLevelsToSearch: 4));
+
+            string inputsPath = Configuration.InputPath ?? "inputs";
+
+            // check if the file already exists
+            if (File.Exists($"{inputsPath}/puzzle_inputs/{Year}_{Day}.txt"))
+            {
+                return File.ReadAllText($"{inputsPath}/puzzle_inputs/{Year}_{Day}.txt");
+            }
+
             var response = await Client.GetAsync($"/{Year}/day/{Day}/input");
 
-            return await response.EnsureSuccessStatusCode()
+            var stringResult = await response.EnsureSuccessStatusCode()
                 .Content
                 .ReadAsStringAsync();
+
+            if (!string.IsNullOrWhiteSpace(stringResult))
+            {
+                // store in a temporary file
+                File.WriteAllText($"{inputsPath}/puzzle_inputs/{Year}_{Day}.txt", stringResult);
+            }
+
+            return stringResult;
         });
 
         task.Wait();

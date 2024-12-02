@@ -14,4 +14,6 @@ public static class Configuration
     /// the website has set and paste its value here, it be something like <c>session:"[value]"</c>
     /// </remarks>
     public readonly static string? CookieValue = Environment.GetEnvironmentVariable("AOC_COOKIE");
+
+    public readonly static string? InputPath = Environment.GetEnvironmentVariable("AOC_INPUT_PATH");
 }
