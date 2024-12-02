@@ -12,15 +12,16 @@ namespace Advent24.Days
             return input.Select(line => {
                 var levels = line.Split(' ')
                                 .Select(int.Parse)
-                                .Select(levelNumber => new Report.Level(levelNumber))
                                 .ToArray();
                 return new Report { Levels = levels };
             }).ToArray();            
         }
 
-        public override long PartOne(Report[] input)
+        public override long PartOne(Report[] reports)
         {
-            throw new NotImplementedException();
+            var safeReports = reports.Select(r => r.IsSafe());
+
+            return safeReports.Count(safe => safe);
         }
 
         public override long PartTwo(Report[] input)
