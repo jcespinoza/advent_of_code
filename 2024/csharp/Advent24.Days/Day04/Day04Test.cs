@@ -3,7 +3,7 @@ using dotenv.net;
 
 namespace Advent24.Days
 {
-    public class Day04Test : TestEngine<Day04Solver, object[], long>
+    public class Day04Test : TestEngine<Day04Solver, char[][], long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 123;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
