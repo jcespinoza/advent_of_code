@@ -1,21 +1,34 @@
-﻿using AdventOfCode.Commons;
+﻿using Advent24.Days.Day03;
+using AdventOfCode.Commons;
 
 namespace Advent24.Days
 {
-    public class Day03Solver : Solver<object[], long>
+    public class Day03Solver : Solver<Operation[], long>
     {
         public Day03Solver() : base(2024, 03) { }
 
-        public override object[] ParseInput(IEnumerable<string> input)
-            => input.ToArray();
-
-
-        public override long PartOne(object[] input)
+        public override Operation[] ParseInput(IEnumerable<string> input)
         {
-            throw new NotImplementedException();
+            Operation[] operations = input.SelectMany(ParseOperationsInLine).ToArray();
+
+            return operations;
         }
 
-        public override long PartTwo(object[] input)
+        private Operation[] ParseOperationsInLine(string line)
+        {
+            var parser = new OperationParser(line);
+            var operations = parser.ReadOperations();
+            return [.. operations];
+        }
+
+        public override long PartOne(Operation[] operations)
+        {
+            long totalSum = operations.Sum(o => o.OperandA * o.OperandB);
+
+            return totalSum;
+        }
+
+        public override long PartTwo(Operation[] input)
         {
             throw new NotImplementedException();
         }
