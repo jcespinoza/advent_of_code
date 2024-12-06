@@ -45,7 +45,7 @@ namespace Advent24.Days
             return Result<int,string>.Success(int.Parse(number.ToString()));
         }
 
-        public Result<Operation, string> ReadOperation()
+        public Result<Instruction, string> ReadMulOperation()
         {
             if (HasNext() && CurrentChar == 'm')
             {
@@ -62,7 +62,7 @@ namespace Advent24.Days
                             var operandA = ReadNumber();
                             if (operandA.IsFailure)
                             {
-                                return Result<Operation, string>.Failure(operandA.Error);
+                                return Result<Instruction, string>.Failure(operandA.Error);
                             }
                             if (HasNext() && CurrentChar == ',')
                             {
@@ -70,32 +70,117 @@ namespace Advent24.Days
                                 var operandB = ReadNumber();
                                 if (operandB.IsFailure)
                                 {
-                                    return Result<Operation, string>.Failure(operandB.Error);
+                                    return Result<Instruction, string>.Failure(operandB.Error);
                                 }
                                 if (HasNext() && CurrentChar == ')')
                                 {
                                     AdvancePointer();
-                                    return Result<Operation, string>.Success(new Operation(operandA.Value, operandB.Value));
+                                    return Result<Instruction, string>.Success(new MulOperation(operandA.Value, operandB.Value));
                                 }
-                                return Result<Operation, string>.Failure("Expected closing parenthesis");
+                                return Result<Instruction, string>.Failure("Expected closing parenthesis");
                             }
-                            return Result<Operation, string>.Failure("Expected comma");
+                            return Result<Instruction, string>.Failure("Expected comma");
                         }
-                        return Result<Operation, string>.Failure("Expected opening parenthesis");
+                        return Result<Instruction, string>.Failure("Expected opening parenthesis");
                     }
-                    return Result<Operation, string>.Failure("Expected 'l'");
+                    return Result<Instruction, string>.Failure("Expected 'l'");
                 }
-                return Result<Operation, string>.Failure("Expected 'u'");
+                return Result<Instruction, string>.Failure("Expected 'u'");
             }
-            return Result<Operation, string>.Failure("Expected 'm'");
+            return Result<Instruction, string>.Failure("Expected 'm'");
         }
 
-        public List<Operation> ReadOperations()
+        // Matches either "do()" or "don't()" in a single pass
+        // Assigns the InstructionType depending on which one it matched
+        // If successful, returns a DoInstruction or DontInstruction
+        public Result<Instruction, string> ReadDoInstruction()
         {
-            List<Operation> operations = [];
+            InstructionType type = InstructionType.Do;
+            if(HasNext() && CurrentChar == 'd')
+            {
+                AdvancePointer();
+                if (HasNext() && CurrentChar == 'o')
+                {
+                    AdvancePointer();
+                    // attempt to find an "n" which means we need to match a "don't()"
+                    if (HasNext() && CurrentChar == 'n')
+                    {
+                        AdvancePointer();
+                        type = InstructionType.Dont;
+                        if (HasNext() && CurrentChar == '\'')
+                        {
+                            AdvancePointer();
+                            if (HasNext() && CurrentChar == 't')
+                            {
+                                AdvancePointer();
+                            }
+                            else
+                            {
+                                return Result<Instruction, string>.Failure("Expected 't'");
+                            }
+                        }
+                        else
+                        {
+                            return Result<Instruction, string>.Failure("Expected single quote");
+                        }
+                    }
+                    if(HasNext() && CurrentChar == '(')
+                    {
+                        AdvancePointer();
+                        if (HasNext() && CurrentChar == ')')
+                        {
+                            AdvancePointer();
+                            if (type == InstructionType.Dont)
+                            {
+                                return Result<Instruction, string>.Success(new DontInstruction());
+                            }
+                            return Result<Instruction, string>.Success(new DoInstruction());                            
+                        }
+                        return Result<Instruction, string>.Failure("Expected ')'");
+                    }
+                    return Result<Instruction, string>.Failure("Expected '('");
+                }
+                return Result<Instruction, string>.Failure("Expected 'o'");
+            }
+            return Result<Instruction, string>.Failure("Expected 'd'");
+        }
+
+        public Result<Instruction, string> ReadInstruction()
+        {
+            if(HasNext() && CurrentChar == 'm')
+            {
+                return ReadMulOperation();
+            }else if(HasNext() && CurrentChar == 'd')
+            {
+                return ReadDoInstruction();
+            }
+            return Result<Instruction, string>.Failure("Expected 'm' or 'd'");
+        }
+
+        public List<Instruction> ReadOperations()
+        {
+            List<Instruction> operations = [];
             while (HasNext())
             {
-                var operation = ReadOperation();
+                var operation = ReadMulOperation();
+                if (operation.IsSuccess)
+                {
+                    operations.Add(operation.Value);
+                }
+                else
+                {
+                    AdvancePointer();
+                }
+            }
+            return operations;
+        }
+
+        public List<Instruction> ReadInstructions()
+        {
+            List<Instruction> operations = [];
+            while (HasNext())
+            {
+                var operation = ReadInstruction();
                 if (operation.IsSuccess)
                 {
                     operations.Add(operation.Value);

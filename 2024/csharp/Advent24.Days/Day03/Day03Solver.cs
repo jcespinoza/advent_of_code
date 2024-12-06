@@ -3,34 +3,56 @@ using AdventOfCode.Commons;
 
 namespace Advent24.Days
 {
-    public class Day03Solver : Solver<Operation[], long>
+    public class Day03Solver : Solver<Instruction[], long>
     {
         public Day03Solver() : base(2024, 03) { }
 
-        public override Operation[] ParseInput(IEnumerable<string> input)
+        public override Instruction[] ParseInput(IEnumerable<string> input)
         {
-            Operation[] operations = input.SelectMany(ParseOperationsInLine).ToArray();
+            Instruction[] intructions = input.SelectMany(ParseOperationsInLine).ToArray();
 
-            return operations;
+            return intructions;
         }
 
-        private Operation[] ParseOperationsInLine(string line)
+        private Instruction[] ParseOperationsInLine(string line)
         {
             var parser = new OperationParser(line);
-            var operations = parser.ReadOperations();
-            return [.. operations];
+            var instructions = parser.ReadInstructions();
+            return [.. instructions];
         }
 
-        public override long PartOne(Operation[] operations)
+        public override long PartOne(Instruction[] intructions)
         {
-            long totalSum = operations.Sum(o => o.OperandA * o.OperandB);
+            long totalSum = intructions
+                .Where(i => i is MulOperation mul)
+                .Select(i => i as MulOperation)
+                .Sum(o => o!.OperandA * o!.OperandB);
 
             return totalSum;
         }
 
-        public override long PartTwo(Operation[] input)
+        public override long PartTwo(Instruction[] instructions)
         {
-            throw new NotImplementedException();
+            bool enableMuls = true;
+            long totalSum = 0;
+            for (int index = 0; index < instructions.Length; index++)
+            {
+                var current = instructions[index];
+                if (current is DoInstruction)
+                {
+                    enableMuls = true;
+                }
+                else if (current is DontInstruction)
+                {
+                    enableMuls = false;
+                }
+                else if (current is MulOperation mul && enableMuls)
+                {
+                    totalSum += mul.OperandA * mul.OperandB;
+                }
+            }
+
+            return totalSum;
         }
     }
 }
