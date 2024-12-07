@@ -55,47 +55,15 @@ namespace Advent24.Days
 
         public override long PartOne(PrintingConfig input)
         {
-            List<int[]> correctUpdates = [];
-            foreach (var update in input.Updates)
-            {
-                bool isCorrect = DoesUpdateFollowRules(update, input.Rules);
-                if (isCorrect)
-                {
-                    correctUpdates.Add(update);
-                }
-            }
+            List<int[]> correctUpdates = PrintingOrderChecker
+                                        .FindCorrectUpdates(input.Updates, input.Rules)
+                                        .ToList();
+
             List<int> middlePages = correctUpdates.Select(u => u[u.Length / 2]).ToList();
 
             long sumOfPageNumber = middlePages.Sum();
 
             return sumOfPageNumber;
-        }
-
-        private bool DoesUpdateFollowRules(int[] update, List<OrderingRule> rules)
-        {
-            foreach (var rule in rules)
-            {
-                bool passesTest = DoesUpdateFollowRule(update, rule);
-                if(!passesTest)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        private bool DoesUpdateFollowRule(int[] update, OrderingRule rule)
-        {
-            int indexX = Array.IndexOf(update, rule.PageX);
-            int indexY = Array.IndexOf(update, rule.PageY);
-
-            // if either index is -1, the rule does not apply
-            if (indexX == -1 || indexY == -1)
-            {
-                return true;
-            }
-
-            return indexX < indexY;
         }
 
         public override long PartTwo(PrintingConfig input)
