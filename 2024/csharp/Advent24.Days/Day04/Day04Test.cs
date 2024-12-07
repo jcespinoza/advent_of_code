@@ -5,7 +5,7 @@ namespace Advent24.Days
 {
     public class Day04Test : TestEngine<Day04Solver, char[][], long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 123;
+        private const long EXPECTED_SOLUTION_PART_1 = 2618;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
 
         public Day04Test()
@@ -33,6 +33,15 @@ namespace Advent24.Days
                 Result = 18,
             },
             Examples = [
+                new(){
+                    RawInput = [
+                        "..S..X..S",
+                        "..SAMX.A.",
+                        "...AM.M..",
+                        "..SA.X..."
+                        ],
+                    Result = 4
+                    }
             ],
             Solution = EXPECTED_SOLUTION_PART_1,
         };

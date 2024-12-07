@@ -6,6 +6,16 @@ namespace Advent24.Days
     public class Day04Solver : Solver<char[][], long>
     {
         public Day04Solver() : base(2024, 04) { }
+        public Direction[] AllDirections = [
+            Direction.North,
+            Direction.NorthEast,
+            Direction.East,
+            Direction.SouthEast,
+            Direction.South,
+            Direction.SouthWest,
+            Direction.West,
+            Direction.NorthWest,
+        ];
 
         public override char[][] ParseInput(IEnumerable<string> input)
             => input.Select(l => l.ToCharArray()).ToArray();
@@ -36,9 +46,46 @@ namespace Advent24.Days
             return successCounts;
         }
 
-        private int FindWordCountInAllDirections(char[][] inputGrid, int row, int col, string word)
+        private int FindWordCountInAllDirections(char[][] inputGrid, int startRow, int startCol, string word)
         {
-            throw new NotImplementedException();
+            int countOfWords = 0;
+            foreach (var direction in AllDirections)
+            {
+                bool isWordInDirection = FindWordCountInDirection(inputGrid, startRow, startCol, word, direction);
+
+                if(isWordInDirection) countOfWords++;
+            }
+
+            return countOfWords;
+        }
+
+        private bool FindWordCountInDirection(char[][] inputGrid, int startRow, int startCol, string word, Direction direction)
+        {
+            (int currentRow, int currentCol) = (startRow, startCol);
+            for (int index = 1; index < word.Length; index++)
+            {
+                var result = GridWalker<char>.Move(inputGrid, direction, currentRow, currentCol);
+                if(result.IsFailure)
+                {
+                    // no more cells in that directions
+                    return false;
+                }
+
+                (int newRow, int newCol) = result.Value;
+
+                bool charactersMatch = inputGrid[newRow][newCol] == word[index];
+                if (!charactersMatch)
+                {
+                    // character at that position does not match the expected value
+                    return false;
+                }
+
+                // set currentRow, currentCol for next iteration
+                (currentRow, currentCol) = (newRow, newCol);
+            }
+
+            // We were able to match the whole word
+            return true;
         }
 
         public override long PartTwo(char[][] input)
