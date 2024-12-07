@@ -68,7 +68,16 @@ namespace Advent24.Days
 
         public override long PartTwo(PrintingConfig input)
         {
-            throw new NotImplementedException();
+            List<int[]> incorrectUpdates = PrintingOrderChecker
+                                        .FindIncorrectUpdates(input.Updates, input.Rules)
+                                        .ToList();
+            List<int[]> correctedUpdates = PrintingOrderChecker
+                .CorrectUpdates(incorrectUpdates, input.Rules)
+                .ToList();
+            List<int> middlePages = correctedUpdates.Select(u => u[u.Length / 2]).ToList();
+
+            long sumOfPageNumber = middlePages.Sum();
+            return sumOfPageNumber;
         }
     }
 }

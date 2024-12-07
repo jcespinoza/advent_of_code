@@ -54,5 +54,70 @@
 
             return indexX < indexY;
         }
+
+        public static IEnumerable<int[]> CorrectUpdates(List<int[]> incorrectUpdates, List<OrderingRule> rules)
+        {
+            foreach (var update in incorrectUpdates)
+            {
+                List<OrderingRule> applicableRules = FilterApplicableRules(update, rules);
+                int[] correctedUpdate = CorrectUpdate(update, applicableRules);
+                yield return correctedUpdate;
+            }
+        }
+
+        public static List<OrderingRule> FilterApplicableRules(int[] update, List<OrderingRule> rules)
+        {
+            List<OrderingRule> applicableRules = [];
+            foreach (var rule in rules)
+            {
+                if (update.Contains(rule.PageX) && update.Contains(rule.PageY))
+                {
+                    applicableRules.Add(rule);
+                }
+            }
+            return applicableRules;
+        }
+
+        public static int[] CorrectUpdate(int[] update, List<OrderingRule> applicableRules)
+        {
+            // copy the update to avoid modifying the original
+            int[] correctedUpdate = new int[update.Length];
+            update.CopyTo(correctedUpdate, 0);
+
+            foreach (var rule in applicableRules)
+            {
+                ApplyOrderingRule(correctedUpdate, rule);
+            }
+
+            return correctedUpdate;
+        }
+
+        public static void ApplyOrderingRule(int[] correctedUpdate, OrderingRule rule)
+        {
+            int indexX = Array.IndexOf(correctedUpdate, rule.PageX);
+            int indexY = Array.IndexOf(correctedUpdate, rule.PageY);
+
+            if (indexX < indexY)
+            {
+                return;
+            }
+
+            if (indexX > indexY)
+            {
+                SwapElements(correctedUpdate, indexX, indexY);
+            }
+            else
+            {
+                // if the elements are already in the correct order, move the element at indexY to the end
+                SwapElements(correctedUpdate, indexY, correctedUpdate.Length - 1);
+            }
+        }
+
+        private static void SwapElements(int[] correctedUpdate, int indexX, int indexY)
+        {
+            int temp = correctedUpdate[indexX];
+            correctedUpdate[indexX] = correctedUpdate[indexY];
+            correctedUpdate[indexY] = temp;
+        }
     }
 }
