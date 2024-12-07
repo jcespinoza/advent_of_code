@@ -28,9 +28,16 @@ namespace Advent24.Days
             return wordCount;
         }
 
+        public override long PartTwo(char[][] input)
+        {
+            int xwordCount= FindXWordCount(input, "MAS");
+
+            return xwordCount;
+        }
+
         private int FindWordCount(char[][] inputGrid, string word)
         {
-            int successCounts = 0;
+            int successCount = 0;
             for (int row = 0; row < inputGrid.Length; row++)
             {
                 for (int col = 0; col < inputGrid[row].Length; col++)
@@ -38,12 +45,12 @@ namespace Advent24.Days
                     if (inputGrid[row][col] == word[0])
                     {
                         int countFromCell = FindWordCountInAllDirections(inputGrid, row, col, word);
-                        successCounts += countFromCell;
+                        successCount += countFromCell;
                     }
                 }
             }
 
-            return successCounts;
+            return successCount;
         }
 
         private int FindWordCountInAllDirections(char[][] inputGrid, int startRow, int startCol, string word)
@@ -51,7 +58,7 @@ namespace Advent24.Days
             int countOfWords = 0;
             foreach (var direction in AllDirections)
             {
-                bool isWordInDirection = FindWordCountInDirection(inputGrid, startRow, startCol, word, direction);
+                bool isWordInDirection = IsWordInDirection(inputGrid, startRow, startCol, word, direction);
 
                 if(isWordInDirection) countOfWords++;
             }
@@ -59,8 +66,14 @@ namespace Advent24.Days
             return countOfWords;
         }
 
-        private bool FindWordCountInDirection(char[][] inputGrid, int startRow, int startCol, string word, Direction direction)
+        private bool IsWordInDirection(char[][] inputGrid, int startRow, int startCol, string word, Direction direction)
         {
+            if (word[0] != inputGrid[startRow][startCol])
+            {
+                // the first character does not match
+                return false;
+            }
+
             (int currentRow, int currentCol) = (startRow, startCol);
             for (int index = 1; index < word.Length; index++)
             {
@@ -73,7 +86,9 @@ namespace Advent24.Days
 
                 (int newRow, int newCol) = result.Value;
 
-                bool charactersMatch = inputGrid[newRow][newCol] == word[index];
+                char cellChar = inputGrid[newRow][newCol];
+                char wordChar = word[index];
+                bool charactersMatch = cellChar == wordChar;
                 if (!charactersMatch)
                 {
                     // character at that position does not match the expected value
@@ -88,9 +103,62 @@ namespace Advent24.Days
             return true;
         }
 
-        public override long PartTwo(char[][] input)
+        private int FindXWordCount(char[][] input, string word)
         {
-            throw new NotImplementedException();
+            if(word.Length % 2 == 0)
+            {
+                throw new ArgumentException("Word length must be odd in order to form an X");
+            }
+
+            int successCount = 0;
+            int halfLength = word.Length / 2;
+            char middleChar = word[halfLength];
+
+            for (int row = 0; row < input.Length; row++)
+            {
+                for (int col = 0; col < input[row].Length; col++)
+                {
+                    char currentChar = input[row][col];
+                    if (currentChar != middleChar) continue;
+                    
+                    var nWest = GridWalker<char>.Move(input, Direction.NorthWest, row, col, halfLength);
+                    var sWest = GridWalker<char>.Move(input, Direction.SouthWest, row, col, halfLength);
+                    var nEast = GridWalker<char>.Move(input, Direction.NorthEast, row, col, halfLength);
+                    var sEast = GridWalker<char>.Move(input, Direction.SouthEast, row, col, halfLength);
+
+                    if (nWest.IsFailure || sWest.IsFailure || nEast.IsFailure || sEast.IsFailure)
+                    {
+                        // this cell can not be the center of the X. skip
+                        continue;
+                    }
+
+                    (int nwRow, int nwCol) = nWest.Value;
+                    (int swRow, int swCol) = sWest.Value;
+                    (int neRow, int neCol) = nEast.Value;
+                    (int seRow, int seCol) = sEast.Value;
+
+                    // Find the word from all four corners
+                    bool containsWordFromNW = IsWordInDirection(input, nwRow, nwCol, word, Direction.SouthEast);
+                    bool containsWordFromSW = IsWordInDirection(input, swRow, swCol, word, Direction.NorthEast);
+                    bool containsWordFromNE = IsWordInDirection(input, neRow, neCol, word, Direction.SouthWest);
+                    bool containsWordFromSE = IsWordInDirection(input, seRow, seCol, word, Direction.NorthWest);
+
+                    // Consolidate pairs from the four cardinal directions
+                    bool hasXFromWest = containsWordFromNW && containsWordFromSW;
+                    bool hasXFromEast = containsWordFromNE && containsWordFromSE;
+                    bool hasXFromNorth = containsWordFromNE && containsWordFromNW;
+                    bool hasXFromSouth = containsWordFromSE && containsWordFromSW;
+
+                    // If there is any X, increment the count
+                    bool formsXword = hasXFromWest || hasXFromEast || hasXFromNorth || hasXFromSouth;
+                    if (formsXword)
+                    {
+                        successCount++;
+                    }                    
+                }
+            }
+
+            return successCount;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Advent24.Days
     public class Day04Test : TestEngine<Day04Solver, char[][], long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 2618;
-        private const long EXPECTED_SOLUTION_PART_2 = 123;
+        private const long EXPECTED_SOLUTION_PART_2 = 2011;
 
         public Day04Test()
         {
@@ -48,13 +48,57 @@ namespace Advent24.Days
 
         public override Puzzle PartTwo => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
                 RawInput = [
+                    "MMMSXXMASM",
+                    "MSAMXMSMSA",
+                    "AMXSXMAAMM",
+                    "MSAMASMSMX",
+                    "XMASAMXAMM",
+                    "XXAMMXXAMA",
+                    "SMSMSASXSS",
+                    "SAXAMASAAA",
+                    "MAMMMXMMMM",
+                    "MXMXAXMASX",
                 ],
-                Result = 8,
+                Result = 9,
             },
+            Examples = [
+                new(){
+                    RawInput = [
+                        "M.S",
+                        ".A.",
+                        "M.S",
+                    ],
+                    Result = 1,
+                },
+                new(){
+                    RawInput = [
+                        "S.M",
+                        ".A.",
+                        "S.M",
+                    ],
+                    Result = 1,
+                },
+                new(){
+                    RawInput = [
+                        "M.M",
+                        ".A.",
+                        "S.S",
+                    ],
+                    Result = 1,
+                },
+                new(){
+                    RawInput = [
+                        "S.S",
+                        ".A.",
+                        "M.M",
+                    ],
+                    Result = 1,
+                }
+            ],
             Solution = EXPECTED_SOLUTION_PART_2,
         };
     }
