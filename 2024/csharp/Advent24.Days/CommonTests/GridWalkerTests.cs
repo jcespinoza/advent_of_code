@@ -50,10 +50,30 @@ namespace Advent24.Days.CommonTests
         public void WalkingTests(Direction direction, int startRow, int startCol, int expRow, int expCol, bool sholdSuceed)
         {
             // Act
-            Result<(int row,int col), string> result = GridWalker<int>.Move(testGrid, direction, startRow, startCol);
+            Result<(int row, int col), string> result = GridWalker<int>.Move(testGrid, direction, startRow, startCol);
 
             // Assert
             if (sholdSuceed)
+            {
+                result.IsSuccess.Should().BeTrue();
+                result.Value.row.Should().Be(expRow);
+                result.Value.col.Should().Be(expCol);
+            }
+            else
+            {
+                result.IsFailure.Should().BeTrue();
+            }
+        }
+
+        [Theory]
+        [InlineData(Direction.North, 1, 1, 2, 1, 0, false)]
+        [InlineData(Direction.NorthEast, 2, 1, 2, 0, 3, true)]
+        public void WalkingArbitraryStepsTests(Direction direction, int startRow, int startCol, int steps, int expRow, int expCol, bool shouldSucceed)
+        {
+            // Act
+            Result<(int row, int col), string> result = GridWalker<int>.Move(testGrid, direction, startRow, startCol, steps);
+            // Assert
+            if (shouldSucceed)
             {
                 result.IsSuccess.Should().BeTrue();
                 result.Value.row.Should().Be(expRow);
