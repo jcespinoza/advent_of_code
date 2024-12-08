@@ -6,18 +6,45 @@ if [ "$(uname)" == "Darwin" ]; then
     exit 1
 fi
 
-# Get day number from the arguments in the form --day=<integer> or -d=<integer>
+# Get day number from the arguments in the form --day <integer> or -d <integer>
 for i in "$@"
 do
-case $i in
-    --day=*|-d=*)
-    DAY="${i#*=}"
-    shift
-    ;;
-    *)
-    ;;
-esac
+    case $i in
+        --day=*)
+            DAY="${i#*=}"
+            shift
+            ;;
+        --day)
+            DAY="$2"
+            shift
+            shift
+            ;;
+        -d=*)
+            DAY="${i#*=}"
+            shift
+            ;;
+        -d)
+            DAY="$2"
+            shift
+            shift
+            ;;
+        *)
+            ;;
+    esac
 done
+
+# Provide usage details if the --help flag is passed
+if [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
+    echo "Usage: create_day.sh --day <integer>"
+    echo "Example: create_day.sh --day 1"
+    exit 0
+fi
+
+# If no day is provided, exit with an error message
+if [ -z "$DAY" ]; then
+    echo "Please provide a day number using the --day flag"
+    exit 1
+fi
 
 # set the dayname to the format Day<DAY> using 0-padding if the day is less than 10
 DAYNAME=$(printf "%02d" $DAY)
