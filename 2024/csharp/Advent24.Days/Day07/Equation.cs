@@ -20,6 +20,7 @@ namespace Advent24.Days
     public enum Operation
     {
         Add,
-        Multiply
+        Multiply,
+        Concatenation
     }
 }
