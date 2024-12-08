@@ -10,12 +10,12 @@ namespace Advent24.Days
             => input.Select(l => l.ToCharArray()).ToArray();
 
 
-        public override long PartOne(char[][] input)
+        public override long PartOne(char[][] map)
         {
             throw new NotImplementedException();
         }
 
-        public override long PartTwo(char[][] input)
+        public override long PartTwo(char[][] map)
         {
             throw new NotImplementedException();
         }
