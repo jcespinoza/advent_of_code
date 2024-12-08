@@ -1,7 +1,24 @@
-﻿namespace AdventOfCode.Commons
+﻿
+
+namespace AdventOfCode.Commons
 {
     public static class GridWalker<T> where T: notnull
     {
+        public static Result<(int row, int col), string> Find(char[][] map, char searchValue)
+        {
+            for (int row = 0; row < map.Length; row++)
+            {
+                for (int col = 0; col < map[row].Length; col++)
+                {
+                    if (map[row][col] == searchValue)
+                    {
+                        return Result<(int,int),string>.Success( (row, col));
+                    }
+                }
+            }
+            return Result<(int, int), string>.Failure("The search value was not found in the grid");
+        }
+
         public static Result<(int row, int col), string> Move(T[][] grid, Direction direction, int startRow, int startCol)
         {
             return Move(grid, direction, startRow, startCol, 1);
