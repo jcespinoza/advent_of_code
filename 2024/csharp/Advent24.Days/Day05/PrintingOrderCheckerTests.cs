@@ -53,19 +53,6 @@ namespace Advent24.Days
         }
 
         [Fact]
-        public void ApplyOrderingRule_ReturnsOriginalUpdateIfOrderIsAlreadyCorrect()
-        {
-            // Arrange
-            int[] update = [75, 97, 47, 61, 53];
-            OrderingRule rule = new(47, 53);
-            int[] expectedOrder = [75, 97, 47, 61, 53];
-            // Act
-            PrintingOrderChecker.ApplyOrderingRule(update, rule);
-            // Assert
-            update.Should().ContainInOrder(expectedOrder);
-        }
-
-        [Fact]
         public void CorrectUpdate_ReturnsCorrectUpdate_1()
         {
             // Arrange

@@ -78,46 +78,76 @@
             return applicableRules;
         }
 
-        public static int[] CorrectUpdate(int[] update, List<OrderingRule> applicableRules)
+        public static int[] CorrectUpdate(int[] originalUpdate, List<OrderingRule> applicableRules)
         {
-            // copy the update to avoid modifying the original
-            int[] correctedUpdate = new int[update.Length];
-            update.CopyTo(correctedUpdate, 0);
+            // build a graph out of the applicable rules
+            Dictionary<int, HashSet<int>> rulesDict = ConvertToDictionary(applicableRules);
 
-            foreach (var rule in applicableRules)
+            var inwardRuleCounts = originalUpdate.ToDictionary(p => p, p => 0);
+            var graph = new Dictionary<int, HashSet<int>>();
+
+            foreach (var page in originalUpdate)
             {
-                ApplyOrderingRule(correctedUpdate, rule);
+                graph[page] = new HashSet<int>();
             }
 
-            return correctedUpdate;
+            foreach (var rule in rulesDict)
+            {
+                int left = rule.Key;
+
+                foreach (var right in rule.Value)
+                {
+                    if (!graph[left].Contains(right))
+                    {
+                        graph[left].Add(right);
+                        inwardRuleCounts[right]++;
+                    }
+                }
+            }
+
+            var sortedItems = new List<int>();
+            // Initialize the Queue with items that have no incoming edges
+            var queue = new Queue<int>(originalUpdate.Where(p => inwardRuleCounts[p] == 0));
+
+            // Process each item in the queue by looking at its outgoing rules
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+                sortedItems.Add(current);
+
+                foreach (var neighborPage in graph[current])
+                {
+                    // Trim the edge from the graph
+                    inwardRuleCounts[neighborPage]--;
+
+                    // If the neighbor has no more incoming edges, add it to the queue
+                    if (inwardRuleCounts[neighborPage] == 0)
+                    {
+                        queue.Enqueue(neighborPage);
+                    }
+                }
+
+            }
+
+            return sortedItems.Count == originalUpdate.Length ? [.. sortedItems] : originalUpdate;
         }
 
-        public static void ApplyOrderingRule(int[] correctedUpdate, OrderingRule rule)
+        private static Dictionary<int, HashSet<int>> ConvertToDictionary(List<OrderingRule> applicableRules)
         {
-            int indexX = Array.IndexOf(correctedUpdate, rule.PageX);
-            int indexY = Array.IndexOf(correctedUpdate, rule.PageY);
-
-            if (indexX < indexY)
+            Dictionary<int, HashSet<int>> result = new();
+            foreach (var item in applicableRules)
             {
-                return;
+                if(result.TryGetValue(item.PageX, out var set))
+                {
+                    set.Add(item.PageY);
+                }
+                else
+                {
+                    result[item.PageX] = new HashSet<int> { item.PageY };
+                }
             }
 
-            if (indexX > indexY)
-            {
-                SwapElements(correctedUpdate, indexX, indexY);
-            }
-            else
-            {
-                // if the elements are already in the correct order, move the element at indexY to the end
-                SwapElements(correctedUpdate, indexY, correctedUpdate.Length - 1);
-            }
-        }
-
-        private static void SwapElements(int[] correctedUpdate, int indexX, int indexY)
-        {
-            int temp = correctedUpdate[indexX];
-            correctedUpdate[indexX] = correctedUpdate[indexY];
-            correctedUpdate[indexY] = temp;
+            return result;
         }
     }
 }
