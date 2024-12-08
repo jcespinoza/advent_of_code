@@ -2,20 +2,20 @@
 
 namespace Advent24.Days
 {
-    public class Day08Solver : Solver<object[], long>
+    public class Day08Solver : Solver<char[][], long>
     {
         public Day08Solver() : base(2024, 08) { }
 
-        public override object[] ParseInput(IEnumerable<string> input)
-            => input.ToArray();
+        public override char[][] ParseInput(IEnumerable<string> input)
+            => input.Select(l => l.ToCharArray()).ToArray();
 
 
-        public override long PartOne(object[] input)
+        public override long PartOne(char[][] input)
         {
             throw new NotImplementedException();
         }
 
-        public override long PartTwo(object[] input)
+        public override long PartTwo(char[][] input)
         {
             throw new NotImplementedException();
         }
