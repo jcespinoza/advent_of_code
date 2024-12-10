@@ -15,12 +15,13 @@ namespace Advent24.Days
 
         public override Puzzle PartOne => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
                 RawInput = [
+                    "2333133121414131402"
                 ],
-                Result = 8,
+                Result = 1928,
             },
             Examples = [
             ],
