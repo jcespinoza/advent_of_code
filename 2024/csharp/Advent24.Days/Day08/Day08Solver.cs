@@ -34,7 +34,7 @@ namespace Advent24.Days
                 {
                     for (int indexB = indexA + 1; indexB < group.Count; indexB++)
                     {
-                    // Compare one antenna with rest of antennas
+                        // Compare one antenna with rest of antennas
                         Antenna antennaA = group[indexA];
                         Antenna antennaB = group[indexB];
                         (int aRow, int aCol) = (antennaA.Row, antennaA.Col);
@@ -53,6 +53,38 @@ namespace Advent24.Days
                         if (GridWalker<char>.IsPointInGrid(map, antiRow2, antiCol2))
                         {
                             allAntinodes.Add((antiRow2, antiCol2));
+                        }
+                    }
+                }
+            }
+
+            return allAntinodes;
+        }
+
+        private HashSet<(int, int)> FindAntinodesInMapAnywhere(char[][] map, Dictionary<char, List<Antenna>> mapOfAntennas)
+        {
+            HashSet<(int, int)> allAntinodes = [];
+            foreach (var group in mapOfAntennas.Values)
+            {
+                foreach(var antennaA in group)
+                {
+                    foreach(var antennaB in group)
+                    {
+                        // Make sure we are not comparing one antenna with itself
+                        if (antennaA == antennaB) continue;
+
+                        (int aRow, int aCol) = (antennaA.Row, antennaA.Col);
+                        (int bRow, int bCol) = (antennaB.Row, antennaB.Col);
+
+                        (int diffRow, int diffCol) = (bRow - aRow, bCol - aCol);
+
+                        int antiRow = aRow;
+                        int antiCol = aCol;
+                        while (GridWalker<char>.IsPointInGrid(map, antiRow, antiCol))
+                        {
+                            allAntinodes.Add((antiRow, antiCol));
+                            antiRow += diffRow;
+                            antiCol += diffCol;
                         }
                     }
                 }
@@ -82,7 +114,16 @@ namespace Advent24.Days
 
         public override long PartTwo(char[][] map)
         {
-            throw new NotImplementedException();
+            List<Antenna> antennas = FindAntennas(map);
+            Dictionary<char, List<Antenna>> mapOfAntennas = antennas
+                                                .GroupBy(a => a.Frequency)
+                                                .ToDictionary(a => a.Key, a => a.ToList());
+
+            HashSet<(int, int)> allAntinodes = FindAntinodesInMapAnywhere(map, mapOfAntennas);
+
+            var uniqueLocations = allAntinodes.OrderBy(a => a.Item1).ThenBy(a => a.Item2).Select(a => (a.Item1, a.Item2)).ToHashSet();
+
+            return uniqueLocations.Count;
         }
     }
 }
