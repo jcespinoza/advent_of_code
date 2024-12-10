@@ -108,5 +108,13 @@ namespace AdventOfCode.Commons
             double slopeBC = (pointC.Item2 - pointB.Item2) / (double)(pointC.Item1 - pointB.Item1);
             return Math.Abs(slopeAB - slopeBC) < COLINEARITY_TOLERANCE;
         }
+
+        public static bool IsPointInGrid(char[][] map, int antiRow1, int antiCol1)
+        {
+            bool rowIsWithinBounds = antiRow1 >= 0 && antiRow1 < map.Length;
+            bool columnIsWithinBounds = antiCol1 >= 0 && antiCol1 < map[0].Length;
+
+            return rowIsWithinBounds && columnIsWithinBounds;
+        }
     }
 }

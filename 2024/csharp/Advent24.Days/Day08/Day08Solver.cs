@@ -14,84 +14,51 @@ namespace Advent24.Days
         public override long PartOne(char[][] map)
         {
             List<Antenna> antennas = FindAntennas(map);
-            Dictionary<(int,int), List<(Antenna, int)>> distancesToAntennas = FindDistances(map, antennas);
-            HashSet<(int, int, char)> allAntinodes = FindAntinodesInMap(distancesToAntennas);
+            Dictionary<char, List<Antenna>> mapOfAntennas = antennas
+                                                .GroupBy(a => a.Frequency)
+                                                .ToDictionary(a => a.Key, a => a.ToList());
+            
+            HashSet<(int, int)> allAntinodes = FindAntinodesInMap(map, mapOfAntennas);
 
-            var uniqueLocations = allAntinodes.Select(a => (a.Item1, a.Item2)).ToHashSet();
+            var uniqueLocations = allAntinodes.OrderBy(a => a.Item1).ThenBy(a => a.Item2).Select(a => (a.Item1, a.Item2)).ToHashSet();
 
             return uniqueLocations.Count;
         }
 
-        private static HashSet<(int, int, char)> FindAntinodesInMap(Dictionary<(int, int), List<(Antenna, int)>> distancesToAntennas)
+        private HashSet<(int, int)> FindAntinodesInMap(char[][] map, Dictionary<char, List<Antenna>> mapOfAntennas)
         {
-            HashSet<(int, int, char)> antinodeLocations = [];
-            foreach(var distEntry in distancesToAntennas)
+            HashSet<(int, int)> allAntinodes = [];
+            foreach (var group in mapOfAntennas.Values)
             {
-                (int row, int col) = distEntry.Key;
-                List<char> antinodeFrequencies = FindAntinodes(row, col, distEntry.Value);
-
-                var locations = antinodeFrequencies.Select( f =>
+                for(int indexA = 0; indexA < group.Count; indexA++)
                 {
-                    return (row, col, f);
-                }).ToList();
-
-                locations.ForEach( l => antinodeLocations.Add(l));
-            }
-
-            return antinodeLocations;
-        }
-
-        private static List<char> FindAntinodes(int srcRow, int srcCol, List<(Antenna, int)> distanceMap)
-        {
-            HashSet<char> frequencies = [];
-            foreach (var firstPair in distanceMap)
-            {
-                (Antenna firstAntenna, int firstDistance) = firstPair;
-                (int firsRow, int firstCol) = (firstAntenna.Row, firstAntenna.Col);
-                foreach (var secondPair in distanceMap)
-                {
-                    (Antenna secAntenna, int secDistance) = secondPair;
-                    (int secRow, int secCol) = (secAntenna.Row, secAntenna.Col);
-
-                    // Skip if we're comparing the same antenna.
-                    if (firstAntenna == secAntenna) continue;
-                    // Skip if the frequencies of the antennas are different
-                    if (secAntenna.Frequency != firstAntenna.Frequency) continue;
-                    // Skip if an of the frequency the current point is 
-
-                    bool distanceRatioIsHalf = secDistance/firstDistance == 2 || firstDistance/secDistance == 2;
-                    bool colinearityConditon = GridWalker<char>.ArePointsColinear((srcRow, srcCol), (secRow, secCol), (firsRow, firstCol), firstDistance,secDistance);
-                    if (distanceRatioIsHalf && colinearityConditon)
+                    for (int indexB = indexA + 1; indexB < group.Count; indexB++)
                     {
-                        frequencies.Add(firstAntenna.Frequency);
+                    // Compare one antenna with rest of antennas
+                        Antenna antennaA = group[indexA];
+                        Antenna antennaB = group[indexB];
+                        (int aRow, int aCol) = (antennaA.Row, antennaA.Col);
+                        (int bRow, int bCol) = (antennaB.Row, antennaB.Col);
+
+                        // Antinode in away from first antenna
+                        (int antiRow1, int antiCol1) = (2 * aRow - bRow, 2 * aCol - bCol);
+                        // Antinode in away from second antenna
+                        (int antiRow2, int antiCol2) = (2 * bRow - aRow, 2 * bCol - aCol);
+
+                        if (GridWalker<char>.IsPointInGrid(map, antiRow1, antiCol1))
+                        {
+                            allAntinodes.Add((antiRow1, antiCol1));
+                        }
+
+                        if (GridWalker<char>.IsPointInGrid(map, antiRow2, antiCol2))
+                        {
+                            allAntinodes.Add((antiRow2, antiCol2));
+                        }
                     }
                 }
-
             }
 
-            return [.. frequencies];
-        }
-
-        private static Dictionary<(int, int), List<(Antenna, int)>> FindDistances(char[][] map, List<Antenna> antennas)
-        {
-            Dictionary<(int, int), List<(Antenna, int)>> result = [];
-
-            for (int rIndex = 0; rIndex < map.Length; rIndex++)
-            {
-                for (int cIndex = 0; cIndex < map[rIndex].Length; cIndex++)
-                {
-                    List<(Antenna, int)> distancesToAntennas = [];
-                    foreach (var antenna in antennas)
-                    {
-                        int distanceToAntenna = GridWalker<char>.FindDistance((rIndex, cIndex), (antenna.Row, antenna.Col));
-                        if (distanceToAntenna == 0) continue; // An antenna is located here, don't count this distance
-                        distancesToAntennas.Add((antenna, distanceToAntenna));
-                    }
-                    result[(rIndex, cIndex)] = distancesToAntennas;
-                }
-            }
-
-            return result;
+            return allAntinodes;
         }
 
         private static List<Antenna> FindAntennas(char[][] map)
