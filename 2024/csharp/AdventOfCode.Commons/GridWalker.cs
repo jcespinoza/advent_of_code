@@ -2,8 +2,21 @@
 
 namespace AdventOfCode.Commons
 {
-    public static class GridWalker<T> where T: notnull
+    public static class GridWalker<T> where T: IEquatable<T>
     {
+        private static readonly double COLINEARITY_TOLERANCE = 0.0001;
+        public static int FindDistance((int,int) source, (int,int) target)
+        {
+            if (source == target) return 0;
+
+            (int sRow, int sCol) = source;
+            (int tRow, int tCol) = target;
+
+            int manhattanDistance = Math.Abs(sRow - tRow) + Math.Abs(sCol - tCol);
+
+            return manhattanDistance;
+        }
+
         public static Result<(int row, int col), string> Find(char[][] map, char searchValue)
         {
             for (int row = 0; row < map.Length; row++)
@@ -85,6 +98,23 @@ namespace AdventOfCode.Commons
                 default:
                     return Result<(int, int), string>.Failure("Invalid direction specified");
             }
+        }
+
+        public static bool ArePointsColinear((int, int) pointA, (int, int) pointB, (int, int) pointC, int distanceAB, int distanceBC)
+        {
+            if (distanceAB == 0 || distanceBC == 0) return false;
+
+            double slopeAB = (pointB.Item2 - pointA.Item2) / (double)(pointB.Item1 - pointA.Item1);
+            double slopeBC = (pointC.Item2 - pointB.Item2) / (double)(pointC.Item1 - pointB.Item1);
+            return Math.Abs(slopeAB - slopeBC) < COLINEARITY_TOLERANCE;
+        }
+
+        public static bool IsPointInGrid(char[][] map, int antiRow1, int antiCol1)
+        {
+            bool rowIsWithinBounds = antiRow1 >= 0 && antiRow1 < map.Length;
+            bool columnIsWithinBounds = antiCol1 >= 0 && antiCol1 < map[0].Length;
+
+            return rowIsWithinBounds && columnIsWithinBounds;
         }
     }
 }
