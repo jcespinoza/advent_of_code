@@ -87,11 +87,114 @@ namespace Advent24.Days
             return totalSum;
         }
 
-        public override long PartTwo(int[] input)
+        public override long PartTwo(int[] diskMap)
         {
-            throw new NotImplementedException();
+            FileSystem fileSystem = BuildFileSystem(diskMap);
+
+            CompactFileSystem(fileSystem);
+
+            long checksum = GetFileSytemChecksum(fileSystem);
+
+            return checksum;
+        }
+
+        private static void CompactFileSystem(FileSystem fileSystem)
+        {
+            Dictionary<int, DiskBlock> files = fileSystem.Files;
+            int fileId = files.Count;
+            while (fileId > 0)
+            {
+                fileId--;
+                DiskBlock file = files[fileId];
+                List<DiskBlock> blanks = fileSystem.BlankSpace;
+                for (int index = 0; index < blanks.Count; index++)
+                {
+                    var blank = blanks[index];
+                    if (blank.Position >= file.Position)
+                    {
+                        int countToTake = blanks.Count - index - 1;
+                        blanks = blanks
+                                                    .Take(countToTake)
+                                                    .ToList();
+                        break;
+                    }
+                    if (file.Size <= blank.Size)
+                    {
+                        files[fileId] = new(blank.Position, file.Size);
+                        if (file.Size == blank.Size)
+                        {
+                            blanks.RemoveAt(index);
+                        }
+                        else
+                        {
+                            blanks[index] = new(blank.Position + file.Size, blank.Size - file.Size);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        private long GetFileSytemChecksum(FileSystem fileSystem)
+        {
+            long totalSum = 0;
+            foreach (var entry in fileSystem.Files)
+            {
+                DiskBlock file = entry.Value;
+                foreach (var index in Enumerable.Range(file.Position, file.Size))
+                {
+                    totalSum += entry.Key * index;
+                }
+            }
+
+            return totalSum;
+        }
+
+        private FileSystem BuildFileSystem(int[] diskMap)
+        {
+            Dictionary<int, DiskBlock> files = [];
+            List<DiskBlock> blankSpace = [];
+            int fileId = 0;
+            int position = 0;
+
+            for (int index = 0; index < diskMap.Length; index++)
+            {
+                int size = diskMap[index];
+                if (index % 2 == 0)
+                {
+                    if (size == 0) throw new Exception("Size can not be zero");
+                    files.Add(fileId, new(position, size));
+                    fileId++;
+                }
+                else
+                {
+                    if (size > 0)
+                    {
+                        blankSpace.Add(new(position, size));
+                    }
+                }
+                position += size;
+            }
+
+            return new FileSystem
+            {
+                Disk = diskMap,
+                Files = files,
+                BlankSpace = blankSpace
+            };
         }
     }
 
-    public record DiskBlock(int Size, int Id);
+    public record DiskBlock(int Position, int Size)
+    {
+        public override string ToString()
+        {
+            return $"({Position} {Size})";
+        }
+    };
+    public class FileSystem{
+        public int[] Disk { get; set; }
+        public Dictionary<int, DiskBlock> Files { get; set; }
+        public List<DiskBlock> BlankSpace { get; set; }
+    }
 }
