@@ -2,20 +2,22 @@
 
 namespace Advent24.Days
 {
-    public class Day11Solver : Solver<object[], long>
+    public class Day11Solver : Solver<long[], long>
     {
         public Day11Solver() : base(2024, 11) { }
 
-        public override object[] ParseInput(IEnumerable<string> input)
-            => input.ToArray();
+        public override long[] ParseInput(IEnumerable<string> input)
+            => input.First().Split(' ').Select(long.Parse).ToArray();
 
 
-        public override long PartOne(object[] input)
+        public override long PartOne(long[] stones)
         {
-            throw new NotImplementedException();
+            List<long> newStoes = PlutonianPebbles.CalculateState(stones, 25);
+
+            return newStoes.Count;
         }
 
-        public override long PartTwo(object[] input)
+        public override long PartTwo(long[] input)
         {
             throw new NotImplementedException();
         }

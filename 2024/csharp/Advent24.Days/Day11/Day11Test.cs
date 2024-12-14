@@ -3,7 +3,7 @@ using dotenv.net;
 
 namespace Advent24.Days
 {
-    public class Day11Test : TestEngine<Day11Solver, object[], long>
+    public class Day11Test : TestEngine<Day11Solver, long[], long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 123;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
@@ -15,12 +15,13 @@ namespace Advent24.Days
 
         public override Puzzle PartOne => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
                 RawInput = [
+                    "125 17"
                 ],
-                Result = 8,
+                Result = 55312,
             },
             Examples = [
             ],
