@@ -7,7 +7,7 @@ namespace Advent24.Days
 {
     public class Day09Test : TestEngine<Day09Solver, int[], long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 123;
+        private const long EXPECTED_SOLUTION_PART_1 = 6398252054886L;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
 
         public Day09Test()
@@ -41,20 +41,5 @@ namespace Advent24.Days
             },
             Solution = EXPECTED_SOLUTION_PART_2,
         };
-
-        [Fact]
-        public void PartOne_Example_01()
-        {
-            // Arrange
-            Day09Solver day09Solver = new Day09Solver();
-            var input = PartOne.Example.Input ?? day09Solver.ParseInput(["20202"]);
-            var expectation = 0*1+6*1+9*2;
-            // represents 001122
-
-            // Act
-            var result = day09Solver.PartOne(input);
-            // Assert
-            result.Should().Be(expectation);
-        }
     }
 }

@@ -12,21 +12,68 @@ namespace Advent24.Days
 
         public override long PartOne(int[] diskMap)
         {
-            List<DiskBlock> blocks = BuildBlocks(diskMap);
-            int[] sortedDisk = SortBlocks(blocks);
+            List<int> blocks = BuildBlocks(diskMap);
+
+            List<int> blankSpace = blocks
+                                    .Select((element,index) => new { index, element })
+                                    .Where(x => x.element == -1)
+                                    .Select(x => x.index)
+                                    .ToList();
+
+            int[] sortedDisk = SortBlocks(blocks, blankSpace);
+            var sortedStr = DataPrinter.Print(sortedDisk);
             long checksum = GetFileSytemChecksum(sortedDisk);
 
             return checksum;
         }
 
-        private List<DiskBlock> BuildBlocks(int[] diskMap)
+        private List<int> BuildBlocks(int[] diskMap)
         {
-            throw new NotImplementedException();
+            List<int> blocks = [];
+            int fileId = 0;
+            for (int index = 0; index < diskMap.Length; index++)
+            {
+                int size = diskMap[index];
+                if(index % 2 == 0)
+                {
+                    // Repeatedly add the file id to the blocks
+                    foreach (int i in Enumerable.Range(0, size))
+                    {
+                        blocks.Add(fileId);
+                    }
+                    fileId++;
+                }
+                else
+                {
+                    // Repeatedly add the negative size to the blocks
+                    foreach (int i in Enumerable.Range(0, size))
+                    {
+                        blocks.Add(-1);
+                    }
+                }
+            }
+            return blocks;
         }
 
-        private int[] SortBlocks(List<DiskBlock> blocks)
+        private int[] SortBlocks(List<int> blocks, List<int> blankIndexes)
         {
-            throw new NotImplementedException();
+            var sortedDisk = blocks.ToList();
+            foreach (var blankIndex in blankIndexes)
+            {
+                // Remove all the blank spaces at the end of the disk
+                while (sortedDisk.Last() == -1)
+                {
+                    sortedDisk.RemoveAt(sortedDisk.Count - 1);
+                }
+                // Blank space is now beyond the end of the disk
+                if (blankIndex >= sortedDisk.Count) break;
+
+                // Move the last file to the current blank space
+                int lastFile = sortedDisk.Last();
+                sortedDisk.RemoveAt(sortedDisk.Count - 1);
+                sortedDisk[blankIndex] = lastFile;
+            }
+            return [.. sortedDisk];
         }
 
         private long GetFileSytemChecksum(int[] sortedDisk)
@@ -46,5 +93,5 @@ namespace Advent24.Days
         }
     }
 
-    public record DiskBlock(int Size, int Index);
+    public record DiskBlock(int Size, int Id);
 }
