@@ -87,9 +87,55 @@ namespace Advent24.Days
             }
         }
 
-        public override long PartTwo(int[][] input)
+        public override long PartTwo(int[][] topoMap)
         {
-            throw new NotImplementedException();
+            List<(int, int)> trailheads = GetTrailHeads(topoMap);
+
+            long totalRating = 0;
+            foreach (var head in trailheads)
+            {
+                (int row, int col) = head;
+                long rating = GetHikingRating(topoMap, row, col);
+                totalRating += rating;
+            }
+
+            return totalRating;
+        }
+
+        private int GetHikingRating(int[][] topoMap, int row, int col)
+        {
+            int paths = GetNumberOfPathsToTop(topoMap, row, col);
+
+            return paths;
+        }
+
+        private int GetNumberOfPathsToTop(int[][] topoMap, int row, int col)
+        {
+            int height = topoMap[row][col];
+            if (height >= 9) return 0;
+
+            int paths = 0;
+            Direction[] cardinalPoints = [Direction.North, Direction.East, Direction.South, Direction.West];
+            foreach (var direction in cardinalPoints)
+            {
+                Result<(int,int), string> targetCell = GridWalker<int>.Move(topoMap, direction, row, col);
+                if(targetCell.IsFailure) continue;
+
+                (int nRow, int nCol) = targetCell.Value;
+                int targetHeight = topoMap[nRow][nCol];
+
+                if (targetHeight - height != 1) continue;
+                if(targetHeight == 9)
+                {
+                    paths++;
+                    continue;
+                }
+                
+                int pathsInDirection = GetNumberOfPathsToTop(topoMap, nRow, nCol);
+                paths += pathsInDirection;
+            }
+
+            return paths;
         }
     }
 }
