@@ -6,7 +6,7 @@ namespace Advent24.Days
     public class Day11Test : TestEngine<Day11Solver, long[], long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 199982L;
-        private const long EXPECTED_SOLUTION_PART_2 = 123;
+        private const long EXPECTED_SOLUTION_PART_2 = 237149922829154L;
 
         public Day11Test()
         {
@@ -36,7 +36,7 @@ namespace Advent24.Days
                 RawInput = [
                     "125 17"
                 ],
-                Result = 8,
+                Result = 65601038650482L,
             },
             Solution = EXPECTED_SOLUTION_PART_2,
         };

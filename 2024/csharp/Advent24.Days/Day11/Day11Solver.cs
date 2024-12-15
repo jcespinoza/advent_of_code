@@ -12,16 +12,16 @@ namespace Advent24.Days
 
         public override long PartOne(long[] stones)
         {
-            List<long> newStoes = PlutonianPebbles.CalculateState(stones, 25);
+            long newStonesCount = PlutonianPebbles.CountStones(stones, 25);
 
-            return newStoes.Count;
+            return newStonesCount;
         }
 
         public override long PartTwo(long[] stones)
         {
-            List<long> newStoes = PlutonianPebbles.CalculateState(stones, 75);
+            long newStonesCount = PlutonianPebbles.CountStones(stones, 75);
 
-            return newStoes.Count;
+            return newStonesCount;
         }
     }
 }

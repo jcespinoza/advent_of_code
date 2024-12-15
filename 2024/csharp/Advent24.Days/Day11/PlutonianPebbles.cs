@@ -18,23 +18,32 @@ namespace Advent24.Days
         {
             if (blinkCount == 0) return stones.Length;
 
+            Dictionary<(long, int), long> countsCache = [];
             long totalStones = 0;
             foreach (var stone in stones)
             {
-                long stonesAfterBlinks = ComputeHistoryForStone(stone, blinkCount);
+                long stonesAfterBlinks = ComputeHistoryForStone(stone, blinkCount, countsCache);
                 totalStones += stonesAfterBlinks;
             }
 
             return totalStones;
         }
 
-        private static long ComputeHistoryForStone(long stoneValue, int blinkCount)
+        private static long ComputeHistoryForStone(long stoneValue, int blinkCount, Dictionary<(long, int), long> countsCache)
         {
-            if (blinkCount <= 0) return 0;
+            if (blinkCount <= 0) return 1;
 
+            if(countsCache.ContainsKey((stoneValue, blinkCount)))
+            {
+                return countsCache[(stoneValue, blinkCount)];
+            }
+
+            long result;
             if (stoneValue == 0)
             {
-                return 1 + ComputeHistoryForStone(1, blinkCount - 1);
+                result = ComputeHistoryForStone(1, blinkCount - 1, countsCache);
+                countsCache.Add((stoneValue, blinkCount), result);
+                return result;
             }
 
             int digitCount = GetDigitCount(stoneValue);
@@ -43,14 +52,18 @@ namespace Advent24.Days
                 // Split the stone in two
                 long newLeftStone = ExtractDigits(stoneValue, 0, digitCount / 2);
                 long newRightStone = ExtractDigits(stoneValue, digitCount / 2, digitCount / 2);
-                var leftHistory = ComputeHistoryForStone(newLeftStone, blinkCount - 1);
-                var rightHistory = ComputeHistoryForStone(newRightStone, blinkCount - 1);
+                var leftHistory = ComputeHistoryForStone(newLeftStone, blinkCount - 1, countsCache);
+                var rightHistory = ComputeHistoryForStone(newRightStone, blinkCount - 1, countsCache);
 
-                return 2 + leftHistory + rightHistory;
+                result = leftHistory + rightHistory;
+                countsCache.Add((stoneValue, blinkCount), result);
+                return result;
             }
 
 
-            return ComputeHistoryForStone(stoneValue * 2024, blinkCount - 1);
+            result = ComputeHistoryForStone(stoneValue * 2024, blinkCount - 1, countsCache);
+            countsCache.Add((stoneValue, blinkCount), result);
+            return result;
         }
 
         private static void Shift(List<long> newStones)
