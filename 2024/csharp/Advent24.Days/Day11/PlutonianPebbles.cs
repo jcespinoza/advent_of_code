@@ -4,8 +4,8 @@
     {
         public static List<long> CalculateState(long[] stones, int blinkCount)
         {
-            List<long> newStones = stones.ToList();
-            for (int blink = 0; blink <= 25; blink++)
+            List<long> newStones = [.. stones];
+            for (int blink = 1; blink <= blinkCount; blink++)
             {
                 Shift(newStones);
             }
