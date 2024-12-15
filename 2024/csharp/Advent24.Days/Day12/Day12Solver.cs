@@ -15,8 +15,10 @@ namespace Advent24.Days
             HashSet<Region> regions = [];
             Dictionary<(int, int), Region> cellToRegion = [];
 
-            MapGarden(garden, regions, cellToRegion);
-            //Dictionary<Region, List<(int, int)>> = MapRegionsToCells(cellToRegion);
+            Dictionary<Region, HashSet<(int, int)>> regionToCells = [];
+            MapGarden(garden, regions, cellToRegion, regionToCells);
+
+            ComputeRegionDimensions(garden, regionToCells);
 
             long totalPrice = 0;
             foreach (var region in regions)
@@ -30,43 +32,100 @@ namespace Advent24.Days
 
         private static void MapGarden(
             char[][] garden, HashSet<Region> regions, 
-            Dictionary<(int, int), Region> cellToRegion
+            Dictionary<(int, int), Region> cellToRegion,
+            Dictionary<Region, HashSet<(int, int)>> regionToCells
         )
         {
+            HashSet<(int, int)> visited = [];
             for (int row = 0; row < garden.Length; row++)
             {
                 for (int col = 0; col < garden[row].Length; col++)
                 {
+                    if (visited.Contains((row, col))) continue;
+
                     char plantType = garden[row][col];
-                    if (cellToRegion.ContainsKey((row, col)))
-                    {
-                        continue;
-                    }
-
-                    var results = CheckAllNeighbors(garden, regions, cellToRegion, row, col, plantType);
-                    var neighboringRegion = results.FirstOrDefault(r => r.Region != null && r.Region.Plant == plantType)?.Region;
-
-                    if(neighboringRegion != null)
-                    {
-                        neighboringRegion.Area++;
-                        int neighboringPerimeter = results.Count(r => r.PlantType != plantType && r.IsInGarden || !r.IsInGarden);
-                        neighboringRegion.Perimeter += neighboringPerimeter;
-                        cellToRegion[(row, col)] = neighboringRegion;
-                    }
-                    else
-                    {
-                        var neighboringPerimeter = results
-                            .Where(
-                                r => r.IsInGarden && r.PlantType == plantType
-                            )
-                            .Count();
-
-                        Region newRegion = new() { Plant = plantType, Area = 1, Perimeter = 4 - neighboringPerimeter };
-                        regions.Add(newRegion);
-                        cellToRegion[(row, col)] = newRegion;
-                    }
+                    Region region = new() { Plant = plantType };
+                    regions.Add(region);
+                    regionToCells[region] = [(row,col)];
+                    cellToRegion.Add((row, col), region);
+                    PropagateRegion(garden, regions, cellToRegion, regionToCells, visited, row, col, plantType, region);
                 }
             }
+        }
+
+        private static void PropagateRegion(char[][] garden, HashSet<Region> regions,
+            Dictionary<(int, int), Region> cellToRegion,
+            Dictionary<Region, HashSet<(int, int)>> regionToCells, HashSet<(int, int)> visited,
+            int row, int col, char plantType, Region region
+        )
+        {
+            if(visited.Contains((row, col))) return;
+
+            visited.Add((row, col));
+
+            IEnumerable<Direction> directions = [Direction.East, Direction.South, Direction.West];
+            foreach (var direction in directions)
+            {
+                var cellResult = GridWalker<char>.Move(garden, direction, row, col);
+                if (cellResult.IsFailure)
+                {
+                    continue;
+                }
+                (int nRow, int nCol) = cellResult.Value;
+
+                if (garden[nRow][nCol] != plantType)
+                {
+                    continue;
+                }
+
+                if (!cellToRegion.ContainsKey((nRow, nCol)))
+                {
+                    cellToRegion.Add((nRow, nCol), region);
+                }
+                regionToCells[region].Add((nRow, nCol));
+                PropagateRegion(garden, regions, cellToRegion, regionToCells, visited, nRow, nCol, plantType, region);
+            }
+        }
+
+        private static void ComputeRegionDimensions(char[][] garden, Dictionary<Region, HashSet<(int, int)>> regionToCells)
+        {
+            foreach (var regionEntry in regionToCells)
+            {
+                var region = regionEntry.Key;
+                var cells = regionEntry.Value;
+
+                int perimeter = 0;
+                foreach (var (row, col) in cells)
+                {
+                    int bordersWithOtherPlants = ComputeBordersWithOtherPlants(garden, row, col, region.Plant);
+                    perimeter += bordersWithOtherPlants;
+                }
+                region.Area = cells.Count;
+                region.Perimeter = perimeter;
+            }
+        }
+
+        private static int ComputeBordersWithOtherPlants(char[][] garden, int row, int col, char plant)
+        {
+            int borders = 0;
+            IEnumerable<Direction> directions = [Direction.North, Direction.East, Direction.South, Direction.West];
+            foreach (var direction in directions)
+            {
+                var cellResult = GridWalker<char>.Move(garden, direction, row, col);
+                if (cellResult.IsFailure) {
+                    // Cell is outside of grid, therefore is a border
+                    borders++;
+                    continue;
+                }
+                (int nRow, int nCol) = cellResult.Value;
+
+                if (garden[nRow][nCol] != plant)
+                {
+                    borders++;
+                }
+            }
+
+            return borders;
         }
 
         private static List<NeighborCheckResult> CheckAllNeighbors(
@@ -97,7 +156,7 @@ namespace Advent24.Days
             Result<(int,int), string> neighborCell = GridWalker<char>.Move(garden, north, sRow, sCol);
             if (neighborCell.IsFailure)
             {
-                return new NeighborCheckResult(null, plantType, false);
+                return new NeighborCheckResult(-1, -1, null, plantType, false);
             }
 
             (int nRow, int nCol) = neighborCell.Value;
@@ -106,10 +165,10 @@ namespace Advent24.Days
             if (cellToRegion.ContainsKey((nRow, nCol)))
             {
                 Region neighborRegion = cellToRegion[(nRow, nCol)];
-                return new NeighborCheckResult(neighborRegion, neighborRegion.Plant, true);
+                return new NeighborCheckResult(nRow, nCol, neighborRegion, neighborRegion.Plant, true);
             }
 
-            return new NeighborCheckResult(null, garden[nRow][nCol], true);            
+            return new NeighborCheckResult(nRow, nCol, null, garden[nRow][nCol], true);            
         }
 
         public override long PartTwo(char[][] garden)
@@ -118,5 +177,5 @@ namespace Advent24.Days
         }
     }
 
-    public record NeighborCheckResult(Region? Region, char PlantType, bool IsInGarden);
+    public record NeighborCheckResult(int Row, int Col, Region? Region, char PlantType, bool IsInGarden);
 }
