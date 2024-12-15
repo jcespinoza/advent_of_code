@@ -3,7 +3,7 @@ using dotenv.net;
 
 namespace Advent24.Days
 {
-    public class Day12Test : TestEngine<Day12Solver, object[], long>
+    public class Day12Test : TestEngine<Day12Solver, char[][], long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 123;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
@@ -15,14 +15,45 @@ namespace Advent24.Days
 
         public override Puzzle PartOne => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
                 RawInput = [
+                    "RRRRIICCFF",
+                    "RRRRIICCCF",
+                    "VVRRRCCFFF",
+                    "VVRCCCJFFF",
+                    "VVVVCJJCFE",
+                    "VVIVCCJJEE",
+                    "VVIIICJJEE",
+                    "MIIIIIJJEE",
+                    "MIIISIJEEE",
+                    "MMMISSJEEE",
                 ],
-                Result = 8,
+                Result = 1930,
             },
             Examples = [
+                new()
+                {
+                    RawInput = [
+                        "AAAA",
+                        "BBCD",
+                        "BBCC",
+                        "EEEC",
+                    ],
+                    Result = 140,
+                },
+                new()
+                {
+                    RawInput = [
+                        "OOOOO",
+                        "OXOXO",
+                        "OOOOO",
+                        "OXOXO",
+                        "OOOOO",
+                    ],
+                    Result = 772,
+                },
             ],
             Solution = EXPECTED_SOLUTION_PART_1,
         };
