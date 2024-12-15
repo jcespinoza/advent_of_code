@@ -34,6 +34,7 @@ namespace Advent24.Days
             Example = new()
             {
                 RawInput = [
+                    "125 17"
                 ],
                 Result = 8,
             },

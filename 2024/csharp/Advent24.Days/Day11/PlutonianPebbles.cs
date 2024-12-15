@@ -1,4 +1,6 @@
-﻿namespace Advent24.Days
+﻿using System;
+
+namespace Advent24.Days
 {
     public static class PlutonianPebbles
     {
@@ -10,6 +12,45 @@
                 Shift(newStones);
             }
             return newStones;
+        }
+
+        public static long CountStones(long[] stones, int blinkCount)
+        {
+            if (blinkCount == 0) return stones.Length;
+
+            long totalStones = 0;
+            foreach (var stone in stones)
+            {
+                long stonesAfterBlinks = ComputeHistoryForStone(stone, blinkCount);
+                totalStones += stonesAfterBlinks;
+            }
+
+            return totalStones;
+        }
+
+        private static long ComputeHistoryForStone(long stoneValue, int blinkCount)
+        {
+            if (blinkCount <= 0) return 0;
+
+            if (stoneValue == 0)
+            {
+                return 1 + ComputeHistoryForStone(1, blinkCount - 1);
+            }
+
+            int digitCount = GetDigitCount(stoneValue);
+            if (digitCount % 2 == 0)
+            {
+                // Split the stone in two
+                long newLeftStone = ExtractDigits(stoneValue, 0, digitCount / 2);
+                long newRightStone = ExtractDigits(stoneValue, digitCount / 2, digitCount / 2);
+                var leftHistory = ComputeHistoryForStone(newLeftStone, blinkCount - 1);
+                var rightHistory = ComputeHistoryForStone(newRightStone, blinkCount - 1);
+
+                return 2 + leftHistory + rightHistory;
+            }
+
+
+            return ComputeHistoryForStone(stoneValue * 2024, blinkCount - 1);
         }
 
         private static void Shift(List<long> newStones)
@@ -44,17 +85,13 @@
         }
 
         // Takes the <countOfDigitsToExtract> digits from the <stoneValue> starting from the <startingPosition>
+        // Example2: For a <stoneValue> of 1000, a <startingPosition> of 0 and a <countOfDigitsToExtract> of 2; the result should be 10
         // Example1: For a <stoneValue> of 1000, a <startingPosition> of 2 and a <countOfDigitsToExtract> of 2; the result should be 00
-        // Example: For a <stoneValue> of 1000, a <startingPosition> of 0 and a <countOfDigitsToExtract> of 2; the result should be 10
         private static long ExtractDigits(long stoneValue, int startingPosition, int countOfDigitsToExtract)
         {
-            long result = 0;
-            for (int i = 0; i < countOfDigitsToExtract; i++)
-            {
-                long digit = (stoneValue / (long)Math.Pow(10, startingPosition + i)) % 10;
-                result += digit * (long)Math.Pow(10, i);
-            }
-            return result;
+            string stoneStr = stoneValue.ToString();
+            string newStoneStr = stoneStr.Substring(startingPosition, countOfDigitsToExtract);
+            return long.Parse(newStoneStr);
         }
 
         private static int GetDigitCount(long number)

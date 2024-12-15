@@ -17,9 +17,11 @@ namespace Advent24.Days
             return newStoes.Count;
         }
 
-        public override long PartTwo(long[] input)
+        public override long PartTwo(long[] stones)
         {
-            throw new NotImplementedException();
+            List<long> newStoes = PlutonianPebbles.CalculateState(stones, 75);
+
+            return newStoes.Count;
         }
     }
 }
