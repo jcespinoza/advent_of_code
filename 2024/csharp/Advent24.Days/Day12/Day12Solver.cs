@@ -1,4 +1,5 @@
 ﻿using AdventOfCode.Commons;
+using System.Globalization;
 
 namespace Advent24.Days
 {
@@ -12,17 +13,12 @@ namespace Advent24.Days
 
         public override long PartOne(char[][] garden)
         {
-            HashSet<Region> regions = [];
-            Dictionary<(int, int), Region> cellToRegion = [];
-
-            Dictionary<Region, HashSet<(int, int)>> regionToCells = [];
-            MapGarden(garden, regions, cellToRegion, regionToCells);
-
-            ComputeRegionDimensions(garden, regionToCells);
+            Dictionary<Region, HashSet<(int, int)>> regionToCells = MapRegions(garden);
 
             long totalPrice = 0;
-            foreach (var region in regions)
+            foreach (var regionKey in regionToCells)
             {
+                var region = regionKey.Key;
                 long regionPrice = region.Area * region.Perimeter;
                 totalPrice += regionPrice;
             }
@@ -30,27 +26,25 @@ namespace Advent24.Days
             return totalPrice;
         }
 
-        private static void MapGarden(
-            char[][] garden, HashSet<Region> regions, 
-            Dictionary<(int, int), Region> cellToRegion,
-            Dictionary<Region, HashSet<(int, int)>> regionToCells
-        )
+        private static Dictionary<Region, HashSet<(int, int)>> MapRegions(char[][] garden
+            )
         {
-            HashSet<(int, int)> visited = [];
+            Dictionary<Region, HashSet<(int, int)>> regionToCells = [];
+            HashSet<(int, int)> seen = [];
 
             for (int row = 0; row < garden.Length; row++)
             {
                 for (int col = 0; col < garden[row].Length; col++)
                 {
-                    if(visited.Contains((row, col))) continue;
-                    visited.Add((row, col));
-                    HashSet<(int, int)> cellsInRegion = [];
-                    Queue<(int, int)> toVisit = new([(row,col)]);
-
-                    char cPlantType = garden[row][col];
-                    Region region = new() { Plant = cPlantType };
-                    regionToCells.Add(region, cellsInRegion);
-                    while (toVisit.TryDequeue(out (int, int) qCell))
+                    if (seen.Contains((row, col))) continue;
+                    seen.Add((row, col));
+                    HashSet<(int, int)> regionCells = [];
+                    regionCells.Add((row, col));
+                    Queue<(int, int)> queue = [];
+                    queue.Enqueue((row, col));
+                    char plantType = garden[row][col];
+                    int perimeter = 0;
+                    while (queue.TryDequeue(out (int,int) qCell))
                     {
                         (int cRow, int cCol) = qCell;
                         IEnumerable<Direction> directions = [Direction.North, Direction.East, Direction.South, Direction.West];
@@ -59,63 +53,32 @@ namespace Advent24.Days
                             var cellResult = GridWalker<char>.Move(garden, direction, cRow, cCol);
                             if (cellResult.IsFailure)
                             {
+                                perimeter++;
                                 continue;
                             }
                             (int nRow, int nCol) = cellResult.Value;
 
                             char nPlantType = garden[nRow][nCol];
-                            if (nPlantType != cPlantType) continue;
-                            if(cellsInRegion.Contains((nRow, nCol))) continue;
-                            cellsInRegion.Add((nRow, nCol));
-                            regionToCells[region].Add((nRow, nCol));
-                            visited.Add((nRow, nCol));
-                            toVisit.Enqueue((nRow, nCol));
+                            if (nPlantType != plantType)
+                            {
+                                perimeter++;
+                                continue;
+                            }
+                        
+                            if(regionCells.Contains((nRow, nCol))) continue;
+
+                            regionCells.Add((nRow, nCol));
+                            queue.Enqueue((nRow, nCol));
+                            seen.Add((nRow, nCol));
                         }
                     }
-                    regions.Add(region);
-                }
-            }
-        }
 
-        private static void ComputeRegionDimensions(char[][] garden, Dictionary<Region, HashSet<(int, int)>> regionToCells)
-        {
-            foreach (var regionEntry in regionToCells)
-            {
-                var region = regionEntry.Key;
-                var cells = regionEntry.Value;
-
-                int perimeter = 0;
-                foreach (var (row, col) in cells)
-                {
-                    int bordersWithOtherPlants = ComputeBordersWithOtherPlants(garden, row, col, region.Plant);
-                    perimeter += bordersWithOtherPlants;
-                }
-                region.Area = cells.Count;
-                region.Perimeter = perimeter;
-            }
-        }
-
-        private static int ComputeBordersWithOtherPlants(char[][] garden, int row, int col, char plant)
-        {
-            int borders = 0;
-            IEnumerable<Direction> directions = [Direction.North, Direction.East, Direction.South, Direction.West];
-            foreach (var direction in directions)
-            {
-                var cellResult = GridWalker<char>.Move(garden, direction, row, col);
-                if (cellResult.IsFailure) {
-                    // Cell is outside of grid, therefore is a border
-                    borders++;
-                    continue;
-                }
-                (int nRow, int nCol) = cellResult.Value;
-
-                if (garden[nRow][nCol] != plant)
-                {
-                    borders++;
+                    Region newRegion = new() { Plant = plantType, Area = regionCells.Count, Perimeter = perimeter };
+                    regionToCells.Add(newRegion, regionCells);
                 }
             }
 
-            return borders;
+            return regionToCells;
         }
 
         public override long PartTwo(char[][] garden)
