@@ -37,53 +37,43 @@ namespace Advent24.Days
         )
         {
             HashSet<(int, int)> visited = [];
+
             for (int row = 0; row < garden.Length; row++)
             {
                 for (int col = 0; col < garden[row].Length; col++)
                 {
-                    if (visited.Contains((row, col))) continue;
+                    if(visited.Contains((row, col))) continue;
+                    visited.Add((row, col));
+                    HashSet<(int, int)> cellsInRegion = [];
+                    Queue<(int, int)> toVisit = new([(row,col)]);
 
-                    char plantType = garden[row][col];
-                    Region region = new() { Plant = plantType };
+                    char cPlantType = garden[row][col];
+                    Region region = new() { Plant = cPlantType };
+                    regionToCells.Add(region, cellsInRegion);
+                    while (toVisit.TryDequeue(out (int, int) qCell))
+                    {
+                        (int cRow, int cCol) = qCell;
+                        IEnumerable<Direction> directions = [Direction.North, Direction.East, Direction.South, Direction.West];
+                        foreach (var direction in directions)
+                        {
+                            var cellResult = GridWalker<char>.Move(garden, direction, cRow, cCol);
+                            if (cellResult.IsFailure)
+                            {
+                                continue;
+                            }
+                            (int nRow, int nCol) = cellResult.Value;
+
+                            char nPlantType = garden[nRow][nCol];
+                            if (nPlantType != cPlantType) continue;
+                            if(cellsInRegion.Contains((nRow, nCol))) continue;
+                            cellsInRegion.Add((nRow, nCol));
+                            regionToCells[region].Add((nRow, nCol));
+                            visited.Add((nRow, nCol));
+                            toVisit.Enqueue((nRow, nCol));
+                        }
+                    }
                     regions.Add(region);
-                    regionToCells[region] = [(row,col)];
-                    cellToRegion.Add((row, col), region);
-                    PropagateRegion(garden, regions, cellToRegion, regionToCells, visited, row, col, plantType, region);
                 }
-            }
-        }
-
-        private static void PropagateRegion(char[][] garden, HashSet<Region> regions,
-            Dictionary<(int, int), Region> cellToRegion,
-            Dictionary<Region, HashSet<(int, int)>> regionToCells, HashSet<(int, int)> visited,
-            int row, int col, char plantType, Region region
-        )
-        {
-            if(visited.Contains((row, col))) return;
-
-            visited.Add((row, col));
-
-            IEnumerable<Direction> directions = [Direction.East, Direction.South, Direction.West];
-            foreach (var direction in directions)
-            {
-                var cellResult = GridWalker<char>.Move(garden, direction, row, col);
-                if (cellResult.IsFailure)
-                {
-                    continue;
-                }
-                (int nRow, int nCol) = cellResult.Value;
-
-                if (garden[nRow][nCol] != plantType)
-                {
-                    continue;
-                }
-
-                if (!cellToRegion.ContainsKey((nRow, nCol)))
-                {
-                    cellToRegion.Add((nRow, nCol), region);
-                }
-                regionToCells[region].Add((nRow, nCol));
-                PropagateRegion(garden, regions, cellToRegion, regionToCells, visited, nRow, nCol, plantType, region);
             }
         }
 
@@ -128,54 +118,9 @@ namespace Advent24.Days
             return borders;
         }
 
-        private static List<NeighborCheckResult> CheckAllNeighbors(
-            char[][] garden, 
-            HashSet<Region> regions, 
-            Dictionary<(int, int), Region> cellToRegion, 
-            int row, int col, 
-            char plantType
-        )
-        {
-            var northCheck = CheckNeighbor(garden, regions, cellToRegion, Direction.North, row, col, plantType);
-            var eastCheck = CheckNeighbor(garden, regions, cellToRegion, Direction.East, row, col, plantType);
-            var southCheck = CheckNeighbor(garden, regions, cellToRegion, Direction.South, row, col, plantType);
-            var westCheck = CheckNeighbor(garden, regions, cellToRegion, Direction.West, row, col, plantType);
-
-            return [northCheck, eastCheck, southCheck, westCheck];
-        }
-
-        private static NeighborCheckResult CheckNeighbor(
-            char[][] garden, 
-            HashSet<Region> regions, 
-            Dictionary<(int, int), Region> cellToRegion, 
-            Direction north, 
-            int sRow, int sCol,
-            char plantType
-        )
-        {
-            Result<(int,int), string> neighborCell = GridWalker<char>.Move(garden, north, sRow, sCol);
-            if (neighborCell.IsFailure)
-            {
-                return new NeighborCheckResult(-1, -1, null, plantType, false);
-            }
-
-            (int nRow, int nCol) = neighborCell.Value;
-
-            // check if the neighbor has a region
-            if (cellToRegion.ContainsKey((nRow, nCol)))
-            {
-                Region neighborRegion = cellToRegion[(nRow, nCol)];
-                return new NeighborCheckResult(nRow, nCol, neighborRegion, neighborRegion.Plant, true);
-            }
-
-            return new NeighborCheckResult(nRow, nCol, null, garden[nRow][nCol], true);            
-        }
-
         public override long PartTwo(char[][] garden)
         {
             throw new NotImplementedException();
         }
     }
-
-    public record NeighborCheckResult(int Row, int Col, Region? Region, char PlantType, bool IsInGarden);
 }
