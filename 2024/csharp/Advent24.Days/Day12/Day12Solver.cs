@@ -26,8 +26,7 @@ namespace Advent24.Days
             return totalPrice;
         }
 
-        private static Dictionary<Region, HashSet<(int, int)>> MapRegions(char[][] garden
-            )
+        private static Dictionary<Region, HashSet<(int, int)>> MapRegions(char[][] garden)
         {
             Dictionary<Region, HashSet<(int, int)>> regionToCells = [];
             HashSet<(int, int)> seen = [];
