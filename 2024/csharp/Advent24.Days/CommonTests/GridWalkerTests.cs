@@ -11,14 +11,14 @@ namespace Advent24.Days.CommonTests
 {
     public class GridWalkerTests
     {
-        int[][] testGrid = new int[6][] {
+        int[][] testGrid = [
             [5, 2, 6, 9, 1, 1],
             [1, 8, 5, 7, 6, 1],
             [3, 3, 6, 4, 7, 9],
             [5, 5, 1, 4, 8, 7],
             [6, 7, 5, 1, 2, 1],
             [1, 8, 5, 4, 9, 6],
-        };
+        ];
         // Given the following grid
         // 5 2 6 9 1 1 
         // 1 8 5 7 6 1 
