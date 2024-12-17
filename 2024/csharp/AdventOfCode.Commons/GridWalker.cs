@@ -45,56 +45,76 @@ namespace AdventOfCode.Commons
                 return Result<(int,int), string>.Failure("The starting cell is out of bounds");
             }
 
+            int rowDiff = startRow - steps;
+            int colSum = startCol + steps;
+            int rowSum = startRow + steps;
+            int colDiff = startCol - steps;
             switch (direction)
             {
                 case Direction.North:
-                    if (startRow - steps < 0)
+                    if (rowDiff < 0)
                     {
-                        return Result<(int, int), string>.Failure("The resulting row is out of bounds");
+                        var result = Result<(int, int), string>.Failure("The resulting row is out of bounds");
+                        result.Value = (rowDiff, startCol);
+                        return result;
                     }
-                    return Result<(int, int), string>.Success((startRow - steps, startCol));
+                    return Result<(int, int), string>.Success((rowDiff, startCol));
                 case Direction.NorthEast:
-                    if (startRow - steps < 0 || startCol + steps >= grid[startRow].Length)
+                    if (rowDiff < 0 || colSum >= grid[startRow].Length)
                     {
-                        return Result<(int, int), string>.Failure("The resulting row is out of bounds");
+                        Result<(int, int), string> result = Result<(int, int), string>.Failure("The resulting row is out of bounds");
+                        result.Value = (rowDiff, colSum);
+                        return result;
                     }
-                    return Result<(int, int), string>.Success((startRow - steps, startCol + steps));
+                    return Result<(int, int), string>.Success((rowDiff, colSum));
                 case Direction.East:
-                    if (startCol + steps >= grid[startRow].Length)
+                    if (colSum >= grid[startRow].Length)
                     {
-                        return Result<(int, int), string>.Failure("The resulting column is out of bounds");
+                        Result<(int, int), string> result = Result<(int, int), string>.Failure("The resulting column is out of bounds");
+                        result.Value = (startRow, colSum);
+                        return result;
                     }
-                    return Result<(int, int), string>.Success((startRow, startCol + steps));
+                    return Result<(int, int), string>.Success((startRow, colSum));
                 case Direction.SouthEast:
-                    if (startRow + steps >= grid.Length || startCol + steps >= grid[startRow].Length)
+                    if (rowSum >= grid.Length || colSum >= grid[startRow].Length)
                     {
-                        return Result<(int, int), string>.Failure("The resulting row is out of bounds");
+                        Result<(int, int), string> result = Result<(int, int), string>.Failure("The resulting row is out of bounds");
+                        result.Value = (rowSum, colSum);
+                        return result;
                     }
-                    return Result<(int, int), string>.Success((startRow + steps, startCol + steps));
+                    return Result<(int, int), string>.Success((rowSum, colSum));
                 case Direction.South:
-                    if (startRow + steps >= grid.Length)
+                    if (rowSum >= grid.Length)
                     {
-                        return Result<(int, int), string>.Failure("The resulting row is out of bounds");
+                        Result<(int, int), string> result = Result<(int, int), string>.Failure("The resulting row is out of bounds");
+                        result.Value = (rowSum, startCol);
+                        return result;
                     }
-                    return Result<(int, int), string>.Success((startRow + steps, startCol));
+                    return Result<(int, int), string>.Success((rowSum, startCol));
                 case Direction.SouthWest:
-                    if (startRow + steps >= grid.Length || startCol - steps < 0)
+                    if (rowSum >= grid.Length || colDiff < 0)
                     {
-                        return Result<(int, int), string>.Failure("The resulting row is out of bounds");
+                        Result<(int, int), string> result = Result<(int, int), string>.Failure("The resulting row is out of bounds");
+                        result.Value = (rowSum, colDiff);
+                        return result;
                     }
-                    return Result<(int, int), string>.Success((startRow + steps, startCol - steps));
+                    return Result<(int, int), string>.Success((rowSum, colDiff));
                 case Direction.West:
-                    if (startCol - steps < 0)
+                    if (colDiff < 0)
                     {
-                        return Result<(int, int), string>.Failure("The resulting column is out of bounds");
+                        Result<(int, int), string> result = Result<(int, int), string>.Failure("The resulting column is out of bounds");
+                        result.Value = (startRow, colDiff);
+                        return result;
                     }
-                    return Result<(int, int), string>.Success((startRow, startCol - steps));
+                    return Result<(int, int), string>.Success((startRow, colDiff));
                 case Direction.NorthWest:
-                    if (startRow - steps < 0 || startCol - steps < 0)
+                    if (rowDiff < 0 || colDiff < 0)
                     {
-                        return Result<(int, int), string>.Failure("The resulting row is out of bounds");
+                        Result<(int, int), string> result = Result<(int, int), string>.Failure("The resulting row is out of bounds");
+                        result.Value = (rowDiff, colDiff);
+                        return result;
                     }
-                    return Result<(int, int), string>.Success((startRow - steps, startCol - steps));
+                    return Result<(int, int), string>.Success((rowDiff, colDiff));
                 default:
                     return Result<(int, int), string>.Failure("Invalid direction specified");
             }
