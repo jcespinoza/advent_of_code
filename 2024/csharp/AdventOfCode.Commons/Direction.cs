@@ -30,5 +30,25 @@
             }
             return directions[index];
         }
+
+        public static int RowOffset(this Direction direction)
+        {
+            return direction switch
+            {
+                Direction.North => -1,
+                Direction.South => 1,
+                _ => 0,
+            };
+        }
+
+        public static int ColOffset(this Direction direction)
+        {
+            return direction switch
+            {
+                Direction.East => 1,
+                Direction.West => -1,
+                _ => 0,
+            };
+        }
     }
 }
