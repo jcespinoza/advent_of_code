@@ -3,7 +3,7 @@
     // generic. T and E can be a value or reference type
     public record Result<T, E> where T : notnull where E : notnull
     {
-        public T Value { get; init; }
+        public T Value { get; set; }
         public E Error { get; init; }
         public bool IsSuccess => Error is null;
         public bool IsFailure => !IsSuccess;
