@@ -47,6 +47,11 @@ namespace Advent24.Days
 
         public override long PartOne(MachineConfig[] configs)
         {
+            return ComputeTokenCost(configs, withConversionFix: false);
+        }
+
+        private static long ComputeTokenCost(MachineConfig[] configs, bool withConversionFix)
+        {
             const int A_PRICE = 3;
             const int B_PRICE = 1;
 
@@ -70,6 +75,8 @@ namespace Advent24.Days
                 We can then use the first equation to determine the number of presses needed to get to the prize coordinates
              */
 
+            long conversionFix = withConversionFix ? 10000000000000 : 0;
+            bool limitPresses = !withConversionFix;
             long tokensUsed = 0;
             foreach (var config in configs)
             {
@@ -77,28 +84,30 @@ namespace Advent24.Days
                 var Ay = config.A.YOffset;
                 var Bx = config.B.XOffset;
                 var By = config.B.YOffset;
-                var Px = config.PrizeX;
-                var Py = config.PrizeY;
-                var S = (Px * By - Py * Bx) / (Ax * By - Ay * Bx);
-                var T = (Px - Ax * S) / Bx;
+                var Px = config.PrizeX + conversionFix;
+                var Py = config.PrizeY + conversionFix;
+
+                // Perform floating-point division
+                var S = (double)(Px * By - Py * Bx) / (Ax * By - Ay * Bx);
+                var T = (double)(Px - Ax * S) / Bx;
 
                 // Discard solutions that are not integers
                 if (S % 1 != 0 || T % 1 != 0) continue;
                 // Discard solutions that represent more than 100 button presses
-                if (S > 100 || T > 100) continue;
+                if (limitPresses && (S > 100 || T > 100)) continue;
 
-                // Now mutiple the butto presses by the price of each
-                var costA = S * A_PRICE;
-                var costB = T * B_PRICE;
+                // Now multiply the button presses by the price of each
+                var costA = (long)(S * A_PRICE);
+                var costB = (long)(T * B_PRICE);
                 tokensUsed += costA + costB;
             }
 
             return tokensUsed;
         }
 
-        public override long PartTwo(MachineConfig[] input)
+        public override long PartTwo(MachineConfig[] configs)
         {
-            throw new NotImplementedException();
+            return ComputeTokenCost(configs, withConversionFix: true);
         }
     }
 }
