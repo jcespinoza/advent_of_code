@@ -5,7 +5,7 @@ namespace Advent24.Days
 {
     public class Day15Test : TestEngine<Day15Solver, Warehouse, long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 123;
+        private const long EXPECTED_SOLUTION_PART_1 = 1412971L;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
 
         public Day15Test()
@@ -66,12 +66,22 @@ namespace Advent24.Days
 
         public override Puzzle PartTwo => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
                 RawInput = [
+                        "########",
+                        "#..O.O.#",
+                        "##@.O..#",
+                        "#...O..#",
+                        "#.#.O..#",
+                        "#...O..#",
+                        "#......#",
+                        "########",
+                        "",
+                        "<^^>>>vv<v>>v<<",
                 ],
-                Result = 8,
+                Result = 9021,
             },
             Solution = EXPECTED_SOLUTION_PART_2,
         };
