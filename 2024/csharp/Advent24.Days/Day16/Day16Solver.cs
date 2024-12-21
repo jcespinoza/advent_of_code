@@ -14,7 +14,7 @@ namespace Advent24.Days
             (int, int) startLocation = FindInMap(map, 'S');
             (int, int) goalLocation = FindInMap(map, 'E');
 
-            PathResult path = ComputeLowestScorePath(map, startLocation);
+            PathResult path = ComputeLowestScorePath(map, startLocation, goalLocation);
 
             long lowestScode = path.LowestScore;
 
@@ -36,7 +36,7 @@ namespace Advent24.Days
             return (-1, -1);
         }
 
-        private static PathResult ComputeLowestScorePath(char[][] map, (int, int) startLocation)
+        private static PathResult ComputeLowestScorePath(char[][] map, (int,int) startLocation, (int,int) goalLocation)
         {
             PriorityQueue<(int cost, int row, int col, int rOffset, int cOffset), int> pQueue = new();
             HashSet<(int row, int col, int rOffset, int cOffset)> visited = [];
@@ -50,8 +50,7 @@ namespace Advent24.Days
                 (int cCost, int cRow, int cCol, int crOffset, int ccOffset) = pQueue.Dequeue();
                 visited.Add((cRow, cCol, crOffset, ccOffset));
 
-                char cValue = map[cRow][cCol];
-                if(cValue == 'E')
+                if((cRow, cCol) == goalLocation)
                 {
                     lowestScore = cCost;
                     break;
