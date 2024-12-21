@@ -14,14 +14,14 @@ namespace Advent24.Days
             (int, int) startLocation = FindInMap(map, 'S');
             (int, int) goalLocation = FindInMap(map, 'E');
 
-            PathResult path = ComputeLowestScorePath(map, startLocation, goalLocation);
+            PathResult path = ComputeLowestScorePath(map, startLocation);
 
             long lowestScode = path.LowestScore;
 
             return lowestScode;
         }
 
-        private (int, int) FindInMap(char[][] map, char targetChar)
+        private static (int, int) FindInMap(char[][] map, char targetChar)
         {
             for (int row = 0; row < map.Length; row++)
             {
@@ -36,55 +36,44 @@ namespace Advent24.Days
             return (-1, -1);
         }
 
-        private PathResult ComputeLowestScorePath(char[][] map, (int, int) startLocation, (int, int) goalLocation)
+        private static PathResult ComputeLowestScorePath(char[][] map, (int, int) startLocation)
         {
-            PriorityQueue<(int cost, int row, int col, Direction dir), int> pQueue = new();
-            HashSet<(int cost, int row, int col, Direction dir)> visited = [];
+            PriorityQueue<(int cost, int row, int col, int rOffset, int cOffset), int> pQueue = new();
+            HashSet<(int row, int col, int rOffset, int cOffset)> visited = [];
 
             int lowestScore = -1;
             (int sRow, int sCol) = startLocation;
-            pQueue.Enqueue((0, sRow, sCol, Direction.East), 0);
-            visited.Add((0, sRow, sCol, Direction.East));
+            pQueue.Enqueue((0, sRow, sCol, 0, 1), 0);
+            visited.Add((sRow, sCol, 0, 1));
             while (pQueue.Count > 0)
             {
-                (int cCost, int cRow, int cCol, Direction cDir) = pQueue.Dequeue();
-                visited.Add((cCost, cRow, cCol, cDir));
+                (int cCost, int cRow, int cCol, int crOffset, int ccOffset) = pQueue.Dequeue();
+                visited.Add((cRow, cCol, crOffset, ccOffset));
 
-                if((cRow, cCol) == goalLocation)
+                char cValue = map[cRow][cCol];
+                if(cValue == 'E')
                 {
                     lowestScore = cCost;
                     break;
                 }
 
-                foreach (var direction in new Direction[] {Direction.North, Direction.East, Direction.South, Direction.West })
+
+                foreach ((int nCost, int nRow, int nCol, int nrOffset, int ncOffset) in new(int, int, int, int, int)[]{
+                    (cCost + 1, cRow + crOffset, cCol + ccOffset, crOffset, ccOffset),
+                    (cCost + 1000, cRow, cCol, ccOffset, -crOffset),
+                    (cCost + 1000, cRow, cCol, -ccOffset, crOffset),
+                })
                 {
-                    if(cDir.IsOpposite(direction)) continue;
+                    char nValue = map[nRow][nCol];
+                    if (nValue == '#') continue;
 
-                    (int nCost, int nRow, int nCol, Direction nDir) = direction switch {
-                        Direction.North => (cCost + GetCost(cDir, Direction.North), cRow - 1, cCol, Direction.North),
-                        Direction.South => (cCost + GetCost(cDir, Direction.South), cRow + 1, cCol, Direction.South),
-                        Direction.West => (cCost + GetCost(cDir, Direction.West), cRow, cCol - 1, Direction.West),
-                        Direction.East => (cCost + GetCost(cDir, Direction.East), cRow, cCol + 1, Direction.East),
-                        _ => throw new InvalidOperationException()
-                    };
+                    if (visited.Contains((nRow, nCol, nrOffset, ncOffset))) continue;
 
-                    char cellValue = map[nRow][nCol];
-                    if (cellValue == '#') continue;
-
-                    if (visited.Contains((nCost, nRow, nCol, nDir))) continue;
-
-                    pQueue.Enqueue((nCost, nRow, nCol, nDir), nCost);
+                    pQueue.Enqueue((nCost, nRow, nCol, nrOffset, ncOffset), nCost);
                 }
             }
 
             return new PathResult { LowestScore = lowestScore };
-        }
-
-        private static int GetCost(Direction cDirection, Direction nDirection)
-        {
-            if (cDirection.IsPerpedicular(nDirection)) return 1000;
-
-            return 1;
         }
 
         public override long PartTwo(char[][] map)
