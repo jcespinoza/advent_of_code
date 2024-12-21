@@ -57,13 +57,13 @@ namespace Advent24.Days
                     break;
                 }
 
-
                 foreach ((int nCost, int nRow, int nCol, int nrOffset, int ncOffset) in new(int, int, int, int, int)[]{
                     (cCost + 1, cRow + crOffset, cCol + ccOffset, crOffset, ccOffset),
                     (cCost + 1000, cRow, cCol, ccOffset, -crOffset),
                     (cCost + 1000, cRow, cCol, -ccOffset, crOffset),
                 })
                 {
+
                     char nValue = map[nRow][nCol];
                     if (nValue == '#') continue;
 
