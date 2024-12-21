@@ -1,13 +1,12 @@
 ﻿using AdventOfCode.Commons;
-using FluentAssertions.Execution;
 
 namespace Advent24.Days
 {
-    public class Day15Solver : Solver<Warehouse, long>
+    public class Day15Solver : SteppedSolver<Warehouse, Warehouse, long>
     {
         public Day15Solver() : base(2024, 15) { }
 
-        public override Warehouse ParseInput(IEnumerable<string> input)
+        public override Warehouse ParseInputOne(IEnumerable<string> input)
         {
             var lines = input.ToList();
             var map = lines.TakeWhile(x => x.StartsWith('#')).Select(x => x.ToCharArray()).ToArray();
@@ -26,6 +25,11 @@ namespace Advent24.Days
                 })
                 .ToList();
             return new() { Map = map, Moves = moves };
+        }
+
+        public override Warehouse ParseInputTwo(IEnumerable<string> input)
+        {
+            return ParseInputOne(input);
         }
 
         public override long PartOne(Warehouse warehouse)
@@ -131,11 +135,5 @@ namespace Advent24.Days
         {
             throw new NotImplementedException();
         }
-    }
-
-    public record Warehouse
-    {
-        public char[][] Map { get; set; }
-        public List<Direction> Moves { get; set; }
     }
 }

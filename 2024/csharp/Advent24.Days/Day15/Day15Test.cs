@@ -3,7 +3,7 @@ using dotenv.net;
 
 namespace Advent24.Days
 {
-    public class Day15Test : TestEngine<Day15Solver, Warehouse, long>
+    public class Day15Test : SteppedTestEngine<Day15Solver, Warehouse, Warehouse, long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 1412971L;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
