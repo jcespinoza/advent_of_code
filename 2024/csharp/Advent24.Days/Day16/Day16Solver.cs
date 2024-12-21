@@ -38,19 +38,20 @@ namespace Advent24.Days
 
         private static PathResult ComputeLowestScorePath(char[][] map, (int,int) startLocation, (int,int) goalLocation)
         {
-            PriorityQueue<(int cost, int row, int col, int rOffset, int cOffset), int> pQueue = new();
-            HashSet<(int row, int col, int rOffset, int cOffset)> visited = [];
+            PriorityQueue<(int cost, int row, int col, Direction dir), int> pQueue = new();
+            HashSet<(int row, int col, Direction dir)> visited = [];
 
             int lowestScore = -1;
             (int sRow, int sCol) = startLocation;
-            pQueue.Enqueue((0, sRow, sCol, 0, 1), 0);
-            visited.Add((sRow, sCol, 0, 1));
+            pQueue.Enqueue((0, sRow, sCol, Direction.East), 0);
+            visited.Add((sRow, sCol,Direction.East));
             while (pQueue.Count > 0)
             {
-                (int cCost, int cRow, int cCol, int crOffset, int ccOffset) = pQueue.Dequeue();
-                visited.Add((cRow, cCol, crOffset, ccOffset));
+                (int cCost, int cRow, int cCol, Direction cDir) = pQueue.Dequeue();
+                visited.Add((cRow, cCol, cDir));
 
-                if((cRow, cCol) == goalLocation)
+                (int crOffset, int ccOffset) = cDir.ToOffsets();
+                if ((cRow, cCol) == goalLocation)
                 {
                     lowestScore = cCost;
                     break;
@@ -66,9 +67,9 @@ namespace Advent24.Days
                     char nValue = map[nRow][nCol];
                     if (nValue == '#') continue;
 
-                    if (visited.Contains((nRow, nCol, nrOffset, ncOffset))) continue;
+                    if (visited.Contains((nRow, nCol, (nrOffset, ncOffset).ToDirection() ))) continue;
 
-                    pQueue.Enqueue((nCost, nRow, nCol, nrOffset, ncOffset), nCost);
+                    pQueue.Enqueue((nCost, nRow, nCol, (nrOffset, ncOffset).ToDirection()), nCost);
                 }
             }
 

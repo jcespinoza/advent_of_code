@@ -19,6 +19,38 @@
             return direction.RotateOrtogonal(1);
         }
 
+        public static Direction ToDirection(this (int rowOffset, int colOffset) offset)
+        {
+            return offset switch
+            {
+                (-1, 0) => Direction.North,
+                (-1, 1) => Direction.NorthEast,
+                (0, 1) => Direction.East,
+                (1, 1) => Direction.SouthEast,
+                (1, 0) => Direction.South,
+                (1, -1) => Direction.SouthWest,
+                (0, -1) => Direction.West,
+                (-1, -1) => Direction.NorthWest,
+                _ => throw new System.ArgumentException("Invalid offsets")
+            };
+        }
+
+        public static (int, int) ToOffsets(this Direction direction)
+        {
+            return direction switch
+            {
+                Direction.North => (-1, 0),
+                Direction.NorthEast => (-1, 1),
+                Direction.East => (0, 1),
+                Direction.SouthEast => (1, 1),
+                Direction.South => (1, 0),
+                Direction.SouthWest => (1, -1),
+                Direction.West => (0, -1),
+                Direction.NorthWest => (-1, -1),
+                _ => throw new System.ArgumentException("Invalid direction")
+            };
+        }
+
         public static Direction RotateOrtogonal(this Direction direction, int steps)
         {
             var directions = new Direction[] { Direction.North, Direction.East, Direction.South, Direction.West };
