@@ -29,7 +29,33 @@ namespace Advent24.Days
 
         public override Warehouse ParseInputTwo(IEnumerable<string> input)
         {
-            return ParseInputOne(input);
+            var lines = input.ToList();
+            var map = lines
+                .TakeWhile(x => x.StartsWith('#'))
+                .Select(
+                    str => str.Replace("#", "##")
+                    .Replace(".", "..")
+                    .Replace("@", "@.")
+                    .Replace("O", "[]")
+                )
+                .Select(x => x.ToCharArray())
+                .ToArray();
+            List<Direction> moves = lines
+                .SkipWhile(x => x.StartsWith('#'))
+                .Skip(1)
+                .TakeWhile(x => !string.IsNullOrWhiteSpace(x))
+                .SelectMany(x => x.ToCharArray())
+                .Select(x =>
+                {
+                    if (x == '^') return Direction.North;
+                    if (x == 'v') return Direction.South;
+                    if (x == '>') return Direction.East;
+                    if (x == '<') return Direction.West;
+
+                    throw new InvalidOperationException();
+                })
+                .ToList();
+            return new() { Map = map, Moves = moves };
         }
 
         public override long PartOne(Warehouse warehouse)
@@ -39,7 +65,7 @@ namespace Advent24.Days
             {
                 robotLocation = MoveRobot(warehouse.Map, robotLocation, move);
             }
-            HashSet<(int, int)> boxes = FindBoxes(warehouse.Map);
+            HashSet<(int, int)> boxes = FindBoxes(warehouse.Map, 'O');
 
             long sumOfGPS = 0;
             foreach (var box in boxes)
@@ -116,7 +142,7 @@ namespace Advent24.Days
             return (rbRow + rowOffset, rbCol + colOffset);
         }
 
-        private static HashSet<(int, int)> FindBoxes(char[][] map)
+        private static HashSet<(int, int)> FindBoxes(char[][] map, char indicator)
         {
             HashSet<(int, int)> boxes = [];
             //A box is every cell that has an 'O' in it
@@ -124,7 +150,7 @@ namespace Advent24.Days
             {
                 for (int col = 0; col < map[row].Length; col++)
                 {
-                    if(map[row][col] == 'O')
+                    if(map[row][col] == indicator)
                         boxes.Add((row, col));
                 }
             }
@@ -133,7 +159,101 @@ namespace Advent24.Days
 
         public override long PartTwo(Warehouse warehouse)
         {
-            throw new NotImplementedException();
+            (int, int) robotLocation = FindRobotInMap(warehouse.Map);
+
+            foreach (var move in warehouse.Moves)
+            {
+                robotLocation = MoveWideRobot(warehouse.Map, robotLocation, move);
+            }
+            HashSet<(int, int)> boxes = FindBoxes(warehouse.Map, '[');
+
+            long sumOfGPS = 0;
+            foreach (var box in boxes)
+            {
+                (int distanceFromTop, int distanceFromLeft) = box;
+                int localSum = 100 * distanceFromTop + distanceFromLeft;
+                sumOfGPS += localSum;
+            }
+
+            return sumOfGPS;
+        }
+
+        private static (int, int) MoveWideRobot(char[][] map, (int, int) robotLocation, Direction direction)
+        {
+            (int rbRow, int rbCol) = robotLocation;
+            List<(int, int)> pushTargets = [];
+            (int rowOffset, int colOffset) = direction switch
+            {
+                Direction.North => (-1, 0),
+                Direction.South => (1, 0),
+                Direction.East => (0, 1),
+                Direction.West => (0, -1),
+                _ => (0, 0),
+            };
+            pushTargets.Add((rbRow, rbCol));
+            bool canPush = true;
+            for (int index = 0; index < pushTargets.Count; index++)
+            {
+                (int cRow, int cCol) = pushTargets[index];
+                int nRow = cRow + rowOffset;
+                int nCol = cCol + colOffset;
+
+                if (pushTargets.Contains((nRow, nCol)))
+                {
+                    continue;
+                }
+
+                char cellValue = map[nRow][nCol];
+                if (cellValue == '#')
+                {
+                    canPush = false;
+                    break;
+                }
+                if (cellValue == '[')
+                {
+                    pushTargets.Add((nRow, nCol));
+                    pushTargets.Add((nRow, nCol + 1));
+                }
+                if (cellValue == ']')
+                {
+                    pushTargets.Add((nRow, nCol));
+                    pushTargets.Add((nRow, nCol - 1));
+                }
+            }
+            if (!canPush) return robotLocation;
+
+            char[][] mapDup = DuplicateMap(map);
+
+            map[rbRow][rbCol] = '.';
+            map[rbRow + rowOffset][rbCol + colOffset] = '@';
+
+            for (int index = 1; index < pushTargets.Count; index++)
+            {
+                (int bRow, int bCol) = pushTargets[index];
+                map[bRow][bCol] = '.';
+            }
+
+            for (int index = 1; index < pushTargets.Count; index++)
+            {
+                (int bRow, int bCol) = pushTargets[index];
+                map[bRow + rowOffset][bCol + colOffset] = mapDup[bRow][bCol];
+            }
+
+            return (rbRow + rowOffset, rbCol + colOffset);
+        }
+
+        private static char[][] DuplicateMap(char[][] map)
+        {
+            char[][] newMap = new char[map.Length][];
+            for (int i = 0; i < map.Length; i++)
+            {
+                newMap[i] = new char[map[i].Length];
+                for (int j = 0; j < map[i].Length; j++)
+                {
+                    newMap[i][j] = map[i][j];
+                }
+            }
+            return newMap;
         }
     }
 }
