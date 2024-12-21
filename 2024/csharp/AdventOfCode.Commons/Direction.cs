@@ -50,5 +50,39 @@
                 _ => 0,
             };
         }
+
+        public static bool IsPerpedicular(this Direction cDirection, Direction otherDirection)
+        {
+            if(cDirection == otherDirection) return false;
+
+            if (cDirection == Direction.North || cDirection == Direction.South
+                && otherDirection == Direction.East || otherDirection == Direction.West)
+            {
+                return true;
+            }
+
+            if(cDirection == Direction.East || cDirection == Direction.West
+                && otherDirection == Direction.North || otherDirection == Direction.South)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsOpposite(this Direction cDirection, Direction otherDirection)
+        {
+            if (cDirection == Direction.North && otherDirection == Direction.South) return true;
+            if (cDirection == Direction.South && otherDirection == Direction.North) return true;
+            if (cDirection == Direction.East && otherDirection == Direction.West) return true;
+            if (cDirection == Direction.West && otherDirection == Direction.East) return true;
+
+            if (cDirection == Direction.NorthEast && otherDirection == Direction.SouthWest) return true;
+            if (cDirection == Direction.SouthWest && otherDirection == Direction.NorthEast) return true;
+            if (cDirection == Direction.NorthWest && otherDirection == Direction.SouthEast) return true;
+            if (cDirection == Direction.SouthEast && otherDirection == Direction.NorthWest) return true;
+
+            return false;
+        }
     }
 }
