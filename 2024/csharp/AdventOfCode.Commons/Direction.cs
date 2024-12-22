@@ -11,7 +11,8 @@ namespace AdventOfCode.Commons
         South,
         SouthWest,
         West,
-        NorthWest
+        NorthWest,
+        None
     }
 
     public static class DirectionExtensions
