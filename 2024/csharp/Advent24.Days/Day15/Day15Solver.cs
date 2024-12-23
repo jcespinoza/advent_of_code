@@ -2,7 +2,7 @@
 
 namespace Advent24.Days
 {
-    public class Day15Solver : SteppedSolver<Warehouse, Warehouse, long>
+    public class Day15Solver : SteppedSolver<Warehouse, Warehouse, long, long>
     {
         public Day15Solver() : base(2024, 15) { }
 

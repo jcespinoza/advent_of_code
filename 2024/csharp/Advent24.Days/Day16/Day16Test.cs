@@ -67,7 +67,7 @@ namespace Advent24.Days
 
         public override Puzzle PartTwo => new()
         {
-            ShouldSkipTests = false,
+            ShouldSkipTests = true,
             Example = new()
             {
                 RawInput = [

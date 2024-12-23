@@ -23,8 +23,8 @@ namespace AdventOfCode.Commons;
 /// <typeparam name="TResult">
 /// The type of the result of the puzzle
 /// </typeparam>
-public abstract class SteppedTestEngine<TSolver, TInputOne, TInputTwo, TResult>
-    where TSolver : SteppedSolver<TInputOne, TInputTwo, TResult>, new()
+public abstract class SteppedTestEngine<TSolver, TInputOne, TInputTwo, TResultOne, TResultTwo>
+    where TSolver : SteppedSolver<TInputOne, TInputTwo, TResultOne, TResultTwo>, new()
 {
     /// <summary>
     /// The example used in the advent of code's subject and the expected result for it
@@ -54,9 +54,14 @@ public abstract class SteppedTestEngine<TSolver, TInputOne, TInputTwo, TResult>
         public TInputTwo InputTwo { get; init; } = default!;
 
         /// <summary>
-        /// The expected result for this example
+        /// The expected result for Part One of this example
         /// </summary>
-        public TResult Result { get; init; } = default!;
+        public TResultOne Result { get; init; } = default!;
+
+        /// <summary>
+        /// The expected result for Part Two this example
+        /// </summary>
+        public TResultTwo ResultTwo { get; init; } = default!;
     }
 
     /// <summary>
@@ -85,7 +90,11 @@ public abstract class SteppedTestEngine<TSolver, TInputOne, TInputTwo, TResult>
         /// <summary>
         /// The expected solution for the puzzle
         /// </summary>
-        public required TResult Solution { get; init; }
+        public TResultOne Solution { get; set; }
+        /// <summary>
+        /// The expected solution for the puzzle
+        /// </summary>
+        public TResultTwo SolutionTwo { get; set; }
     }
 
     /// <summary>
@@ -247,7 +256,7 @@ public abstract class SteppedTestEngine<TSolver, TInputOne, TInputTwo, TResult>
         var result = _solver.PartTwo(input);
 
         // Assert
-        result.Should().Be(PartTwo.Example.Result);
+        result.Should().Be(PartTwo.Example.ResultTwo);
     }
 
     [SkippableFact(DisplayName = "Part Two - Examples")]
@@ -264,7 +273,7 @@ public abstract class SteppedTestEngine<TSolver, TInputOne, TInputTwo, TResult>
             var result = _solver.PartTwo(input);
 
             // Assert
-            result.Should().Be(example.Result);
+            result.Should().Be(example.ResultTwo);
         }
     }
 
@@ -280,7 +289,7 @@ public abstract class SteppedTestEngine<TSolver, TInputOne, TInputTwo, TResult>
         var result = _solver.PartTwo(input.Value);
 
         // Assert
-        result.Should().Be(PartTwo.Solution);
+        result.Should().Be(PartTwo.SolutionTwo);
     }
 
     #endregion
