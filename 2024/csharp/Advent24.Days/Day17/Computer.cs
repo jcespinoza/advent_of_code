@@ -190,7 +190,7 @@ namespace Advent24.Days
 
         private static int ResolveComboOperand(Computer computer, int comboOperand)
         {
-            if (comboOperand > 0 && comboOperand <= 3) return comboOperand;
+            if (comboOperand >= 0 && comboOperand <= 3) return comboOperand;
 
             if (comboOperand == 4) return computer.RegA;
             if (comboOperand == 5) return computer.RegB;
