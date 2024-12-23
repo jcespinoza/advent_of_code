@@ -13,9 +13,9 @@ namespace AdventOfCode.Commons;
 /// <typeparam name="TResult">
 /// The type of the result of the puzzle
 /// </typeparam>
-public abstract class SteppedSolver<TParsedInputOne, TParsedInputTwo, TResult>
+public abstract class SteppedSolver<TParsedInputOne, TParsedInputTwo, TResultOne, TResultTwo>
 {
-    public abstract class WithExtraParams<TExtraParams> : SteppedSolver<TParsedInputOne, TParsedInputTwo, TResult>
+    public abstract class WithExtraParams<TExtraParams> : SteppedSolver<TParsedInputOne, TParsedInputTwo, TResultOne, TResultTwo>
     {
         public TExtraParams ExtraParams { get; set; }
 
@@ -119,7 +119,7 @@ public abstract class SteppedSolver<TParsedInputOne, TParsedInputTwo, TResult>
     /// <returns>
     /// The puzzle's solution
     /// </returns>
-    public abstract TResult PartOne(TParsedInputOne input);
+    public abstract TResultOne PartOne(TParsedInputOne input);
 
     /// <summary>
     /// Logic for the solution of the second part of the puzzle
@@ -132,5 +132,5 @@ public abstract class SteppedSolver<TParsedInputOne, TParsedInputTwo, TResult>
     /// <returns>
     /// The puzzle's solution
     /// </returns>
-    public abstract TResult PartTwo(TParsedInputTwo input);
+    public abstract TResultTwo PartTwo(TParsedInputTwo input);
 }

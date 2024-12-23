@@ -3,7 +3,7 @@ using dotenv.net;
 
 namespace Advent24.Days
 {
-    public class Day15Test : SteppedTestEngine<Day15Solver, Warehouse, Warehouse, long>
+    public class Day15Test : SteppedTestEngine<Day15Solver, Warehouse, Warehouse, long, long>
     {
         private const long EXPECTED_SOLUTION_PART_1 = 1412971L;
         private const long EXPECTED_SOLUTION_PART_2 = 1429299L;
@@ -92,7 +92,7 @@ namespace Advent24.Days
                     "^^>vv<^v^v<vv>^<><v<^v>^^^>>>^^vvv^>vvv<>>>^<^>>>>>^<<^v>^vvv<>^<><<v>",
                     "v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^",
                 ],
-                Result = 9021,
+                ResultTwo = 9021,
             },
             Examples = [
                 new()
@@ -109,10 +109,10 @@ namespace Advent24.Days
                         "",
                         "<^^>>>vv<v>>v<<",
                     ],
-                    Result = 1751,
+                    ResultTwo = 1751,
                 },
             ],
-            Solution = EXPECTED_SOLUTION_PART_2,
+            SolutionTwo = EXPECTED_SOLUTION_PART_2,
         };
     }
 }

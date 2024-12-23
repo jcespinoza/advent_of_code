@@ -13,7 +13,7 @@ namespace AdventOfCode.Commons;
 /// <typeparam name="TResult">
 /// The type of the result of the puzzle
 /// </typeparam>
-public abstract class Solver<TInput, TResult> : SteppedSolver<TInput, TInput, TResult>
+public abstract class Solver<TInput, TResult> : SteppedSolver<TInput, TInput, TResult, TResult>
 {
     /// <summary>
     /// The puzzle input for Part One
