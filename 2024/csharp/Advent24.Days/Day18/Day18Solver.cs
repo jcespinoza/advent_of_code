@@ -2,11 +2,11 @@
 
 namespace Advent24.Days
 {
-    public class Day18Solver : Solver<(int,int)[], long>
+    public class Day18Solver : SteppedSolver<(int,int)[], (int, int)[], long, (int,int)>
     {
         public Day18Solver() : base(2024, 18) { }
 
-        public override (int,int)[] ParseInput(IEnumerable<string> input)
+        public override (int,int)[] ParseInputOne(IEnumerable<string> input)
             => input
             .Select(l => l.Split(','))
             .Select(l =>
@@ -17,6 +17,7 @@ namespace Advent24.Days
             )
             .ToArray();
 
+        public override (int, int)[] ParseInputTwo(IEnumerable<string> input) => ParseInputOne(input);
 
         public override long PartOne((int,int)[] byteLocations)
         {
@@ -29,8 +30,7 @@ namespace Advent24.Days
                 bytesToSimulate = 12;
             }
 
-            char[][] map = GetMap(gridSize + 1);
-            long stepsToExit = ComputeStepsToExit(map, byteLocations, bytesToSimulate);
+            long stepsToExit = ComputeStepsToExit(gridSize, byteLocations, bytesToSimulate);
 
             return stepsToExit;
         }
@@ -45,8 +45,9 @@ namespace Advent24.Days
             return map;
         }
 
-        private static long ComputeStepsToExit(char[][] map, (int, int)[] byteLocations, int bytesToSimulate)
+        private static long ComputeStepsToExit(int gridSize, (int, int)[] byteLocations, int bytesToSimulate)
         {
+            char[][] map = GetMap(gridSize + 1);
             (int, int) exitLocation = (map.Length - 1, map.Length - 1);
             for(int index = 0; index < bytesToSimulate; index++)
             {
@@ -99,9 +100,43 @@ namespace Advent24.Days
             return long.MaxValue;
         }
 
-        public override long PartTwo((int,int)[] input)
+        public override (int,int) PartTwo((int,int)[] byteLocations)
         {
-            throw new NotImplementedException();
+            int gridSize = 70;
+
+            if (byteLocations.Length < 500)
+            {
+                // This is an example and not the real puzzle
+                gridSize = 6;
+            }
+
+            return FindFirstBlockage(byteLocations, gridSize);
+        }
+
+        private static (int, int) FindFirstBlockage((int, int)[] byteLocations, int gridSize)
+        {
+            int minIndex = 0;
+            int maxIndex = byteLocations.Length - 1;
+
+            // Narrow down search
+            while (minIndex < maxIndex)
+            {
+                // Look at the mid point
+                var mid = (minIndex + maxIndex) / 2;
+                long stepsToExit = ComputeStepsToExit(gridSize, byteLocations, mid + 1);
+                if (stepsToExit != long.MaxValue)
+                {
+                // If there's a path to the exit, set the midpoint as the new lower bound
+                    minIndex = mid + 1;
+                }
+                else
+                {
+                    // Otherwise, make the midpoint the higher boundary
+                    maxIndex = mid;
+                }
+            }
+
+            return byteLocations[minIndex];
         }
     }
 }
