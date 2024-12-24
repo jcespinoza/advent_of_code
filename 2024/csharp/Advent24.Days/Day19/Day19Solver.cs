@@ -63,9 +63,10 @@ namespace Advent24.Days
             var maxLength = Math.Min(design.Length, maxPatterLength);
             foreach (var countToGrab in Enumerable.Range(0, maxLength +1 ))
             {
-                bool patterExists = patterns.Contains(design[..countToGrab]);
+                bool patternExists = patterns.Contains(design[..countToGrab]);
+                if (!patternExists) continue;
                 bool subPatternFeasible = IsDesignPossible(design[countToGrab..], patterns, feasibilityCache, maxPatterLength);
-                if (patterExists && subPatternFeasible)
+                if (patternExists && subPatternFeasible)
                 {
                     feasibilityCache.Add(design, true);
                     return true;
@@ -74,10 +75,57 @@ namespace Advent24.Days
             feasibilityCache.Add(design, false);
             return false;
         }
+        private static long GetFeasibleDesignPermutations(OnsenWarehouse warehouse)
+        {
+            Dictionary<string, int> feasibilityCache = [];
+            List<long> combinations = [];
+            var maxPatterLength = warehouse.Patterns.Max(x => x.Length);
+            foreach (var design in warehouse.Designs)
+            {
+                int count = GetPossibleDesignArrangements(design, warehouse.Patterns, feasibilityCache, maxPatterLength);
+                if (count > 0)
+                {
+                    combinations.Add(count);
+                }
+            }
+            long sumFeasible = feasibilityCache.Values.Select(i => (long)i).Sum();
+            long subCombinations = combinations.Sum();
+            return subCombinations;
+        }
+
+        private static int GetPossibleDesignArrangements(string design, List<string> patterns, Dictionary<string, int> feasibilityCache, int maxPatterLength)
+        {
+            if (feasibilityCache.TryGetValue(design, out int cachedResult))
+            {
+                return cachedResult;
+            }
+
+            if (design.Length == 0)
+            {
+                return 1;
+            }
+
+            var maxLength = Math.Min(design.Length, maxPatterLength);
+            var count = 0;
+            // Repeatedly match smaller chunks of the string against the available patterns
+            foreach (var countToGrab in Enumerable.Range(0, maxLength + 1))
+            {
+                // Recursively check the remainder of the pattern
+                if (patterns.Contains(design[..countToGrab]))
+                {
+                    int subPermuttations = GetPossibleDesignArrangements(design[countToGrab..], patterns, feasibilityCache, maxPatterLength);
+                    count += subPermuttations;
+                }
+            }
+            feasibilityCache.Add(design, count);
+            return count;
+        }
 
         public override long PartTwo(OnsenWarehouse warehouse)
         {
-            throw new NotImplementedException();
+            long combinations = GetFeasibleDesignPermutations(warehouse);
+
+            return combinations;
         }
     }
 

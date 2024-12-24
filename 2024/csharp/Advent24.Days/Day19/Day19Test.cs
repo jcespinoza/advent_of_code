@@ -43,8 +43,18 @@ namespace Advent24.Days
             Example = new()
             {
                 RawInput = [
+                    "r, wr, b, g, bwu, rb, gb, br",
+                    "",
+                    "brwrr",
+                    "bggr",
+                    "gbbr",
+                    "rrbgbr",
+                    "ubwu",
+                    "bwurrg",
+                    "brgr",
+                    "bbrgwb",
                 ],
-                Result = 8,
+                Result = 16,
             },
             Solution = EXPECTED_SOLUTION_PART_2,
         };
