@@ -35,7 +35,7 @@ namespace Advent24.Days
                     "#...#...#...###",
                     "###############",
                 ],
-                Result = 100,
+                Result = 1367,
             },
             Examples = [
             ],
