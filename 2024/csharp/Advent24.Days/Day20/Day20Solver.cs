@@ -20,15 +20,51 @@ namespace Advent24.Days
 
             var path = FindPath(map);
 
-            long cheats = FindCheatsForPicosends(map, path, targetTimeSaved, maxTime: 2, useExact: false);
+            long cheats = FindCheatsForPicosends(map, path, targetTimeSaved, useExact: false);
 
             return cheats;
         }
 
-        public static long FindCheatsForPicosends(char[][] map, List<(int, int)> path, int targetTimeSaved, int maxTime, bool useExact)
+        public static long FindCheatsForPicosends(char[][] map, List<(int, int)> path, int targetTimeSaved, bool useExact)
         {
+            int offset = 2;
             int count = 0;
             foreach ((int row, int col) in path) {
+                foreach ((int nRow, int nCol) in new (int, int)[] {
+                    (row - offset, col),
+                    (row + offset, col),
+                    (row, col - offset),
+                    (row, col + offset)
+                })
+                {
+                    if (nRow < 0 || nRow >= map.Length || nCol < 0 || nCol >= map[nRow].Length) continue;
+                    if (map[nRow][nCol] == '#') continue;
+                    if (map[nRow][nCol] == 'S') continue;
+
+                    var distA = path.IndexOf((row, col));
+                    var distB = path.IndexOf((nRow, nCol));
+                    if (distA > distB) continue;
+                    int localDist = Math.Abs(distA - distB);
+                    bool savesEqualOrMoreSteps = localDist >= targetTimeSaved + offset;
+                    bool savesEqualSteps = localDist == targetTimeSaved + offset;
+                    bool shouldCount = useExact ? savesEqualSteps : savesEqualOrMoreSteps;
+
+                    if (shouldCount)
+                    {
+                        count++;
+                    }
+                }
+                
+            }
+            return count;
+        }
+
+        public static long FindAdvancedCheatsForPicosends(char[][] map, List<(int, int)> path, int targetTimeSaved, bool useExact)
+        {
+            int maxTime = 20;
+            int count = 0;
+            foreach ((int row, int col) in path)
+            {
                 if (map[row][col] == '#') continue;
                 for (int offset = 2; offset <= maxTime; offset++)
                 {
