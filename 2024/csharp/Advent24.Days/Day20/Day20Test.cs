@@ -5,7 +5,7 @@ namespace Advent24.Days
 {
     public class Day20Test : SteppedTestEngine<Day20Solver, char[][], char[][], long, long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 123;
+        private const long EXPECTED_SOLUTION_PART_1 = 1415;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
 
         public Day20Test()
@@ -35,7 +35,7 @@ namespace Advent24.Days
                     "#...#...#...###",
                     "###############",
                 ],
-                Result = 1367,
+                Result = 0,
             },
             Examples = [
             ],

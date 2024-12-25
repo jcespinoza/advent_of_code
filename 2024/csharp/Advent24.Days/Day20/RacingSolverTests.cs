@@ -35,7 +35,7 @@ namespace Advent24.Days.Day20
         public void FindPathLength_Test01()
         {
             var path = Day20Solver.FindPath(_racetrack);
-            var expectedLength = 84;
+            var expectedLength = 85;
 
             path.Count.Should().Be(expectedLength);
         }
@@ -45,9 +45,9 @@ namespace Advent24.Days.Day20
         {
             var path = Day20Solver.FindPath(_racetrack);
 
-            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 2);
+            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 2, useExact: true);
 
-            cheatsForPicoseconds.Should().BeGreaterThanOrEqualTo(14);
+            cheatsForPicoseconds.Should().Be(14);
         }
 
         [Fact]
@@ -55,9 +55,49 @@ namespace Advent24.Days.Day20
         {
             var path = Day20Solver.FindPath(_racetrack);
 
-            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 4);
+            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 4, useExact: true);
 
-            cheatsForPicoseconds.Should().BeGreaterThanOrEqualTo(14);
+            cheatsForPicoseconds.Should().Be(14);
+        }
+
+        [Fact]
+        public void FindCheatsForPicosends_Test6_2()
+        {
+            var path = Day20Solver.FindPath(_racetrack);
+
+            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 6, useExact: true);
+
+            cheatsForPicoseconds.Should().Be(2);
+        }
+
+        [Fact]
+        public void FindCheatsForPicosends_Test8_4()
+        {
+            var path = Day20Solver.FindPath(_racetrack);
+
+            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 8, useExact: true);
+
+            cheatsForPicoseconds.Should().Be(4);
+        }
+
+        [Fact]
+        public void FindCheatsForPicosends_Test10_2()
+        {
+            var path = Day20Solver.FindPath(_racetrack);
+
+            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 10, useExact: true);
+
+            cheatsForPicoseconds.Should().Be(2);
+        }
+
+        [Fact]
+        public void FindCheatsForPicosends_Test12_3()
+        {
+            var path = Day20Solver.FindPath(_racetrack);
+
+            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 12, useExact: true);
+
+            cheatsForPicoseconds.Should().Be(3);
         }
 
         [Fact]
@@ -65,9 +105,9 @@ namespace Advent24.Days.Day20
         {
             var path = Day20Solver.FindPath(_racetrack);
 
-            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 20);
+            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 20, useExact: true);
 
-            cheatsForPicoseconds.Should().BeGreaterThanOrEqualTo(1);
+            cheatsForPicoseconds.Should().Be(1);
         }
 
         [Fact]
@@ -75,9 +115,9 @@ namespace Advent24.Days.Day20
         {
             var path = Day20Solver.FindPath(_racetrack);
 
-            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 36);
+            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 36, useExact: true);
 
-            cheatsForPicoseconds.Should().BeGreaterThanOrEqualTo(1);
+            cheatsForPicoseconds.Should().Be(1);
         }
 
         [Fact]
@@ -85,9 +125,9 @@ namespace Advent24.Days.Day20
         {
             var path = Day20Solver.FindPath(_racetrack);
 
-            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 38);
+            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 38, useExact: true);
 
-            cheatsForPicoseconds.Should().BeGreaterThanOrEqualTo(1);
+            cheatsForPicoseconds.Should().Be(1);
         }
 
         [Fact]
@@ -95,9 +135,9 @@ namespace Advent24.Days.Day20
         {
             var path = Day20Solver.FindPath(_racetrack);
 
-            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 40);
+            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 40, useExact: true);
 
-            cheatsForPicoseconds.Should().BeGreaterThanOrEqualTo(1);
+            cheatsForPicoseconds.Should().Be(1);
         }
 
         [Fact]
@@ -105,9 +145,9 @@ namespace Advent24.Days.Day20
         {
             var path = Day20Solver.FindPath(_racetrack);
 
-            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 64);
+            long cheatsForPicoseconds = Day20Solver.FindCheatsForPicosends(_racetrack, path, targetTimeSaved: 64, useExact: true);
 
-            cheatsForPicoseconds.Should().BeGreaterThanOrEqualTo(1);
+            cheatsForPicoseconds.Should().Be(1);
         }
     }
 }
