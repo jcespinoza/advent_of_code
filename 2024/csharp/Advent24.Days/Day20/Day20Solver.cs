@@ -25,6 +25,17 @@ namespace Advent24.Days
             return cheats;
         }
 
+        public override long PartTwo(char[][] map)
+        {
+            int targetTimeSaved = 100;
+
+            var path = FindPath(map);
+
+            long cheats = FindAdvancedCheatsForPicosends(map, path, targetTimeSaved, useExact: false);
+
+            return cheats;
+        }
+
         public static long FindCheatsForPicosends(char[][] map, List<(int, int)> path, int targetTimeSaved, bool useExact)
         {
             int offset = 2;
@@ -158,11 +169,6 @@ namespace Advent24.Days
                 }
             }
             return (-1, -1);
-        }
-
-        public override long PartTwo(char[][] input)
-        {
-            throw new NotImplementedException();
         }
     }
 }

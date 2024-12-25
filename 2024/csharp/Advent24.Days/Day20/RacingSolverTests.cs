@@ -149,5 +149,27 @@ namespace Advent24.Days.Day20
 
             cheatsForPicoseconds.Should().Be(1);
         }
+
+        [Theory]
+        [InlineData(50, 32)]
+        [InlineData(52, 31)]
+        [InlineData(54, 29)]
+        [InlineData(56, 39)]
+        [InlineData(58, 25)]
+        [InlineData(60, 23)]
+        [InlineData(62, 20)]
+        [InlineData(64, 19)]
+        [InlineData(66, 12)]
+        [InlineData(68, 14)]
+        [InlineData(70, 12)]
+        [InlineData(72, 22)]
+        [InlineData(74, 4)]
+        [InlineData(76, 3)]
+        public void FindAdvancedCheatsForPicosends_Test(int targetTimeSaved, int expectedCheats)
+        {
+            var path = Day20Solver.FindPath(_racetrack);
+            long cheatsForPicoseconds = Day20Solver.FindAdvancedCheatsForPicosends(_racetrack, path, targetTimeSaved, useExact: true);
+            cheatsForPicoseconds.Should().Be(expectedCheats);
+        }
     }
 }
