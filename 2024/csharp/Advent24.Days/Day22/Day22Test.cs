@@ -1,5 +1,7 @@
 ﻿using AdventOfCode.Commons;
 using dotenv.net;
+using FluentAssertions;
+using System.Collections.Immutable;
 using Xunit;
 
 namespace Advent24.Days
@@ -38,8 +40,12 @@ namespace Advent24.Days
             Example = new()
             {
                 RawInput = [
+                    "1",
+                    "2",
+                    "3",
+                    "2024",
                 ],
-                Result = 8,
+                Result = 23,
             },
             Solution = EXPECTED_SOLUTION_PART_2,
         };
@@ -61,7 +67,22 @@ namespace Advent24.Days
             // Act
             long result = Day22Solver.FindNthSecretNumber(initial, step);
             // Assert
-            Assert.Equal(expected, result);
+            result.Should().Be(expected);
+        }
+
+        [Fact]
+        public void ComputePriceList_Test()
+        {
+            // Arrange
+            int secretNumber = 123;
+            int stepOfInterest = 10;
+            List<long> expected = [3, 0, 6, 5, 4, 4, 6, 4, 4, 2,];
+
+            // Act
+            var result = Day22Solver.ComputePriceList(secretNumber, stepOfInterest);
+
+            // Assert
+            result.Should().BeEquivalentTo(expected);
         }
     }
 }
