@@ -3,9 +3,9 @@ using dotenv.net;
 
 namespace Advent24.Days
 {
-    public class Day23Test : TestEngine<Day23Solver, object[], long>
+    public class Day23Test : TestEngine<Day23Solver, (string, string)[], long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 123;
+        private const long EXPECTED_SOLUTION_PART_1 = 1194;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
 
         public Day23Test()
@@ -15,12 +15,44 @@ namespace Advent24.Days
 
         public override Puzzle PartOne => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
                 RawInput = [
+                    "kh-tc",
+                    "qp-kh",
+                    "de-cg",
+                    "ka-co",
+                    "yn-aq",
+                    "qp-ub",
+                    "cg-tb",
+                    "vc-aq",
+                    "tb-ka",
+                    "wh-tc",
+                    "yn-cg",
+                    "kh-ub",
+                    "ta-co",
+                    "de-co",
+                    "tc-td",
+                    "tb-wq",
+                    "wh-td",
+                    "ta-ka",
+                    "td-qp",
+                    "aq-cg",
+                    "wq-ub",
+                    "ub-vc",
+                    "de-ta",
+                    "wq-aq",
+                    "wq-vc",
+                    "wh-yn",
+                    "ka-de",
+                    "kh-ta",
+                    "co-tc",
+                    "wh-qp",
+                    "tb-vc",
+                    "td-yn",
                 ],
-                Result = 8,
+                Result = 7,
             },
             Examples = [
             ],
