@@ -50,7 +50,14 @@ namespace Advent24.Days
             List<Wire> zWires = outputs
                 .Where(o => o.Key.StartsWith('z'))
                 .Select(o => o.Value).ToList();
-            long outputDecimal = EvaluateDecimal(zWires);
+
+
+            var chars = zWires
+                .Select(o => o.Value ? '1' : '0');
+            var reversed = chars.Reverse();
+            var asString = string.Join("", reversed);
+
+            long outputDecimal = Convert.ToInt64(asString, 2);
 
             return outputDecimal;
         }
@@ -64,18 +71,11 @@ namespace Advent24.Days
             foreach (var gate in gates)
             {
                 bool value = EvaluateGate(gate.Key, inputs, gates, outputs);
-                Wire outputWire = new Wire { Name = gate.Key, Value = value };
+                Wire outputWire = new() { Name = gate.Key, Value = value };
                 if (!outputs.ContainsKey(gate.Key))
                 {
                     outputs.Add(gate.Key, outputWire);
                 }
-            }
-
-            // Ensure all gate targets have been evaluated
-            Assert.True(outputs.Count == gates.Count);
-            foreach (var output in outputs)
-            {
-                Assert.True(gates.ContainsKey(output.Key));
             }
 
             return outputs;
@@ -96,22 +96,12 @@ namespace Advent24.Days
             bool inputB = EvaluateGate(gate.InputB, inputs, gates, outputs);
             bool output = gate.Operation switch
             {
-                BoolOperation.AND => inputA && inputB,
-                BoolOperation.OR => inputA || inputB,
+                BoolOperation.AND => inputA & inputB,
+                BoolOperation.OR => inputA | inputB,
                 BoolOperation.XOR => inputA ^ inputB,
                 _ => throw new Exception("Invalid operation")
             };
 
-            return output;
-        }
-
-        public static long EvaluateDecimal(List<Wire> wires)
-        {
-            long output = 0;
-            for (int i = 0; i < wires.Count; i++)
-            {
-                output += wires[i].Value ? 1 << i : 0;
-            }
             return output;
         }
 

@@ -7,7 +7,7 @@ namespace Advent24.Days
 {
     public class Day24Test : TestEngine<Day24Solver, Circuit, long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 911832672L;
+        private const long EXPECTED_SOLUTION_PART_1 = 47666458872582L;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
         private readonly string[] EXAMPLE_ONE_2 = [
                                     "x00: 1",
