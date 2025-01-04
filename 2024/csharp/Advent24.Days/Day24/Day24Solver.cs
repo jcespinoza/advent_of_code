@@ -3,11 +3,11 @@ using Xunit;
 
 namespace Advent24.Days
 {
-    public class Day24Solver : Solver<Circuit, long>
+    public class Day24Solver : SteppedSolver<Circuit, Circuit, long, string>
     {
         public Day24Solver() : base(2024, 24) { }
 
-        public override Circuit ParseInput(IEnumerable<string> input)
+        public override Circuit ParseInputOne(IEnumerable<string> input)
         {
             var inputList = input
                 .TakeWhile(input => !string.IsNullOrEmpty(input))
@@ -42,7 +42,7 @@ namespace Advent24.Days
                 Gates = gates
             };
         }
-
+        public override Circuit ParseInputTwo(IEnumerable<string> input) => ParseInputOne(input);
         public override long PartOne(Circuit circuitSetup)
         {
             SortedList<string, Wire> outputs = EvaluateCircuit(circuitSetup);
@@ -105,7 +105,7 @@ namespace Advent24.Days
             return output;
         }
 
-        public override long PartTwo(Circuit circuitSetup)
+        public override string PartTwo(Circuit circuitSetup)
         {
             throw new NotImplementedException();
         }
