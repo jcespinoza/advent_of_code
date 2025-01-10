@@ -1,17 +1,24 @@
 #![allow(unused)]
 use crate::{
   common::{AocExample, PuzzleInputProvider, SteppedSolver, YEAR_NUM},
-  days::day01::Day01Solver,
+  days::day02::Day02Solver,
 };
 
-const DAY_NUM: i32 = 1;
+const DAY_NUM: i32 = 2;
 
 #[test]
 fn sample_01_part_one() {
-  let raw_input = vec!["3   4", "4   3", "2   5", "1   3", "3   9", "3   3"];
-  let expected_output: i64 = 11;
+  let raw_input = vec![
+    "7 6 4 2 1",
+    "1 2 7 8 9",
+    "9 7 6 2 1",
+    "1 3 2 4 5",
+    "8 6 4 4 1",
+    "1 3 6 7 9",
+  ];
+  let expected_output: i64 = 2;
 
-  let solver = Day01Solver {
+  let solver = Day02Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
   };
@@ -22,15 +29,15 @@ fn sample_01_part_one() {
 }
 
 #[test]
-// #[ignore]
 fn solution_part_one() {
+  #[allow(dead_code)]
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART1: i64 = 3714264;
+  const EXPECTED_SOLUTION_PART1: i64 = 631;
 
-  let solver = Day01Solver {
+  let solver = Day02Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
   };
@@ -42,10 +49,17 @@ fn solution_part_one() {
 
 #[test]
 fn sample_01_part_two() {
-  let raw_input = vec!["3   4", "4   3", "2   5", "1   3", "3   9", "3   3"];
-  let expected_output: i64 = 31;
+  let raw_input = vec![
+    "7 6 4 2 1",
+    "1 2 7 8 9",
+    "9 7 6 2 1",
+    "1 3 2 4 5",
+    "8 6 4 4 1",
+    "1 3 6 7 9",
+  ];
+  let expected_output: i64 = 4;
 
-  let solver = Day01Solver {
+  let solver = Day02Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
   };
@@ -56,15 +70,14 @@ fn sample_01_part_two() {
 }
 
 #[test]
-// #[ignore]
 fn solution_part_two() {
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART2: i64 = 18805872;
+  const EXPECTED_SOLUTION_PART2: i64 = 665;
 
-  let solver = Day01Solver {
+  let solver = Day02Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
   };

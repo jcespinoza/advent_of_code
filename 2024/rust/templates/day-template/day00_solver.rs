@@ -1,5 +1,5 @@
 #![allow(unused)]
-use crate::common::{HasDayYear, SolverRunner, SteppedSolver};
+use crate::common::SteppedSolver;
 
 #[derive(Debug)]
 pub struct Day00Solver {

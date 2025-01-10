@@ -1,19 +1,13 @@
 #![allow(unused)]
 use crate::{
-  common::{PuzzleInputProvider, SteppedSolver},
+  common::{AocExample, PuzzleInputProvider, SteppedSolver, YEAR_NUM},
   days::day00::Day00Solver,
 };
 
 const DAY_NUM: i32 = 0;
-const YEAR_NUM: i32 = 2024;
-
-pub struct AocExample<'a, TResult> {
-  pub expected_output: TResult,
-  pub raw_input: Vec<&'a str>,
-}
 
 #[test]
-fn test_sample_00_part_one() {
+fn sample_01_part_one() {
   let raw_input = vec![];
   let expected_output: i64 = 0;
 
@@ -29,7 +23,7 @@ fn test_sample_00_part_one() {
 
 #[test]
 #[ignore]
-fn test_solution_part_one() {
+fn solution_part_one() {
   #[allow(dead_code)]
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
@@ -49,7 +43,7 @@ fn test_solution_part_one() {
 
 #[test]
 #[ignore]
-fn test_sample_00_part_two() {
+fn sample_01_part_two() {
   let raw_input = vec![];
   let expected_output: i64 = 0;
 
@@ -65,7 +59,7 @@ fn test_sample_00_part_two() {
 
 #[test]
 #[ignore]
-fn test_solution_part_two() {
+fn solution_part_two() {
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
     .unwrap();
@@ -84,7 +78,7 @@ fn test_solution_part_two() {
 
 #[test]
 #[ignore]
-fn test_examples_part_one() {
+fn examples_part_one() {
   let examples: Vec<AocExample<i64>> = vec![AocExample {
     raw_input: vec![],
     expected_output: 0,
@@ -109,7 +103,7 @@ fn test_examples_part_one() {
 
 #[test]
 #[ignore]
-fn test_examples_part_two() {
+fn examples_part_two() {
   let examples: Vec<AocExample<i64>> = vec![AocExample {
     raw_input: vec![],
     expected_output: 0,
