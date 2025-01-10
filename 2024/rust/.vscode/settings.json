@@ -1,5 +1,8 @@
 {
   "rust-analyzer.diagnostics.disabled":[
     "unlinked-file"
-  ]
+  ],
+  "files.exclude": {
+    "**/target": true,
+  }
 }

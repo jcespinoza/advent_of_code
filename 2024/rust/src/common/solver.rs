@@ -1,112 +1,38 @@
-use crate::common::input_strategy::PuzzleInputReaderStrategy;
-pub mod solver;
+use std::collections::HashMap;
+
+use crate::days::day01::day01_solver::day01::Day01Solver;
 
 pub trait SteppedSolver<TParsedInputOne, TParsedInputTwo, TResultOne, TResultTwo> {
-    fn parse_input_one(&self, input: Vec<String>) -> TParsedInputOne;
-    fn parse_input_two(&self, input: Vec<String>) -> TParsedInputTwo;
-    fn part_one(&self, input: TParsedInputOne) -> TResultOne;
-    fn part_two(&self, input: TParsedInputTwo) -> TResultTwo;
+  fn parse_input_one(&self, input: Vec<&str>) -> TParsedInputOne;
+  fn parse_input_two(&self, input: Vec<&str>) -> TParsedInputTwo;
+  fn solve_part_one(&self, input: TParsedInputOne) -> TResultOne;
+  fn solve_part_two(&self, input: TParsedInputTwo) -> TResultTwo;
 }
 
-pub struct SteppedSolver<TParsedInputOne, TParsedInputTwo, TResultOne, TResultTwo> {
-    puzzle_input_reader: Box<dyn PuzzleInputReaderStrategy>,
-    puzzle_input_one: Lazy<TParsedInputOne>,
-    puzzle_input_two: Lazy<TParsedInputTwo>,
+pub trait HasDayYear {
+  fn day(&self) -> i32;
+  fn year(&self) -> i32;
 }
 
-impl<TParsedInputOne, TParsedInputTwo, TResultOne, TResultTwo>
-    SteppedSolver<TParsedInputOne, TParsedInputTwo, TResultOne, TResultTwo>
-where
-    TParsedInputOne: 'static,
-    TParsedInputTwo: 'static,
-{
-    pub fn new_local(input_path: String) -> Self {
-        let reader = Box::new(LocalPuzzleInputReaderStrategy { input_path });
-        Self::new(reader)
-    }
-
-    pub fn new_remote(year: i32, day: i32) -> Self {
-        let reader = Box::new(RemotePuzzleInputReaderStrategy { year, day });
-        Self::new(reader)
-    }
-
-    fn new(puzzle_input_reader: Box<dyn PuzzleInputReaderStrategy>) -> Self {
-        let puzzle_input_one = Lazy::new(|| {
-            let content = puzzle_input_reader.read_input().unwrap();
-            Self::parse_input_one(content)
-        });
-
-        let puzzle_input_two = Lazy::new(|| {
-            let content = puzzle_input_reader.read_input().unwrap();
-            Self::parse_input_two(content)
-        });
-
-        SteppedSolver {
-            puzzle_input_reader,
-            puzzle_input_one,
-            puzzle_input_two,
-        }
-    }
-
-    pub fn parse_input_one(input: Vec<String>) -> TParsedInputOne {
-        unimplemented!()
-    }
-
-    pub fn parse_input_two(input: Vec<String>) -> TParsedInputTwo {
-        unimplemented!()
-    }
-
-    pub fn part_one(&self, input: TParsedInputOne) -> TResultOne {
-        unimplemented!()
-    }
-
-    pub fn part_two(&self, input: TParsedInputTwo) -> TResultTwo {
-        unimplemented!()
-    }
+pub trait SolverRunner {
+  fn solve_part_one_str(&self, input: Vec<&str>) -> String;
+  fn solve_part_two_str(&self, input: Vec<&str>) -> String;
 }
 
-pub struct Solver<TInput, TResult> {
-    puzzle_input: Lazy<TInput>,
-    puzzle_input_reader: Box<dyn PuzzleInputReaderStrategy>,
+// Create and populate the HashMap
+pub fn create_solver_map() -> HashMap<i32, Box<dyn SolverRunner>> {
+  let mut solver_map: HashMap<i32, Box<dyn SolverRunner>> = HashMap::new();
+
+  solver_map.insert(1, create_solver(2024, 1));
+
+  // Add more entries as needed
+
+  solver_map
 }
 
-impl<TInput, TResult> Solver<TInput, TResult> {
-    pub fn new_with_local_file(input_path: String) -> Self {
-        let reader = Box::new(LocalPuzzleInputReaderStrategy { input_path });
-        let puzzle_input = Lazy::new(|| {
-            let content = reader.read_input().unwrap();
-            Self::parse_input(content)
-        });
-        Self {
-            puzzle_input,
-            puzzle_input_reader: reader,
-        }
-    }
-
-    pub fn new_with_remote(year: i32, day: i32) -> Self {
-        let reader = Box::new(RemotePuzzleInputReaderStrategy { year, day });
-        let puzzle_input = Lazy::new(|| {
-            let content = reader.read_input().unwrap();
-            Self::parse_input(content)
-        });
-        Self {
-            puzzle_input,
-            puzzle_input_reader: reader,
-        }
-    }
-
-    pub fn parse_input(input: Vec<String>) -> TInput {
-        // Implement the logic to parse input
-        unimplemented!()
-    }
-
-    pub fn part_one(&self, input: TInput) -> TResult {
-        // Implement the logic for part one
-        unimplemented!()
-    }
-
-    pub fn part_two(&self, input: TInput) -> TResult {
-        // Implement the logic for part two
-        unimplemented!()
-    }
+pub fn create_solver(year: i32, day: i32) -> Box<dyn SolverRunner> {
+  match day {
+    1 => Box::new(Day01Solver { day: 1, year }),
+    _ => panic!("Day not implemented"),
+  }
 }
