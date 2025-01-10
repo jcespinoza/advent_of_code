@@ -1,4 +1,7 @@
-use advent_of_code::{common::PuzzleInputProvider, integration::solver_mapping::create_solver};
+use advent_of_code::{
+  common::{PuzzleInputProvider, YEAR_NUM},
+  integration::solver_mapping::create_solver,
+};
 
 fn main() {
   let args: Vec<String> = std::env::args().collect();
@@ -7,7 +10,6 @@ fn main() {
     std::process::exit(1);
   }
 
-  let year = 2024;
   let mut day = 0;
   let mut part = 0;
 
@@ -24,10 +26,10 @@ fn main() {
     std::process::exit(1);
   }
 
-  let input_provider = PuzzleInputProvider::new_remote(year, day);
+  let input_provider = PuzzleInputProvider::new_remote(YEAR_NUM, day);
   let input = input_provider.read_input().unwrap();
 
-  let solver = create_solver(year, day);
+  let solver = create_solver(YEAR_NUM, day);
   let result = match part {
     1 => solver.solve_part_one_str(input.iter().map(|x| x.as_str()).collect()),
     2 => solver.solve_part_two_str(input.iter().map(|x| x.as_str()).collect()),

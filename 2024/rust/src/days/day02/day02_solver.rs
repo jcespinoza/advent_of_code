@@ -45,7 +45,6 @@ impl SteppedSolver<Vec<Report>, Vec<Report>, i64, i64> for Day02Solver {
 
     let problem_dampened: Vec<Report> = unsafe_reports.iter().flat_map(|x| dampen(x)).collect();
 
-    let mut safe_reports_count = (safe_reports.len() + problem_dampened.len()) as i64;
-    safe_reports_count
+    (safe_reports.len() + problem_dampened.len()) as i64
   }
 }

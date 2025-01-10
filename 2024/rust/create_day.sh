@@ -137,10 +137,15 @@ ${BLANKS}DayNum::Day${DAYNAME} => Box::new(Day${DAYNAME}Solver { day: ${DAY}, ye
 cd .. # Go back to the src folder
 cd .. # Go back to the root folder
 
+# Find the value of the YEAR_NUM global variable in src/common/global.rs and set it to a variable
+YEAR_FULL=$(grep -oP 'YEAR_NUM: i32 = \K\d+' src/common/globals.rs)
+# Get the last two digits of the YEAR_NUM variable
+YEAR_SHORT=${YEAR_FULL:2}
+
 # Create a branch and a commit for the new day
 echo "-> Creating a branch and a commit for the new day"
-git checkout -b day-$DAYNAME-rust24
+git checkout -b day-$DAYNAME-rust$YEAR_SHORT
 git add .
-git commit -m "Adding 2024 Day $DAYNAME in Rust"
+git commit -m "Adding $YEAR_FULL Day $DAYNAME in Rust"
 echo "Changes committed. Ready to publish the branch"
 echo "Start coding for Day $DAY!"
