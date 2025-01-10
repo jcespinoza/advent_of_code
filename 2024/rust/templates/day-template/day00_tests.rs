@@ -1,11 +1,10 @@
 #![allow(unused)]
 use crate::{
-  common::{AocExample, PuzzleInputProvider, SteppedSolver},
+  common::{AocExample, PuzzleInputProvider, SteppedSolver, YEAR_NUM},
   days::day00::Day00Solver,
 };
 
 const DAY_NUM: i32 = 0;
-const YEAR_NUM: i32 = 2024;
 
 #[test]
 fn sample_01_part_one() {
