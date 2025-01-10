@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use crate::{common::SolverRunner, days::day01::Day01Solver};
 
 #[derive(Debug, Eq, Hash, PartialEq)]
@@ -20,19 +18,7 @@ impl TryFrom<i32> for DayNum {
   }
 }
 
-// Create and populate the HashMap
-pub fn create_solver_map() -> HashMap<DayNum, Box<dyn SolverRunner>> {
-  let mut solver_map: HashMap<DayNum, Box<dyn SolverRunner>> = HashMap::new();
-
-  solver_map.insert(DayNum::Day01, create_solver(2024, 1));
-
-  // Add more entries as needed
-
-  solver_map
-}
-
 pub fn create_solver(year: i32, day: i32) -> Box<dyn SolverRunner> {
-  // Convert i32 day to a DayNum
   let day_num = DayNum::try_from(day);
   if day_num.is_err() {
     panic!("Day is not implemented");

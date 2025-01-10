@@ -2,19 +2,17 @@ use advent_of_code::{common::PuzzleInputProvider, integration::solver_mapping::c
 
 fn main() {
   let args: Vec<String> = std::env::args().collect();
-  if args.len() < 7 {
-    eprintln!("Usage: advent_of_code --year <year> --day <day> --part <part>");
+  if args.len() < 5 {
+    eprintln!("Usage: advent_of_code --day <day> --part <part>");
     std::process::exit(1);
   }
 
-  let mut year = 0;
+  let year = 2024;
   let mut day = 0;
   let mut part = 0;
 
   for i in 0..args.len() {
-    if args[i] == "--year" || args[i] == "-y" {
-      year = args[i + 1].parse::<i32>().unwrap();
-    } else if args[i] == "--day" || args[i] == "-d" {
+    if args[i] == "--day" || args[i] == "-d" {
       day = args[i + 1].parse::<i32>().unwrap();
     } else if args[i] == "--part" || args[i] == "-p" {
       part = args[i + 1].parse::<i32>().unwrap();
