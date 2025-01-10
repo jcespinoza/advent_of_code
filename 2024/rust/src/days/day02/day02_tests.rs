@@ -8,8 +8,15 @@ const DAY_NUM: i32 = 2;
 
 #[test]
 fn sample_01_part_one() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec![
+    "7 6 4 2 1",
+    "1 2 7 8 9",
+    "9 7 6 2 1",
+    "1 3 2 4 5",
+    "8 6 4 4 1",
+    "1 3 6 7 9",
+  ];
+  let expected_output: i64 = 2;
 
   let solver = Day02Solver {
     day: DAY_NUM,
@@ -29,7 +36,7 @@ fn solution_part_one() {
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART1: i64 = 0;
+  const EXPECTED_SOLUTION_PART1: i64 = 631;
 
   let solver = Day02Solver {
     day: DAY_NUM,
@@ -44,8 +51,15 @@ fn solution_part_one() {
 #[test]
 #[ignore]
 fn sample_01_part_two() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec![
+    "7 6 4 2 1",
+    "1 2 7 8 9",
+    "9 7 6 2 1",
+    "1 3 2 4 5",
+    "8 6 4 4 1",
+    "1 3 6 7 9",
+  ];
+  let expected_output: i64 = 4;
 
   let solver = Day02Solver {
     day: DAY_NUM,
@@ -64,7 +78,7 @@ fn solution_part_two() {
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART2: i64 = 0;
+  const EXPECTED_SOLUTION_PART2: i64 = 665;
 
   let solver = Day02Solver {
     day: DAY_NUM,
