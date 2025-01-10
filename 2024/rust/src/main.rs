@@ -1,4 +1,6 @@
-use advent_of_code::common::{input_strategy::PuzzleInputProvider, solver::create_solver};
+use advent_of_code::{
+  common::input_strategy::PuzzleInputProvider, integration::solver_mapping::create_solver,
+};
 
 // receive a year, day number and part number as arguments
 // program should be executed as `cargo run --year 2024 --day 3 --part 1`
