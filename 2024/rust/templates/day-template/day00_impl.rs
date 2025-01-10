@@ -1,4 +1,9 @@
 // region: defaul_implementations
+use crate::{
+  common::solver::{HasDayYear, SolverRunner, SteppedSolver},
+  days::day00::day00_solver::Day00Solver,
+};
+
 impl HasDayYear for Day00Solver {
   fn day(&self) -> i32 {
     self.day

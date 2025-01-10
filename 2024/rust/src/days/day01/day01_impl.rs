@@ -1,6 +1,6 @@
 // region: defaul_implementations
 use crate::{
-  common::solver::{HasDayYear, SolverRunner, SteppedSolver},
+  common::{HasDayYear, SolverRunner, SteppedSolver},
   days::day01::day01_solver::Day01Solver,
 };
 

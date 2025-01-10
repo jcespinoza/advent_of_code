@@ -1,4 +1,4 @@
-use advent_of_code::common::solver::SteppedSolver;
+use advent_of_code::common::SteppedSolver;
 
 struct Day00Sample {}
 

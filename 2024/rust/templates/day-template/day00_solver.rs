@@ -1,4 +1,4 @@
-use crate::common::solver::{HasDayYear, SolverRunner, SteppedSolver};
+use crate::common::{HasDayYear, SolverRunner, SteppedSolver};
 
 #[derive(Debug)]
 pub struct Day00Solver {

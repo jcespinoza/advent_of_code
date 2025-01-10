@@ -1,4 +1,4 @@
-use crate::common::solver::SteppedSolver;
+use crate::common::SteppedSolver;
 
 #[derive(Debug)]
 pub struct Day01Solver {
