@@ -90,7 +90,7 @@ fn test_examples_part_one() {
     expected_output: 0,
   }];
 
-  let solver = Day01Solver {
+  let solver = Day00Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
   };
@@ -115,7 +115,7 @@ fn test_examples_part_two() {
     expected_output: 0,
   }];
 
-  let solver = Day01Solver {
+  let solver = Day00Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
   };

@@ -1,3 +1,4 @@
+#![allow(unused)]
 use crate::common::{HasDayYear, SolverRunner, SteppedSolver};
 
 #[derive(Debug)]
@@ -8,18 +9,18 @@ pub struct Day00Solver {
 
 impl SteppedSolver<Vec<i32>, Vec<i32>, i64, i64> for Day00Solver {
   fn parse_input_one(&self, input: Vec<&str>) -> Vec<i32> {
-    uninmplemented!()
+    unimplemented!()
   }
 
   fn parse_input_two(&self, input: Vec<&str>) -> Vec<i32> {
-    uninmplemented!()
+    unimplemented!()
   }
 
   fn solve_part_one(&self, input: Vec<i32>) -> i64 {
-    uninmplemented!()
+    unimplemented!()
   }
 
   fn solve_part_two(&self, input: Vec<i32>) -> i64 {
-    uninmplemented!()
+    unimplemented!()
   }
 }

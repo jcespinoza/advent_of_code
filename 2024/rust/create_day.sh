@@ -100,6 +100,7 @@ echo "Replaced all instances of 00 with $DAYNAME in day${DAYNAME}_solver.rs"
 
 # Replace all instances of 00 with DAYNAME in the day<DAYNAME>_tests.rs file
 sed -i "s/00/$DAYNAME/g" day${DAYNAME}_tests.rs
+sed -i "s/DAY_NUM: i32 = 0/DAY_NUM: i32 = $DAY/g" day${DAYNAME}_tests.rs
 echo "Replaced all instances of 00 with $DAYNAME in day${DAYNAME}_tests.rs"
 
 cd .. # Go back to the days folder
@@ -111,14 +112,14 @@ cd integration # Go to the integration folder
 echo "Entering integration folder"
 
 # Adding new import for the new day solver
-$BLANKS="  "
-sed -i "/\/\/NEXT_IMPORT/i $BLANKSdays::day$DAYNAME::Day${DAYNAME}Solver," solver_mapping.rs
+BLANKS="  "
+sed -i "/\/\/NEXT_IMPORT/i ${BLANKS}days::day$DAYNAME::Day${DAYNAME}Solver," solver_mapping.rs
 # Adding new enum entry
-sed -i "/\/\/NEXT_ENUM_ENTRY/i $BLANKSDay$DAYNAME = $DAY," solver_mapping.rs
-$BLANKS="      "
-sed -i "/\/\/NEXT_ENUM_TRY_FROM/i $BLANKSx if x == DayNum::Day$DAYNAME as i32 => Ok(DayNum::Day$DAYNAME)," solver_mapping.rs
-$BLANKS="    "
-sed -i "/\/\/NEXT_ENUM_MATCH/i $BLANKSDayNum::Day$DAYNAME => Box::new(Day$DAYNAMESolver { day: $DAY, year })," solver_mapping.rs
+sed -i "/\/\/NEXT_ENUM_ENTRY/i ${BLANKS}Day$DAYNAME = $DAY," solver_mapping.rs
+BLANKS="      "
+sed -i "/\/\/NEXT_ENUM_TRY_FROM/i ${BLANKS}x if x == DayNum::Day$DAYNAME as i32 => Ok(DayNum::Day$DAYNAME)," solver_mapping.rs
+BLANKS="    "
+sed -i "/\/\/NEXT_ENUM_MATCH/i ${BLANKS}DayNum::Day$DAYNAME => Box::new(Day${DAYNAME}Solver { day: $DAY, year })," solver_mapping.rs
 
 
 cd .. # Go back to the src folder

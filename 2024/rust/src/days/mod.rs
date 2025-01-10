@@ -1,4 +1,4 @@
-#[allow(unused_imports)]
+#![allow(unused_imports)]
 pub mod day01 {
   pub use day01_impl::*;
   pub use day01_lib::*;
