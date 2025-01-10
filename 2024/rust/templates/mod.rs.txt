@@ -1,3 +1,4 @@
+
 #[allow(unused_imports)]
 pub mod day00 {
   pub use day00_impl::*;

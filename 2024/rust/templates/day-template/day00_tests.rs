@@ -1,12 +1,10 @@
-#[allow(dead_code)]
+#![allow(unused)]
 use crate::{
   common::{PuzzleInputProvider, SteppedSolver},
   days::day00::Day00Solver,
 };
 
-#[allow(unused)]
 const DAY_NUM: i32 = 0;
-#[allow(unused)]
 const YEAR_NUM: i32 = 2024;
 
 pub struct AocExample<'a, TResult> {

@@ -1,4 +1,9 @@
-use crate::{common::SolverRunner, days::day01::Day01Solver};
+use crate::{
+  common::SolverRunner,
+  // All Day Solvers
+  days::day01::Day01Solver,
+  //NEXT_IMPORT
+};
 
 #[derive(Debug, Eq, Hash, PartialEq)]
 pub enum DayNum {
