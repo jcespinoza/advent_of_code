@@ -29,7 +29,7 @@ fn sample_01_part_one() {
 }
 
 #[test]
-#[ignore]
+// #[ignore]
 fn solution_part_one() {
   #[allow(dead_code)]
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
@@ -88,54 +88,4 @@ fn solution_part_two() {
   let result = solver.solve_part_two(input);
 
   assert_eq!(result, EXPECTED_SOLUTION_PART2);
-}
-
-#[test]
-#[ignore]
-fn examples_part_one() {
-  let examples: Vec<AocExample<i64>> = vec![AocExample {
-    raw_input: vec![],
-    expected_output: 0,
-  }];
-
-  let solver = Day02Solver {
-    day: DAY_NUM,
-    year: YEAR_NUM,
-  };
-
-  for (index, example) in examples.iter().enumerate() {
-    let input = solver.parse_input_one(example.raw_input.clone());
-    let result = solver.solve_part_one(input);
-
-    assert_eq!(
-      result, example.expected_output,
-      "Failed for Example: {:?}",
-      index
-    );
-  }
-}
-
-#[test]
-#[ignore]
-fn examples_part_two() {
-  let examples: Vec<AocExample<i64>> = vec![AocExample {
-    raw_input: vec![],
-    expected_output: 0,
-  }];
-
-  let solver = Day02Solver {
-    day: DAY_NUM,
-    year: YEAR_NUM,
-  };
-
-  for (index, example) in examples.iter().enumerate() {
-    let input = solver.parse_input_two(example.raw_input.clone());
-    let result = solver.solve_part_two(input);
-
-    assert_eq!(
-      result, example.expected_output,
-      "Failed for Example: {:?}",
-      index
-    );
-  }
 }
