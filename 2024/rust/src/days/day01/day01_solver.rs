@@ -6,40 +6,38 @@ pub struct Day01Solver {
   pub year: i32,
 }
 
-impl SteppedSolver<Vec<i32>, Vec<i32>, i32, i32> for Day01Solver {
-  fn parse_input_one(&self, input: Vec<&str>) -> Vec<i32> {
-    input.iter().map(|x| x.parse::<i32>().unwrap()).collect()
+impl SteppedSolver<Vec<(i32, i32)>, Vec<(i32, i32)>, i64, i64> for Day01Solver {
+  fn parse_input_one(&self, input: Vec<&str>) -> Vec<(i32, i32)> {
+    input
+      .iter()
+      .map(|x| {
+        let parts = x.split_whitespace().collect::<Vec<&str>>();
+        (parts[0].parse().unwrap(), parts[1].parse().unwrap())
+      })
+      .collect()
   }
 
-  fn parse_input_two(&self, input: Vec<&str>) -> Vec<i32> {
-    input.iter().map(|x| x.parse::<i32>().unwrap()).collect()
+  fn parse_input_two(&self, input: Vec<&str>) -> Vec<(i32, i32)> {
+    self.parse_input_one(input)
   }
 
-  fn solve_part_one(&self, input: Vec<i32>) -> i32 {
-    let mut result = 0;
-    for i in 0..input.len() {
-      for j in i + 1..input.len() {
-        if input[i] + input[j] == 2020 {
-          result = input[i] * input[j];
-          break;
-        }
-      }
+  fn solve_part_one(&self, pairs: Vec<(i32, i32)>) -> i64 {
+    let mut left_ids: Vec<i32> = pairs.iter().map(|x| x.0).collect();
+    let mut right_ids: Vec<i32> = pairs.iter().map(|x| x.1).collect();
+    left_ids.sort();
+    right_ids.sort();
+
+    let mut differences: Vec<i64> = vec![];
+    for (litem, ritem) in left_ids.iter().zip(right_ids.iter()) {
+      let difference = ritem.abs_diff(*litem).into();
+      differences.push(difference);
     }
-    result
+    let final_sum: i64 = differences.iter().sum();
+    final_sum
   }
 
-  fn solve_part_two(&self, input: Vec<i32>) -> i32 {
-    let mut result = 0;
-    for i in 0..input.len() {
-      for j in i + 1..input.len() {
-        for k in j + 1..input.len() {
-          if input[i] + input[j] + input[k] == 2020 {
-            result = input[i] * input[j] * input[k];
-            break;
-          }
-        }
-      }
-    }
-    result
+  #[allow(unused)]
+  fn solve_part_two(&self, pairs: Vec<(i32, i32)>) -> i64 {
+    todo!()
   }
 }

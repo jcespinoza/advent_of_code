@@ -1,13 +1,6 @@
 use advent_of_code::{common::PuzzleInputProvider, integration::solver_mapping::create_solver};
 
-// receive a year, day number and part number as arguments
-// program should be executed as `cargo run --year 2024 --day 3 --part 1`
-// or cargo run -y 2024 -d 3 -p 1
-// or advent_of_code --year 2024 --day 3 --part 1
-// or advent_of_code -y 2024 -d 3 -p 1
 fn main() {
-  // Extract the year and number from the arguments
-  // Show an error message if the arguments are not provided
   let args: Vec<String> = std::env::args().collect();
   if args.len() < 7 {
     eprintln!("Usage: advent_of_code --year <year> --day <day> --part <part>");
@@ -28,13 +21,11 @@ fn main() {
     }
   }
 
-  // Make sure part is either 1 or 2
   if part != 1 && part != 2 {
     eprintln!("Part must be either 1 or 2");
     std::process::exit(1);
   }
 
-  // Create a new solver for the given year and day
   let input_provider = PuzzleInputProvider::new_remote(year, day);
   let input = input_provider.read_input().unwrap();
 
