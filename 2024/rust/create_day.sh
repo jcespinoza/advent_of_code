@@ -16,7 +16,7 @@ rollback() {
 trap rollback ERR
 
 # Check that the operating system is either windows or linux
-echo "Checking operating system..."
+
 if [ "$(uname)" == "Darwin" ]; then
     echo "This script is not supported on MacOS"
     exit 1
@@ -69,7 +69,6 @@ echo "Creating files for Day $DAYNAME"
 # Copy the templates/day-template folder into the new folder using the DAY variable as the folder name
 # For example: day00
 
-echo "Copying from template"
 cp -r templates/day-template src/days/day$DAYNAME
 echo "Copied day-template to src/days/day$DAYNAME"
 # Append the contents of templates/mod.rs.txt to the end of src/days/mod.rs
@@ -83,7 +82,7 @@ sed -i "s/00/$DAYNAME/g" mod.rs
 
 cd day$DAYNAME
 
-echo "Renaming and updating template files to match day number"
+echo "Renaming and updating template files to match day $DAY"
 # Rename the day00_impl.rs file to day<DAYNAME>_impl.rs
 mv day00_impl.rs day${DAYNAME}_impl.rs
 
@@ -114,7 +113,7 @@ cd .. # Go back to the src folder
 
 cd integration # Go to the integration folder
 
-echo "Registering day number to a solver in solver_mapping.rs"
+echo "Registering day $DAY to a solver in solver_mapping.rs"
 # Adding new import for the new day solver
 BLANKS="  "
 sed -i "/\/\/NEXT_IMPORT/i\\
@@ -139,7 +138,7 @@ cd .. # Go back to the src folder
 cd .. # Go back to the root folder
 
 # Create a branch and a commit for the new day
-echo "\nCreating a branch and a commit for the new day"
+echo "-> Creating a branch and a commit for the new day"
 git checkout -b day-$DAYNAME-rust24
 git add .
 git commit -m "Adding 2024 Day $DAYNAME in Rust"
