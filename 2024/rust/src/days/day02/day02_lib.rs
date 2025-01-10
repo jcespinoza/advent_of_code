@@ -2,6 +2,18 @@ pub struct Report {
   pub levels: Vec<i32>,
 }
 
+pub fn dampen(report: &Report) -> Result<Report, String> {
+  for index in 0..report.levels.len() {
+    let mut levels = report.levels.clone();
+    levels.remove(index);
+    let new_report = Report { levels };
+    if new_report.is_safe() {
+      return Ok(new_report);
+    }
+  }
+  Err("Unable to dampen report".to_string())
+}
+
 impl Report {
   pub fn new(levels: Vec<i32>) -> Self {
     Self { levels }

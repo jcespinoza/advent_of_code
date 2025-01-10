@@ -1,7 +1,9 @@
 #![allow(unused)]
+use itertools::Itertools;
+
 use crate::common::SteppedSolver;
 
-use super::Report;
+use super::{dampen, Report};
 
 #[derive(Debug)]
 pub struct Day02Solver {
@@ -30,6 +32,20 @@ impl SteppedSolver<Vec<Report>, Vec<Report>, i64, i64> for Day02Solver {
   }
 
   fn solve_part_two(&self, reports: Vec<Report>) -> i64 {
-    unimplemented!()
+    let mut safe_reports = vec![];
+    let mut unsafe_reports = vec![];
+
+    for report in reports.iter() {
+      if report.is_safe() {
+        safe_reports.push(report);
+      } else {
+        unsafe_reports.push(report);
+      }
+    }
+
+    let problem_dampened: Vec<Report> = unsafe_reports.iter().flat_map(|x| dampen(x)).collect();
+
+    let mut safe_reports_count = (safe_reports.len() + problem_dampened.len()) as i64;
+    safe_reports_count
   }
 }
