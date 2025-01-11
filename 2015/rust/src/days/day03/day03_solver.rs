@@ -21,14 +21,12 @@ impl SteppedSolver<Vec<Offset>, Vec<Offset>, i64, i64> for Day03Solver {
   }
 
   fn solve_part_one(&self, offsets: Vec<Offset>) -> i64 {
-    let mut deliveries: HashMap<Point<i32>, u16> = HashMap::new();
+    let mut deliveries: HashMap<Point, u16> = HashMap::new();
     let mut current_position = Point::from((0, 0));
     deliveries.insert(current_position, 1);
 
     for offset in offsets {
-      let c_row = current_position.row + offset.row;
-      let c_col = current_position.col + offset.col;
-      current_position = Point::from((c_row, c_col));
+      current_position = current_position.move_by(offset);
 
       deliveries
         .entry(current_position)
@@ -40,6 +38,26 @@ impl SteppedSolver<Vec<Offset>, Vec<Offset>, i64, i64> for Day03Solver {
   }
 
   fn solve_part_two(&self, offsets: Vec<Offset>) -> i64 {
-    unimplemented!()
+    let mut deliveries: HashMap<Point, u16> = HashMap::new();
+    let mut santa_position = Point::from((0, 0));
+    let mut robot_position = Point::from((0, 0));
+    deliveries.insert(santa_position, 2);
+
+    for (index, offset) in offsets.iter().enumerate() {
+      let position = if index % 2 == 0 {
+        santa_position = santa_position.move_by(*offset);
+        santa_position
+      } else {
+        robot_position = robot_position.move_by(*offset);
+        robot_position
+      };
+
+      deliveries
+        .entry(position)
+        .and_modify(|v| *v += 1)
+        .or_insert(1);
+    }
+
+    deliveries.len() as i64
   }
 }
