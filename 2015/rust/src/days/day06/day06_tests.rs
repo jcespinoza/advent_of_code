@@ -8,8 +8,8 @@ const DAY_NUM: i32 = 6;
 
 #[test]
 fn sample_01_part_one() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec!["turn on 0,0 through 999,999"];
+  let expected_output: i64 = 1_000_000;
 
   let solver = Day06Solver {
     day: DAY_NUM,
@@ -76,12 +76,20 @@ fn solution_part_two() {
 }
 
 #[test]
-#[ignore]
 fn examples_part_one() {
-  let examples: Vec<AocExample<i64>> = vec![AocExample {
-    raw_input: vec![],
-    expected_output: 0,
-  }];
+  let examples: Vec<AocExample<i64>> = vec![
+    AocExample {
+      raw_input: vec!["toggle 0,0 through 999,0"],
+      expected_output: 1000,
+    },
+    AocExample {
+      raw_input: vec![
+        "turn on 0,0 through 999,999",
+        "turn off 499,499 through 500,500",
+      ],
+      expected_output: 1_000_000 - 4,
+    },
+  ];
 
   let solver = Day06Solver {
     day: DAY_NUM,
