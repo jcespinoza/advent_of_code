@@ -35,5 +35,6 @@ impl SteppedSolver<String, String, i64, i64> for Day04Solver {
 }
 
 fn first_five_are_zeroes(hash: md5::Digest) -> bool {
-  hash[0] == 0 && hash[1] == 0 && hash[2] <= 0x0F
+  let first_five = &format!("{:x}", hash)[0..5];
+  first_five == "00000"
 }
