@@ -8,21 +8,29 @@ pub struct Day01Solver {
   pub year: i32,
 }
 
-impl SteppedSolver<Vec<(i32, i32)>, Vec<(i32, i32)>, i64, i64> for Day01Solver {
-  fn parse_input_one(&self, input: Vec<&str>) -> Vec<(i32, i32)> {
-    todo!()
+impl SteppedSolver<String, String, i64, i64> for Day01Solver {
+  fn parse_input_one(&self, input: Vec<&str>) -> String {
+    input.first().unwrap().to_string()
   }
 
-  fn parse_input_two(&self, input: Vec<&str>) -> Vec<(i32, i32)> {
+  fn parse_input_two(&self, input: Vec<&str>) -> String {
     self.parse_input_one(input)
   }
 
-  fn solve_part_one(&self, pairs: Vec<(i32, i32)>) -> i64 {
-    todo!()
+  fn solve_part_one(&self, instructions: String) -> i64 {
+    let mut current_floor = 0;
+    for instruction in instructions.chars() {
+      match instruction {
+        '(' => current_floor += 1,
+        ')' => current_floor -= 1,
+        _ => (),
+      }
+    }
+    current_floor
   }
 
   #[allow(unused)]
-  fn solve_part_two(&self, pairs: Vec<(i32, i32)>) -> i64 {
+  fn solve_part_two(&self, instructions: String) -> i64 {
     todo!()
   }
 }
