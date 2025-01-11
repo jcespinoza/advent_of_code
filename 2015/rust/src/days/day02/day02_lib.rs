@@ -22,6 +22,16 @@ impl GiftBox {
     sides.sort();
     sides[0] * sides[1]
   }
+
+  pub fn smallest_perimeter(&self) -> u32 {
+    let mut sides = [self.length, self.width, self.height];
+    sides.sort();
+    2 * sides[0] + 2 * sides[1]
+  }
+
+  pub fn volume(&self) -> u32 {
+    self.length * self.width * self.height
+  }
 }
 
 #[cfg(test)]
@@ -50,5 +60,11 @@ mod tests {
   fn test_smallest_area_3() {
     let box1 = GiftBox::new(1, 10, 1);
     assert_eq!(box1.smallest_area(), 1);
+  }
+
+  #[test]
+  fn test_smallest_perimeter() {
+    let box1 = GiftBox::new(2, 3, 4);
+    assert_eq!(box1.smallest_perimeter(), 10);
   }
 }

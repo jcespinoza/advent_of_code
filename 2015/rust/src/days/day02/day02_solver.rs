@@ -40,7 +40,14 @@ impl SteppedSolver<Vec<GiftBox>, Vec<GiftBox>, i64, i64> for Day02Solver {
     total_sum
   }
 
-  fn solve_part_two(&self, input: Vec<GiftBox>) -> i64 {
-    unimplemented!()
+  fn solve_part_two(&self, boxes: Vec<GiftBox>) -> i64 {
+    let mut total_length: i64 = 0;
+    for gift_box in boxes {
+      let smallest_perimeter = gift_box.smallest_perimeter();
+      let volume = gift_box.volume();
+      total_length += (smallest_perimeter + volume) as i64;
+    }
+
+    total_length
   }
 }
