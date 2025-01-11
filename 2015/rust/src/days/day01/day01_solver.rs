@@ -29,8 +29,18 @@ impl SteppedSolver<String, String, i64, i64> for Day01Solver {
     current_floor
   }
 
-  #[allow(unused)]
   fn solve_part_two(&self, instructions: String) -> i64 {
-    todo!()
+    let mut current_floor = 0;
+    for (index, instruction) in instructions.chars().enumerate() {
+      match instruction {
+        '(' => current_floor += 1,
+        ')' => current_floor -= 1,
+        _ => (),
+      }
+      if current_floor == -1 {
+        return index as i64 + 1;
+      }
+    }
+    -1
   }
 }
