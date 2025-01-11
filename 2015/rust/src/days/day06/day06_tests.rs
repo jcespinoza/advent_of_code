@@ -40,10 +40,9 @@ fn solution_part_one() {
 }
 
 #[test]
-#[ignore]
 fn sample_01_part_two() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec!["toggle 0,0 through 999,999"];
+  let expected_output: i64 = 2_000_000;
 
   let solver = Day06Solver {
     day: DAY_NUM,
@@ -56,13 +55,12 @@ fn sample_01_part_two() {
 }
 
 #[test]
-#[ignore]
 fn solution_part_two() {
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART2: i64 = 0;
+  const EXPECTED_SOLUTION_PART2: i64 = 17836115;
 
   let solver = Day06Solver {
     day: DAY_NUM,
@@ -108,11 +106,10 @@ fn examples_part_one() {
 }
 
 #[test]
-#[ignore]
 fn examples_part_two() {
   let examples: Vec<AocExample<i64>> = vec![AocExample {
-    raw_input: vec![],
-    expected_output: 0,
+    raw_input: vec!["turn on 0,0 through 0,0"],
+    expected_output: 1,
   }];
 
   let solver = Day06Solver {

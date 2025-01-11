@@ -62,6 +62,36 @@ impl SteppedSolver<Vec<Instruction>, Vec<Instruction>, i64, i64> for Day06Solver
   }
 
   fn solve_part_two(&self, instructions: Vec<Instruction>) -> i64 {
-    unimplemented!()
+    let mut light_grid = vec![vec![0; 1000]; 1000];
+
+    for instruction in instructions {
+      match instruction {
+        Instruction::TurnOn(start, end) => {
+          for row in start.row..=end.row {
+            for col in start.col..=end.col {
+              light_grid[row as usize][col as usize] += 1;
+            }
+          }
+        }
+        Instruction::TurnOff(start, end) => {
+          for row in start.row..=end.row {
+            for col in start.col..=end.col {
+              light_grid[row as usize][col as usize] =
+                0.max(light_grid[row as usize][col as usize] - 1);
+            }
+          }
+        }
+        Instruction::Toggle(start, end) => {
+          for row in start.row..=end.row {
+            for col in start.col..=end.col {
+              light_grid[row as usize][col as usize] += 2;
+            }
+          }
+        }
+      }
+    }
+
+    let total_brightness = light_grid.iter().flatten().sum::<i64>();
+    total_brightness
   }
 }
