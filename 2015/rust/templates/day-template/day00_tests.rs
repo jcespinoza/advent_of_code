@@ -24,7 +24,6 @@ fn sample_01_part_one() {
 #[test]
 #[ignore]
 fn solution_part_one() {
-  #[allow(dead_code)]
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
     .unwrap();
