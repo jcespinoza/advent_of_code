@@ -46,3 +46,15 @@ pub mod day04 {
   mod day04_solver;
   mod day04_tests;
 }
+
+pub mod day05 {
+  pub use day05_impl::*;
+  pub use day05_lib::*;
+  pub use day05_solver::*;
+  pub use day05_tests::*;
+
+  mod day05_impl;
+  mod day05_lib;
+  mod day05_solver;
+  mod day05_tests;
+}
