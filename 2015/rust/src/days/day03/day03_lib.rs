@@ -6,7 +6,7 @@ pub struct Offset {
   pub col: i32,
 }
 
-#[derive(Eq, Hash, PartialEq, Copy, Clone)]
+#[derive(Debug, Eq, Hash, PartialEq, Copy, Clone)]
 pub struct Point {
   pub row: i32,
   pub col: i32,
