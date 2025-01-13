@@ -1,4 +1,6 @@
 #![allow(unused)]
+use std::collections::HashMap;
+
 use crate::common::SteppedSolver;
 
 #[derive(Debug)]
@@ -22,9 +24,9 @@ impl SteppedSolver<Vec<String>, Vec<String>, i64, i64> for Day08Solver {
 
     let mut total_code_sum = 0;
     let mut total_memory_sum = 0;
-    for (_, code_sum, memory_sum) in pairs {
-      total_code_sum += code_sum;
-      total_memory_sum += memory_sum;
+    for (_, (code_sum, memory_sum, count)) in pairs {
+      total_code_sum += code_sum * count;
+      total_memory_sum += memory_sum * count;
     }
 
     (total_code_sum - total_memory_sum) as i64
@@ -35,8 +37,8 @@ impl SteppedSolver<Vec<String>, Vec<String>, i64, i64> for Day08Solver {
   }
 }
 
-fn get_usage_details(input: Vec<&str>) -> Vec<(&str, i32, i32)> {
-  let mut usage_details: Vec<(&str, i32, i32)> = Vec::new();
+fn get_usage_details(input: Vec<&str>) -> HashMap<&str, (i32, i32, i32)> {
+  let mut usage_details: HashMap<&str, (i32, i32, i32)> = HashMap::new();
 
   for &line in input.iter() {
     let mut code_sum = 0;
@@ -62,7 +64,14 @@ fn get_usage_details(input: Vec<&str>) -> Vec<(&str, i32, i32)> {
       memory_sum += 1;
     }
 
-    usage_details.push((line, code_sum, memory_sum))
+    match usage_details.get_mut(line) {
+      Some((_, _, count)) => {
+        *count += 1;
+      }
+      None => {
+        usage_details.insert(line, (code_sum, memory_sum, 1));
+      }
+    }
   }
   usage_details
 }
