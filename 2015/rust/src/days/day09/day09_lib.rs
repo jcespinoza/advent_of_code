@@ -4,3 +4,8 @@ pub struct Segment {
   pub to: String,
   pub distance: i32,
 }
+
+pub enum Extreme {
+  Shortest,
+  Longest,
+}
