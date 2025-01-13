@@ -82,3 +82,15 @@ pub mod day07 {
   mod day07_solver;
   mod day07_tests;
 }
+
+pub mod day08 {
+  pub use day08_impl::*;
+  pub use day08_lib::*;
+  pub use day08_solver::*;
+  pub use day08_tests::*;
+
+  mod day08_impl;
+  mod day08_lib;
+  mod day08_solver;
+  mod day08_tests;
+}
