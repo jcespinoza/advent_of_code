@@ -1,7 +1,7 @@
 use core::fmt;
 use std::fmt::{format, Display, Formatter};
 
-#[derive(Debug, PartialEq, Hash)]
+#[derive(Debug, PartialEq, Hash, Clone)]
 pub enum Wiring {
   And(Signal, Signal),
   Or(Signal, Signal),
@@ -28,7 +28,7 @@ impl Display for Wiring {
   }
 }
 
-#[derive(Debug, PartialEq, Hash)]
+#[derive(Debug, PartialEq, Hash, Clone)]
 pub enum Signal {
   Wire(String),
   Value(u16),
@@ -60,7 +60,7 @@ impl Display for Signal {
   }
 }
 
-#[derive(Debug, PartialEq, Hash)]
+#[derive(Debug, PartialEq, Hash, Clone)]
 pub struct Wire {
   pub name: String,
   pub wiring: Wiring,

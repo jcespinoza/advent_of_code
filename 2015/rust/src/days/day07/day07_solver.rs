@@ -33,7 +33,26 @@ impl SteppedSolver<Vec<Wire>, Vec<Wire>, i64, i64> for Day07Solver {
   }
 
   fn solve_part_two(&self, wirings: Vec<Wire>) -> i64 {
-    unimplemented!()
+    let part_one_result: u16 = self.solve_part_one(wirings.clone()).try_into().unwrap();
+
+    let mut wire_map: HashMap<String, Wire> = HashMap::new();
+    let mut known_wire_values: HashMap<String, u16> = HashMap::new();
+    for wire in wirings {
+      wire_map.insert(
+        wire.name.clone(),
+        match wire.name.as_str() {
+          "b" => Wire {
+            name: "b".to_string(),
+            wiring: Wiring::DirectSignal(Signal::Value(part_one_result)),
+          },
+          _ => wire,
+        },
+      );
+    }
+
+    let signal_in_wire: u16 = get_value_in_wire(&wire_map, "a", &mut known_wire_values);
+
+    signal_in_wire as i64
   }
 }
 
