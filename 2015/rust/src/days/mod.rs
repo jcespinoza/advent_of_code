@@ -106,3 +106,15 @@ pub mod day09 {
   mod day09_solver;
   mod day09_tests;
 }
+
+pub mod day10 {
+  pub use day10_impl::*;
+  pub use day10_lib::*;
+  pub use day10_solver::*;
+  pub use day10_tests::*;
+
+  mod day10_impl;
+  mod day10_lib;
+  mod day10_solver;
+  mod day10_tests;
+}
