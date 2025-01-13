@@ -36,34 +36,33 @@ impl SteppedSolver<Vec<String>, Vec<String>, i64, i64> for Day08Solver {
 }
 
 fn get_usage_details(input: Vec<&str>) -> Vec<(&str, i32, i32)> {
-  let pairs: Vec<(&str, i32, i32)> = input
-    .iter()
-    .map(|&line| {
-      let mut code_sum = 0;
-      let mut memory_sum = 0;
+  let mut usage_details: Vec<(&str, i32, i32)> = Vec::new();
 
-      let mut chars = line.chars();
-      while let Some(c) = chars.next() {
-        code_sum += 1;
-        if c == '"' {
-          continue;
-        }
+  for &line in input.iter() {
+    let mut code_sum = 0;
+    let mut memory_sum = 0;
 
-        if c == '\\' {
-          let next = chars.next().unwrap();
-          code_sum += 1;
-          if next == 'x' {
-            chars.next();
-            chars.next();
-            code_sum += 2;
-          }
-        }
-
-        memory_sum += 1;
+    let mut chars = line.chars();
+    while let Some(c) = chars.next() {
+      code_sum += 1;
+      if c == '"' {
+        continue;
       }
 
-      (line, code_sum, memory_sum)
-    })
-    .collect();
-  pairs
+      if c == '\\' {
+        let next = chars.next().unwrap();
+        code_sum += 1;
+        if next == 'x' {
+          chars.next();
+          chars.next();
+          code_sum += 2;
+        }
+      }
+
+      memory_sum += 1;
+    }
+
+    usage_details.push((line, code_sum, memory_sum))
+  }
+  usage_details
 }
