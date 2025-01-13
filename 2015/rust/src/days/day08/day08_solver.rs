@@ -17,7 +17,28 @@ impl SteppedSolver<Vec<String>, Vec<String>, i64, i64> for Day08Solver {
   }
 
   fn solve_part_one(&self, input: Vec<String>) -> i64 {
-    let pairs = input.iter().map(|line| {
+    let input_refs: Vec<&str> = input.iter().map(|s| s.as_str()).collect();
+    let pairs = get_usage_details(input_refs);
+
+    let mut total_code_sum = 0;
+    let mut total_memory_sum = 0;
+    for (_, code_sum, memory_sum) in pairs {
+      total_code_sum += code_sum;
+      total_memory_sum += memory_sum;
+    }
+
+    (total_code_sum - total_memory_sum) as i64
+  }
+
+  fn solve_part_two(&self, input: Vec<String>) -> i64 {
+    unimplemented!()
+  }
+}
+
+fn get_usage_details(input: Vec<&str>) -> Vec<(&str, i32, i32)> {
+  let pairs: Vec<(&str, i32, i32)> = input
+    .iter()
+    .map(|&line| {
       let mut code_sum = 0;
       let mut memory_sum = 0;
 
@@ -41,20 +62,8 @@ impl SteppedSolver<Vec<String>, Vec<String>, i64, i64> for Day08Solver {
         memory_sum += 1;
       }
 
-      (code_sum, memory_sum)
-    });
-
-    let mut total_code_sum = 0;
-    let mut total_memory_sum = 0;
-    for (code_sum, memory_sum) in pairs {
-      total_code_sum += code_sum;
-      total_memory_sum += memory_sum;
-    }
-
-    total_code_sum - total_memory_sum
-  }
-
-  fn solve_part_two(&self, input: Vec<String>) -> i64 {
-    unimplemented!()
-  }
+      (line, code_sum, memory_sum)
+    })
+    .collect();
+  pairs
 }
