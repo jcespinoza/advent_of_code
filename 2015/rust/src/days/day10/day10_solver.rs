@@ -29,7 +29,14 @@ impl SteppedSolver<String, String, i64, i64> for Day10Solver {
   }
 
   fn solve_part_two(&self, input: String) -> i64 {
-    unimplemented!()
+    let max_steps = self.steps.unwrap_or(50);
+
+    let mut current_input: String = input;
+    for step in 0..max_steps {
+      current_input = look_and_say(current_input);
+    }
+
+    current_input.len() as i64
   }
 }
 
