@@ -40,11 +40,8 @@ fn solution_part_one() {
 
 #[test]
 fn solution_part_two() {
-  let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
-    .read_input()
-    .unwrap();
-  let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART2: i64 = 492982;
+  let raw_input = vec!["1321131112"];
+  const EXPECTED_SOLUTION_PART2: i64 = 6989950;
 
   let solver = Day10Solver {
     day: DAY_NUM,
