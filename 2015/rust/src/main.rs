@@ -5,7 +5,7 @@ use advent_of_code::{
 
 fn main() {
   let args: Vec<String> = std::env::args().collect();
-  if args.len() < 5 {
+  if args.len() < 5 || args.len() != 7 {
     eprintln!("Usage: advent_of_code --day <day> --part <part> [--input <input>]");
     std::process::exit(1);
   }
@@ -21,6 +21,7 @@ fn main() {
     } else if args[i] == "--part" || args[i] == "-p" {
       part = args[i + 1].parse::<i32>().unwrap();
     } else if args[i] == "--input" || args[i] == "-i" {
+      println!("Input: {}", args[i + 1]);
       inline_input_provided = true;
       inline_input = &args[i + 1];
     }

@@ -14,3 +14,9 @@ pub trait SolverRunner {
   fn solve_part_one_str(&self, input: Vec<&str>) -> String;
   fn solve_part_two_str(&self, input: Vec<&str>) -> String;
 }
+
+#[derive(Debug)]
+pub struct ExtraConfig<T, U> {
+  pub part1: Option<T>,
+  pub part2: Option<U>,
+}
