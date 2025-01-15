@@ -87,10 +87,10 @@ pub fn compute_scores_after_seconds(
       update_reindeer_stats(reindeer, deer_stat);
     }
 
-    update_points(&mut scores);
-
     current_second += 1;
   }
+
+  update_points(&mut scores);
 
   scores
 }
@@ -110,8 +110,6 @@ fn update_reindeer_stats(reindeer: &Reindeer, deer_stat: &mut Stat) {
       deer_stat.fly_time = reindeer.max_fly_time;
     }
   }
-
-  deer_stat.distance += deer_stat.distance;
 }
 
 fn initialize_stats_for_reindeer(scores: &mut HashMap<String, Stat>, reindeer: &Reindeer) {
