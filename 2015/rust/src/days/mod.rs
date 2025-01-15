@@ -142,3 +142,15 @@ pub mod day12 {
   mod day12_solver;
   mod day12_tests;
 }
+
+pub mod day13 {
+  pub use day13_impl::*;
+  pub use day13_lib::*;
+  pub use day13_solver::*;
+  pub use day13_tests::*;
+
+  mod day13_impl;
+  mod day13_lib;
+  mod day13_solver;
+  mod day13_tests;
+}
