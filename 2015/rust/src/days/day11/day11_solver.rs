@@ -28,6 +28,6 @@ impl SteppedSolver<String, String, String, String> for Day11Solver {
   }
 
   fn solve_part_two(&self, old_password: String) -> String {
-    unimplemented!()
+    generate_next_valid_password(Password::from(self.solve_part_one(old_password).as_str()))
   }
 }
