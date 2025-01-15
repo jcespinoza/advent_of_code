@@ -166,3 +166,15 @@ pub mod day14 {
   mod day14_solver;
   mod day14_tests;
 }
+
+pub mod day15 {
+  pub use day15_impl::*;
+  pub use day15_lib::*;
+  pub use day15_solver::*;
+  pub use day15_tests::*;
+
+  mod day15_impl;
+  mod day15_lib;
+  mod day15_solver;
+  mod day15_tests;
+}
