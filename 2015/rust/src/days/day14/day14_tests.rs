@@ -92,7 +92,7 @@ fn sample_140sec_part_two() {
   let solver = Day14Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
-    time: None,
+    time: Some(140),
   };
   let input = solver.parse_input_two(raw_input);
   let result = solver.solve_part_two(input);
@@ -110,7 +110,7 @@ fn sample_1000sec_part_two() {
   let solver = Day14Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
-    time: None,
+    time: Some(1000),
   };
   let input = solver.parse_input_two(raw_input);
   let result = solver.solve_part_two(input);
@@ -124,7 +124,7 @@ fn solution_part_two() {
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART2: i64 = -1;
+  const EXPECTED_SOLUTION_PART2: i64 = 1084;
 
   let solver = Day14Solver {
     day: DAY_NUM,

@@ -3,7 +3,7 @@ use std::collections::HashMap;
 
 use crate::common::SteppedSolver;
 
-use super::{compute_distances_after_seconds, compute_scores_after_seconds, Reindeer, Stat};
+use super::{compute_scores_after_seconds, Reindeer, Stat};
 
 #[derive(Debug)]
 pub struct Day14Solver {

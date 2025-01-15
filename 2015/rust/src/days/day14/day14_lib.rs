@@ -33,44 +33,6 @@ impl From<&str> for Reindeer {
   }
 }
 
-pub fn compute_distances_after_seconds(
-  all_reindeers: &[Reindeer],
-  max_time: i32,
-) -> HashMap<String, i32> {
-  let mut distances: HashMap<String, i32> = HashMap::new();
-
-  for reindeer in all_reindeers.iter() {
-    let mut distance = 0;
-    let mut fly_time = reindeer.max_fly_time;
-    let mut rest_time = 0;
-    let mut flying = true;
-
-    let mut current_second = 1;
-    while current_second <= max_time {
-      if flying {
-        distance += reindeer.top_speed;
-        fly_time -= 1;
-        if fly_time == 0 {
-          flying = false;
-          rest_time = reindeer.max_rest_time;
-        }
-      } else {
-        rest_time -= 1;
-        if rest_time == 0 {
-          flying = true;
-          fly_time = reindeer.max_fly_time;
-        }
-      }
-
-      current_second += 1;
-    }
-
-    distances.insert(reindeer.name.clone(), distance);
-  }
-
-  distances
-}
-
 pub fn compute_scores_after_seconds(
   all_reindeers: &[Reindeer],
   max_time: i32,
@@ -87,10 +49,9 @@ pub fn compute_scores_after_seconds(
       update_reindeer_stats(reindeer, deer_stat);
     }
 
+    update_points(&mut scores);
     current_second += 1;
   }
-
-  update_points(&mut scores);
 
   scores
 }
