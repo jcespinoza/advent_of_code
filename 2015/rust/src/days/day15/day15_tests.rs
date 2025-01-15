@@ -8,8 +8,11 @@ const DAY_NUM: i32 = 15;
 
 #[test]
 fn sample_01_part_one() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec![
+    "Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8",
+    "Cinnamon: capacity 2, durability 3, flavor -2, texture -1, calories 3",
+  ];
+  let expected_output: i64 = 62842880;
 
   let solver = Day15Solver {
     day: DAY_NUM,
