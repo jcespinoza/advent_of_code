@@ -3,7 +3,7 @@ use std::collections::HashMap;
 
 use crate::common::SteppedSolver;
 
-use super::{compute_distances_after_seconds, compute_scores_after_seconds, Reindeer, Score};
+use super::{compute_distances_after_seconds, compute_scores_after_seconds, Reindeer, Stat};
 
 #[derive(Debug)]
 pub struct Day14Solver {
@@ -30,7 +30,7 @@ impl SteppedSolver<Vec<Reindeer>, Vec<Reindeer>, i64, i64> for Day14Solver {
   }
 
   fn solve_part_two(&self, input: Vec<Reindeer>) -> i64 {
-    let scores: HashMap<String, Score> =
+    let scores: HashMap<String, Stat> =
       compute_scores_after_seconds(&input, self.time.unwrap_or(2503));
 
     let winning_points = scores.values().map(|s| s.points).max().unwrap();
