@@ -178,3 +178,15 @@ pub mod day15 {
   mod day15_solver;
   mod day15_tests;
 }
+
+pub mod day16 {
+  pub use day16_impl::*;
+  pub use day16_lib::*;
+  pub use day16_solver::*;
+  pub use day16_tests::*;
+
+  mod day16_impl;
+  mod day16_lib;
+  mod day16_solver;
+  mod day16_tests;
+}
