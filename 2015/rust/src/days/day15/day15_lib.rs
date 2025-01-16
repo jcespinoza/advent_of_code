@@ -85,10 +85,8 @@ pub fn find_best_score(
         continue;
       }
 
-      let score = match required_calories {
-        Some(_) => (capacity * durability * flavor * texture * calories) as i64,
-        None => (capacity * durability * flavor * texture) as i64,
-      };
+      let score = (capacity * durability * flavor * texture) as i64;
+
       if score > max_score {
         max_score = score;
       }
