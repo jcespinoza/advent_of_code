@@ -109,13 +109,13 @@ pub fn find_aunt(aunts: &[AuntSue], machine_result: &MachineResult, use_exact: b
     if aunt.children.is_some() && aunt.children.unwrap() != machine_result.children {
       continue;
     }
-    if aunt.cats.is_some() && aunt.cats.unwrap() != machine_result.cats {
+    if aunt.cats.is_some() && aunt.cats.unwrap() < machine_result.cats {
       continue;
     }
     if aunt.samoyeds.is_some() && aunt.samoyeds.unwrap() != machine_result.samoyeds {
       continue;
     }
-    if aunt.pomeranians.is_some() && aunt.pomeranians.unwrap() != machine_result.pomeranians {
+    if aunt.pomeranians.is_some() && aunt.pomeranians.unwrap() > machine_result.pomeranians {
       continue;
     }
     if aunt.akitas.is_some() && aunt.akitas.unwrap() != machine_result.akitas {
@@ -124,10 +124,10 @@ pub fn find_aunt(aunts: &[AuntSue], machine_result: &MachineResult, use_exact: b
     if aunt.vizslas.is_some() && aunt.vizslas.unwrap() != machine_result.vizslas {
       continue;
     }
-    if aunt.goldfish.is_some() && aunt.goldfish.unwrap() != machine_result.goldfish {
+    if aunt.goldfish.is_some() && aunt.goldfish.unwrap() > machine_result.goldfish {
       continue;
     }
-    if aunt.trees.is_some() && aunt.trees.unwrap() != machine_result.trees {
+    if aunt.trees.is_some() && aunt.trees.unwrap() < machine_result.trees {
       continue;
     }
     if aunt.cars.is_some() && aunt.cars.unwrap() != machine_result.cars {
@@ -140,13 +140,46 @@ pub fn find_aunt(aunts: &[AuntSue], machine_result: &MachineResult, use_exact: b
     matching_aunts.push(aunt);
   }
 
-  if matching_aunts.len() == 1 {
-    return matching_aunts[0].number as i64;
+  if use_exact {
+    for aunt in matching_aunts.iter() {
+      if aunt.cats.is_some() && aunt.cats.unwrap() != machine_result.cats {
+        continue;
+      }
+
+      if aunt.pomeranians.is_some() && aunt.pomeranians.unwrap() != machine_result.pomeranians {
+        continue;
+      }
+
+      if aunt.goldfish.is_some() && aunt.goldfish.unwrap() != machine_result.goldfish {
+        continue;
+      }
+
+      if aunt.trees.is_some() && aunt.trees.unwrap() != machine_result.trees {
+        continue;
+      }
+
+      return aunt.number as i64;
+    }
   } else {
-    println!(
-      "Matching aunts: {:?}",
-      matching_aunts.iter().map(|x| x.to_string()).join("\n")
-    );
+    for aunt in matching_aunts.iter() {
+      if aunt.cats.is_some() && aunt.cats.unwrap() <= machine_result.cats {
+        continue;
+      }
+
+      if aunt.pomeranians.is_some() && aunt.pomeranians.unwrap() >= machine_result.pomeranians {
+        continue;
+      }
+
+      if aunt.goldfish.is_some() && aunt.goldfish.unwrap() >= machine_result.goldfish {
+        continue;
+      }
+
+      if aunt.trees.is_some() && aunt.trees.unwrap() <= machine_result.trees {
+        continue;
+      }
+
+      return aunt.number as i64;
+    }
   }
 
   panic!("Could not find aunt");
