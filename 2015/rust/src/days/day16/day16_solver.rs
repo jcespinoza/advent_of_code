@@ -32,10 +32,23 @@ impl SteppedSolver<Vec<AuntSue>, Vec<AuntSue>, i64, i64> for Day16Solver {
       perfumes: 1,
     };
 
-    find_aunt(&aunts, &machine_result)
+    find_aunt(&aunts, &machine_result, true)
   }
 
   fn solve_part_two(&self, aunts: Vec<AuntSue>) -> i64 {
-    unimplemented!()
+    let machine_result = MachineResult {
+      children: 3,
+      cats: 7,
+      samoyeds: 2,
+      pomeranians: 3,
+      akitas: 0,
+      vizslas: 0,
+      goldfish: 5,
+      trees: 3,
+      cars: 2,
+      perfumes: 1,
+    };
+
+    find_aunt(&aunts, &machine_result, false)
   }
 }

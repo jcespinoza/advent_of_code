@@ -1,3 +1,8 @@
+use std::fmt::Display;
+
+use itertools::Itertools;
+
+#[derive(Debug)]
 pub struct AuntSue {
   pub number: i32,
 
@@ -52,6 +57,33 @@ impl From<&str> for AuntSue {
     }
 
     sue
+  }
+}
+
+impl Display for AuntSue {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    write!(
+      f,
+      "Sue {}: {}",
+      self.number,
+      [
+        ("children", self.children),
+        ("cats", self.cats),
+        ("samoyeds", self.samoyeds),
+        ("pomeranians", self.pomeranians),
+        ("akitas", self.akitas),
+        ("vizslas", self.vizslas),
+        ("goldfish", self.goldfish),
+        ("trees", self.trees),
+        ("cars", self.cars),
+        ("perfumes", self.perfumes),
+      ]
+      .iter()
+      .filter(|x| x.1.is_some())
+      .map(|x| format!("{}: {}", x.0, x.1.unwrap_or(-1)))
+      .collect::<Vec<String>>()
+      .join(", ")
+    )
   }
 }
 
