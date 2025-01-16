@@ -103,7 +103,8 @@ fn update_sue(sue: &mut AuntSue, key: &str, value: i32) {
   }
 }
 
-pub fn find_aunt(aunts: &[AuntSue], machine_result: &MachineResult) -> i64 {
+pub fn find_aunt(aunts: &[AuntSue], machine_result: &MachineResult, use_exact: bool) -> i64 {
+  let mut matching_aunts = Vec::new();
   for aunt in aunts.iter() {
     if aunt.children.is_some() && aunt.children.unwrap() != machine_result.children {
       continue;
@@ -136,7 +137,16 @@ pub fn find_aunt(aunts: &[AuntSue], machine_result: &MachineResult) -> i64 {
       continue;
     }
 
-    return aunt.number as i64;
+    matching_aunts.push(aunt);
+  }
+
+  if matching_aunts.len() == 1 {
+    return matching_aunts[0].number as i64;
+  } else {
+    println!(
+      "Matching aunts: {:?}",
+      matching_aunts.iter().map(|x| x.to_string()).join("\n")
+    );
   }
 
   panic!("Could not find aunt");
