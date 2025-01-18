@@ -3,7 +3,7 @@ use std::collections::HashSet;
 
 use crate::common::SteppedSolver;
 
-use super::{generate_distinct_molecules, Machine, Replacement};
+use super::{common_parse, generate_distinct_molecules, Machine, Replacement};
 
 #[derive(Debug)]
 pub struct Day19Solver {
@@ -13,23 +13,11 @@ pub struct Day19Solver {
 
 impl SteppedSolver<Machine, Machine, i64, i64> for Day19Solver {
   fn parse_input_one(&self, input: Vec<&str>) -> Machine {
-    // take all but the last two elements from the input
-    let replacements = input
-      .iter()
-      .take(input.len() - 2)
-      .map(|x| Replacement::from(*x))
-      .collect();
-
-    // take the last element from the input
-    let target_molecule = input[input.len() - 1].to_string();
-    Machine {
-      replacements,
-      target_molecule,
-    }
+    common_parse(input, false)
   }
 
   fn parse_input_two(&self, input: Vec<&str>) -> Machine {
-    self.parse_input_one(input)
+    common_parse(input, true)
   }
 
   fn solve_part_one(&self, machine: Machine) -> i64 {
@@ -38,6 +26,20 @@ impl SteppedSolver<Machine, Machine, i64, i64> for Day19Solver {
   }
 
   fn solve_part_two(&self, input: Machine) -> i64 {
-    unimplemented!()
+    let mut steps = 0;
+    let mut target = input.target_molecule.clone();
+    let mut replacements = input.replacements.clone();
+
+    while target != "e" {
+      for replacement in replacements.iter() {
+        if target.contains(&replacement.result) {
+          target = target.replacen(&replacement.result, &replacement.source, 1);
+          steps += 1;
+          break;
+        }
+      }
+    }
+
+    steps
   }
 }

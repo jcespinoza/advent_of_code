@@ -16,10 +16,41 @@ impl From<&str> for Replacement {
   }
 }
 
+impl Replacement {
+  pub fn inverse(&self) -> Replacement {
+    Replacement {
+      source: self.result.clone(),
+      result: self.source.clone(),
+    }
+  }
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct Machine {
   pub replacements: Vec<Replacement>,
   pub target_molecule: String,
+}
+
+pub fn common_parse(input: Vec<&str>, should_reverse: bool) -> Machine {
+  // take all but the last two elements from the input
+  let replacements = input
+    .iter()
+    .take(input.len() - 2)
+    .map(|x| {
+      let replacement = Replacement::from(*x);
+      if should_reverse {
+        return replacement.inverse();
+      }
+      replacement
+    })
+    .collect();
+
+  // take the last element from the input
+  let target_molecule = input[input.len() - 1].to_string();
+  Machine {
+    replacements,
+    target_molecule,
+  }
 }
 
 pub fn generate_distinct_molecules(machine: &Machine) -> HashSet<String> {
