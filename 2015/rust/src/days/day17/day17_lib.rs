@@ -19,3 +19,18 @@ pub fn get_container_combinations(
 
   good_combos
 }
+
+pub fn get_min_container_combinations(
+  container_sizes: Vec<i32>,
+  target_capacity: i32,
+) -> Vec<Vec<i32>> {
+  let good_combos = get_container_combinations(container_sizes, target_capacity);
+
+  let smalles_combo_size = good_combos.iter().map(|x| x.len()).min().unwrap();
+  let min_combos: Vec<Vec<i32>> = good_combos
+    .into_iter()
+    .filter(|x| x.len() == smalles_combo_size)
+    .collect();
+
+  min_combos
+}

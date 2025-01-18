@@ -49,7 +49,7 @@ fn sample_01_part_two() {
   let solver = Day17Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
-    liters: Some(50),
+    liters: Some(25),
   };
   let input = solver.parse_input_two(raw_input);
   let result = solver.solve_part_two(input);
@@ -58,13 +58,12 @@ fn sample_01_part_two() {
 }
 
 #[test]
-#[ignore]
 fn solution_part_two() {
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART2: i64 = 0;
+  const EXPECTED_SOLUTION_PART2: i64 = 57;
 
   let solver = Day17Solver {
     day: DAY_NUM,
