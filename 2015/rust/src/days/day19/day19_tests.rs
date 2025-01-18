@@ -55,10 +55,28 @@ fn solution_part_one() {
 }
 
 #[test]
-#[ignore]
 fn sample_01_part_two() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec![
+    "e => H", "e => O", "H => HO", "H => OH", "O => HH", "", "HOH",
+  ];
+  let expected_output: i64 = 3;
+
+  let solver = Day19Solver {
+    day: DAY_NUM,
+    year: YEAR_NUM,
+  };
+  let input = solver.parse_input_two(raw_input);
+  let result = solver.solve_part_two(input);
+
+  assert_eq!(result, expected_output);
+}
+
+#[test]
+fn sample_02_part_two() {
+  let raw_input = vec![
+    "e => H", "e => O", "H => HO", "H => OH", "O => HH", "", "HOHOHO",
+  ];
+  let expected_output: i64 = 6;
 
   let solver = Day19Solver {
     day: DAY_NUM,
@@ -87,29 +105,4 @@ fn solution_part_two() {
   let result = solver.solve_part_two(input);
 
   assert_eq!(result, EXPECTED_SOLUTION_PART2);
-}
-
-#[test]
-#[ignore]
-fn examples_part_two() {
-  let examples: Vec<AocExample<i64>> = vec![AocExample {
-    raw_input: vec![],
-    expected_output: 0,
-  }];
-
-  let solver = Day19Solver {
-    day: DAY_NUM,
-    year: YEAR_NUM,
-  };
-
-  for (index, example) in examples.iter().enumerate() {
-    let input = solver.parse_input_two(example.raw_input.clone());
-    let result = solver.solve_part_two(input);
-
-    assert_eq!(
-      result, example.expected_output,
-      "Failed for Example: {:?}",
-      index
-    );
-  }
 }
