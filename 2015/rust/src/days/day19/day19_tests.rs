@@ -37,13 +37,12 @@ fn sample_02_part_one() {
 }
 
 #[test]
-#[ignore]
 fn solution_part_one() {
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART1: i64 = 0;
+  const EXPECTED_SOLUTION_PART1: i64 = 535;
 
   let solver = Day19Solver {
     day: DAY_NUM,
