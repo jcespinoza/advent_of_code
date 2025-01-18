@@ -202,3 +202,15 @@ pub mod day17 {
   mod day17_solver;
   mod day17_tests;
 }
+
+pub mod day18 {
+  pub use day18_impl::*;
+  pub use day18_lib::*;
+  pub use day18_solver::*;
+  pub use day18_tests::*;
+
+  mod day18_impl;
+  mod day18_lib;
+  mod day18_solver;
+  mod day18_tests;
+}
