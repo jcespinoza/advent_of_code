@@ -170,7 +170,6 @@ fn sample_5_step_part_two() {
 }
 
 #[test]
-#[ignore]
 fn solution_part_two() {
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()

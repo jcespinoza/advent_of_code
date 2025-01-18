@@ -8,8 +8,8 @@ const DAY_NUM: i32 = 19;
 
 #[test]
 fn sample_01_part_one() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec!["H => HO", "H => OH", "O => HH", "", "HOH"];
+  let expected_output: i64 = 7;
 
   let solver = Day19Solver {
     day: DAY_NUM,
