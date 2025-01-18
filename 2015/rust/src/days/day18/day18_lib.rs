@@ -19,11 +19,11 @@ pub fn animate_lights(starting_grid: Vec<Vec<i32>>, steps: i32) -> usize {
     grid = new_grid;
   }
 
-  let on_lights = grid.iter().flatten().filter(|&&x| x == 1).count();
+  let on_lights = grid.iter().flatten().filter(|x| **x == 1).count();
   on_lights
 }
 
-fn get_neighbor_count(grid: &Vec<Vec<i32>>, y: usize, x: usize) -> i32 {
+fn get_neighbor_count(grid: &[Vec<i32>], y: usize, x: usize) -> i32 {
   let mut neighbors = 0;
   for dy in -1..=1 {
     for dx in -1..=1 {
