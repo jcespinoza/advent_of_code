@@ -7,13 +7,62 @@ use crate::{
 const DAY_NUM: i32 = 18;
 
 #[test]
-fn sample_01_part_one() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+fn sample_1_step_part_one() {
+  let raw_input = vec![".#.#.#", "...##.", "#....#", "..#...", "#.#..#", "####.."];
+  let expected_output: i64 = 11;
 
   let solver = Day18Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
+    steps: Some(1),
+  };
+  let input = solver.parse_input_one(raw_input);
+  let result = solver.solve_part_one(input);
+
+  assert_eq!(result, expected_output);
+}
+
+#[test]
+fn sample_2_step_part_one() {
+  let raw_input = vec![".#.#.#", "...##.", "#....#", "..#...", "#.#..#", "####.."];
+  let expected_output: i64 = 8;
+
+  let solver = Day18Solver {
+    day: DAY_NUM,
+    year: YEAR_NUM,
+    steps: Some(2),
+  };
+  let input = solver.parse_input_one(raw_input);
+  let result = solver.solve_part_one(input);
+
+  assert_eq!(result, expected_output);
+}
+
+#[test]
+fn sample_3_step_part_one() {
+  let raw_input = vec![".#.#.#", "...##.", "#....#", "..#...", "#.#..#", "####.."];
+  let expected_output: i64 = 4;
+
+  let solver = Day18Solver {
+    day: DAY_NUM,
+    year: YEAR_NUM,
+    steps: Some(3),
+  };
+  let input = solver.parse_input_one(raw_input);
+  let result = solver.solve_part_one(input);
+
+  assert_eq!(result, expected_output);
+}
+
+#[test]
+fn sample_4_step_part_one() {
+  let raw_input = vec![".#.#.#", "...##.", "#....#", "..#...", "#.#..#", "####.."];
+  let expected_output: i64 = 4;
+
+  let solver = Day18Solver {
+    day: DAY_NUM,
+    year: YEAR_NUM,
+    steps: Some(4),
   };
   let input = solver.parse_input_one(raw_input);
   let result = solver.solve_part_one(input);
@@ -33,6 +82,7 @@ fn solution_part_one() {
   let solver = Day18Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
+    steps: None,
   };
   let input = solver.parse_input_one(raw_input);
   let result = solver.solve_part_one(input);
@@ -49,6 +99,7 @@ fn sample_01_part_two() {
   let solver = Day18Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
+    steps: None,
   };
   let input = solver.parse_input_two(raw_input);
   let result = solver.solve_part_two(input);
@@ -68,36 +119,12 @@ fn solution_part_two() {
   let solver = Day18Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
+    steps: None,
   };
   let input = solver.parse_input_two(raw_input);
   let result = solver.solve_part_two(input);
 
   assert_eq!(result, EXPECTED_SOLUTION_PART2);
-}
-
-#[test]
-#[ignore]
-fn examples_part_one() {
-  let examples: Vec<AocExample<i64>> = vec![AocExample {
-    raw_input: vec![],
-    expected_output: 0,
-  }];
-
-  let solver = Day18Solver {
-    day: DAY_NUM,
-    year: YEAR_NUM,
-  };
-
-  for (index, example) in examples.iter().enumerate() {
-    let input = solver.parse_input_one(example.raw_input.clone());
-    let result = solver.solve_part_one(input);
-
-    assert_eq!(
-      result, example.expected_output,
-      "Failed for Example: {:?}",
-      index
-    );
-  }
 }
 
 #[test]
@@ -111,6 +138,7 @@ fn examples_part_two() {
   let solver = Day18Solver {
     day: DAY_NUM,
     year: YEAR_NUM,
+    steps: None,
   };
 
   for (index, example) in examples.iter().enumerate() {

@@ -109,7 +109,11 @@ pub fn create_solver(year: i32, day: i32) -> Box<dyn SolverRunner> {
       year,
       liters: None,
     }),
-    DayNum::Day18 => Box::new(Day18Solver { day: 18, year }),
+    DayNum::Day18 => Box::new(Day18Solver {
+      day: 18,
+      year,
+      steps: Some(100),
+    }),
     //NEXT_ENUM_MATCH
   }
 }
