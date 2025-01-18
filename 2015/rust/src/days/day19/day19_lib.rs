@@ -1,6 +1,8 @@
 use std::collections::HashSet;
 
-#[derive(Debug, Clone, Hash, PartialEq)]
+use itertools::Itertools;
+
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Replacement {
   pub source: String,
   pub result: String,
@@ -81,4 +83,31 @@ pub fn generate_distinct_molecules(machine: &Machine) -> HashSet<String> {
   }
 
   distinct_molecules
+}
+
+pub fn get_steps_until_target(replacements: &Vec<Replacement>, target_sequence: &str) -> i64 {
+  if target_sequence == "e" {
+    return 0;
+  }
+
+  let mut min_steps = i64::MAX;
+
+  for replacement in replacements.iter() {
+    let mut steps_required = i64::MAX;
+    if target_sequence.contains(&replacement.source) {
+      let rec_steps_required = get_steps_until_target(
+        replacements,
+        &target_sequence.replacen(&replacement.source, &replacement.result, 1),
+      );
+      if rec_steps_required < i64::MAX {
+        steps_required = 1 + rec_steps_required;
+      }
+    }
+
+    if steps_required < min_steps {
+      min_steps = steps_required;
+    }
+  }
+
+  min_steps
 }
