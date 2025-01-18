@@ -1,4 +1,4 @@
-pub fn animate_lights(starting_grid: Vec<Vec<i32>>, steps: i32) -> usize {
+pub fn animate_lights(starting_grid: Vec<Vec<i32>>, steps: i32, corners_always_on: bool) -> usize {
   let mut grid = starting_grid.clone();
   for _ in 0..steps {
     let mut new_grid = vec![];
@@ -30,11 +30,13 @@ fn get_neighbor_count(grid: &[Vec<i32>], y: usize, x: usize) -> i32 {
       if dy == 0 && dx == 0 {
         continue;
       }
+      
       let ny = y as i32 + dy;
       let nx = x as i32 + dx;
       if ny < 0 || ny >= grid.len() as i32 || nx < 0 || nx >= grid[y].len() as i32 {
         continue;
       }
+
       neighbors += grid[ny as usize][nx as usize];
     }
   }

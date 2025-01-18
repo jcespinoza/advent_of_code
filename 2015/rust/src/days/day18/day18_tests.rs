@@ -108,7 +108,7 @@ fn sample_1_step_part_two() {
 #[test]
 fn sample_2_step_part_two() {
   let raw_input = vec!["##.#.#", "...##.", "#....#", "..#...", "#.#..#", "####.#"];
-  let expected_output: i64 = 15;
+  let expected_output: i64 = 18;
 
   let solver = Day18Solver {
     day: DAY_NUM,
