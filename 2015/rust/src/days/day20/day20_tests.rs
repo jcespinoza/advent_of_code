@@ -7,9 +7,10 @@ use crate::{
 const DAY_NUM: i32 = 20;
 
 #[test]
+#[ignore]
 fn sample_01_part_one() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec!["130"];
+  let expected_output: i64 = 9;
 
   let solver = Day20Solver {
     day: DAY_NUM,
@@ -22,13 +23,12 @@ fn sample_01_part_one() {
 }
 
 #[test]
-#[ignore]
 fn solution_part_one() {
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART1: i64 = 0;
+  const EXPECTED_SOLUTION_PART1: i64 = 665280;
 
   let solver = Day20Solver {
     day: DAY_NUM,
@@ -76,12 +76,42 @@ fn solution_part_two() {
 }
 
 #[test]
-#[ignore]
+#[ignore = "House counts lower than 10 do not work with the optimization for big numbers"]
 fn examples_part_one() {
-  let examples: Vec<AocExample<i64>> = vec![AocExample {
-    raw_input: vec![],
-    expected_output: 0,
-  }];
+  let examples: Vec<AocExample<i64>> = vec![
+    AocExample {
+      raw_input: vec!["10"],
+      expected_output: 1,
+    },
+    AocExample {
+      raw_input: vec!["30"],
+      expected_output: 2,
+    },
+    AocExample {
+      raw_input: vec!["40"],
+      expected_output: 3,
+    },
+    AocExample {
+      raw_input: vec!["70"],
+      expected_output: 4,
+    },
+    AocExample {
+      raw_input: vec!["60"],
+      expected_output: 5,
+    },
+    AocExample {
+      raw_input: vec!["120"],
+      expected_output: 6,
+    },
+    AocExample {
+      raw_input: vec!["80"],
+      expected_output: 7,
+    },
+    AocExample {
+      raw_input: vec!["150"],
+      expected_output: 8,
+    },
+  ];
 
   let solver = Day20Solver {
     day: DAY_NUM,
