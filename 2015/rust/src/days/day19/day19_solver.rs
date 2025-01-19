@@ -30,11 +30,6 @@ impl SteppedSolver<Machine, Machine, i64, i64> for Day19Solver {
   }
 
   fn solve_part_two(&self, machine: Machine) -> i64 {
-    let sorted_replacements_iter = machine
-      .replacements
-      .iter()
-      .sorted_by(|a, b| b.source.cmp(&a.source));
-    let replacements: Vec<Replacement> = sorted_replacements_iter.cloned().collect();
-    get_steps_until_target(&replacements, &machine.target_molecule)
+    get_steps_until_target(&machine.replacements, &machine.target_molecule)
   }
 }

@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use itertools::Itertools;
 
@@ -85,29 +85,37 @@ pub fn generate_distinct_molecules(machine: &Machine) -> HashSet<String> {
   distinct_molecules
 }
 
-pub fn get_steps_until_target(replacements: &Vec<Replacement>, target_sequence: &str) -> i64 {
-  if target_sequence == "e" {
-    return 0;
-  }
+pub fn get_steps_until_target(replacements: &[Replacement], target_sequence: &str) -> i64 {
+  let replacement_map = replacements
+    .iter()
+    .fold(HashMap::<String, String>::new(), |mut acc, rep| {
+      acc.insert(rep.source.to_string(), rep.result.to_string());
+      acc
+    });
 
-  let mut min_steps = i64::MAX;
+  let mut sourted_outputs = replacement_map
+    .keys()
+    .map(|x| x.to_string())
+    .collect::<Vec<String>>();
 
-  for replacement in replacements.iter() {
-    let mut steps_required = i64::MAX;
-    if target_sequence.contains(&replacement.source) {
-      let rec_steps_required = get_steps_until_target(
-        replacements,
-        &target_sequence.replacen(&replacement.source, &replacement.result, 1),
-      );
-      if rec_steps_required < i64::MAX {
-        steps_required = 1 + rec_steps_required;
+  sourted_outputs.sort_by_key(|b| std::cmp::Reverse(b.len()));
+
+  let mut current_sequence = target_sequence.to_string();
+
+  let mut step_count = 0;
+  loop {
+    for output in sourted_outputs.iter() {
+      if current_sequence.contains(output) {
+        let source = replacement_map.get(output).unwrap();
+        current_sequence = current_sequence.replacen(output, source, 1);
+        step_count += 1;
+        break;
       }
     }
-
-    if steps_required < min_steps {
-      min_steps = steps_required;
+    if current_sequence == "e" {
+      break;
     }
   }
 
-  min_steps
+  step_count
 }
