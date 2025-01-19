@@ -22,11 +22,8 @@ impl SteppedSolver<usize, usize, i64, i64> for Day20Solver {
     let mut house_present_count = vec![0; (target_present_count / 10)];
 
     for elf_number in 1..house_present_count.len() {
-      let mut house_number = elf_number;
-
-      while house_number < house_present_count.len() {
+      for house_number in (elf_number..house_present_count.len()).step_by(elf_number) {
         house_present_count[house_number] += elf_number * 10;
-        house_number += elf_number;
       }
     }
 
@@ -42,12 +39,11 @@ impl SteppedSolver<usize, usize, i64, i64> for Day20Solver {
     let mut house_present_count = vec![0; (target_present_count / 10)];
 
     for elf_number in 1..house_present_count.len() {
-      let mut house_number = elf_number;
-      let mut houses_visited = 0;
-      while house_number < house_present_count.len() && houses_visited < 50 {
+      for house_number in (elf_number..house_present_count.len())
+        .step_by(elf_number)
+        .take(50)
+      {
         house_present_count[house_number] += elf_number * 11;
-        house_number += elf_number;
-        houses_visited += 1;
       }
     }
 
