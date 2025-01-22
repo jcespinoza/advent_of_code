@@ -49,10 +49,6 @@ impl SteppedSolver<Character, Character, i64, i64> for Day21Solver {
           armor,
         }
       })
-      .filter(|combo| {
-        let player = Character::new(100, combo.armor, combo.damage);
-        player.wins_against(&boss_stats)
-      })
       .sorted_by(|a, b| a.cost.cmp(&b.cost))
       .collect();
 
@@ -67,6 +63,31 @@ impl SteppedSolver<Character, Character, i64, i64> for Day21Solver {
   }
 
   fn solve_part_two(&self, boss_stats: Character) -> i64 {
-    unimplemented!()
+    let all_item_combos: Vec<ItemStat> = iproduct!(&WEAPONS, &ARMOR, &RINGS, &RINGS)
+      .filter(|(_, _, ring_left, ring_right)| {
+        // can not equip same ring on both hands
+        ring_left.name != ring_right.name || ring_left.name == NONE_NAME
+      })
+      .map(|(weapon, armor, ring_left, ring_right)| {
+        let cost = weapon.cost + armor.cost + ring_left.cost + ring_right.cost;
+        let damage = weapon.damage + ring_left.damage + ring_right.damage;
+        let armor = armor.armor + ring_left.armor + ring_right.armor;
+        ItemStat {
+          cost,
+          damage,
+          armor,
+        }
+      })
+      .sorted_by(|a, b| b.cost.cmp(&a.cost))
+      .collect();
+
+    for combo in all_item_combos {
+      let player = Character::new(100, combo.armor, combo.damage);
+      if !player.wins_against(&boss_stats) {
+        return combo.cost as i64;
+      }
+    }
+
+    0
   }
 }
