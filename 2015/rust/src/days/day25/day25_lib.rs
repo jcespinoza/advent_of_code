@@ -18,7 +18,5 @@ fn get_ordinal(target_location: Point) -> i64 {
 
   let count = (triangle_base * (triangle_base + 1)) / 2;
 
-  let ordinal = (count - t_row) + 1;
-
-  ordinal
+  (count - t_row) + 1
 }
