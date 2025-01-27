@@ -27,6 +27,11 @@ impl SteppedSolver<Vec<Instruction>, Vec<Instruction>, i64, i64> for Day23Solver
   }
 
   fn solve_part_two(&self, instructions: Vec<Instruction>) -> i64 {
-    unimplemented!()
+    let mut computer = Computer::default();
+    computer.reg_a = 1;
+    
+    computer.run_program(&instructions);
+
+    computer.reg_b
   }
 }
