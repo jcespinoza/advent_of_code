@@ -104,29 +104,22 @@ pub fn process_battle(battle: Battle) -> BattleResult {
   }
 }
 
-fn queue_spells(queue: &mut VecDeque<(Battle, &Spell)>, battle: Battle) {
-    if battle.player_mana >= MAGIC_MISSILE_COST {
-      queue.push_back((battle, &Spell::MagicMissile));
-    }
-    if battle.player_mana >= DRAIN_COST {
-      queue.push_back((battle, &Spell::Drain));
-    }
-    if battle.player_mana >= SHIELD_COST && battle.shield_timer <= 1 {
-      queue.push_back((battle, &Spell::Shield));
-    }
-    if battle.player_mana >= POISON_COST && battle.poison_timer <= 1 {
-      queue.push_back((battle, &Spell::Poison));
-    }
-    if battle.player_mana >= RECHARGE_COST && battle.recharge_timer <= 1 {
-      queue.push_back((battle, &Spell::Recharge));
-    }
-}
+fn apply_effects(battle: &mut Battle) {
+  battle.player_armor = 0;
 
-fn apply_boss_damage(battle: &mut Battle) {
-  if battle.boss_damage > battle.player_armor {
-    battle.player_hp -= battle.boss_damage - battle.player_armor;
-  } else {
-    battle.player_hp -= 1;
+  if battle.shield_timer > 0 {
+    battle.shield_timer -= 1;
+    battle.player_armor = SHIELD_ARMOR;
+  }
+
+  if battle.poison_timer > 0 {
+    battle.poison_timer -= 1;
+    battle.boss_hp -= POISON_DAMAGE;
+  }
+
+  if battle.recharge_timer > 0 {
+    battle.recharge_timer -= 1;
+    battle.player_mana += RECHARGE_MANA;
   }
 }
 
@@ -160,21 +153,28 @@ fn proces_spell(battle: &mut Battle, next_spell: &Spell) {
   battle.player_mana_spent += mana_cost;
 }
 
-fn apply_effects(battle: &mut Battle) {
-  battle.player_armor = 0;
-
-  if battle.shield_timer > 0 {
-    battle.shield_timer -= 1;
-    battle.player_armor = SHIELD_ARMOR;
+fn apply_boss_damage(battle: &mut Battle) {
+  if battle.boss_damage > battle.player_armor {
+    battle.player_hp -= battle.boss_damage - battle.player_armor;
+  } else {
+    battle.player_hp -= 1;
   }
+}
 
-  if battle.poison_timer > 0 {
-    battle.poison_timer -= 1;
-    battle.boss_hp -= POISON_DAMAGE;
-  }
-
-  if battle.recharge_timer > 0 {
-    battle.recharge_timer -= 1;
-    battle.player_mana += RECHARGE_MANA;
-  }
+fn queue_spells(queue: &mut VecDeque<(Battle, &Spell)>, battle: Battle) {
+    if battle.player_mana >= MAGIC_MISSILE_COST {
+      queue.push_back((battle, &Spell::MagicMissile));
+    }
+    if battle.player_mana >= DRAIN_COST {
+      queue.push_back((battle, &Spell::Drain));
+    }
+    if battle.player_mana >= SHIELD_COST && battle.shield_timer <= 1 {
+      queue.push_back((battle, &Spell::Shield));
+    }
+    if battle.player_mana >= POISON_COST && battle.poison_timer <= 1 {
+      queue.push_back((battle, &Spell::Poison));
+    }
+    if battle.player_mana >= RECHARGE_COST && battle.recharge_timer <= 1 {
+      queue.push_back((battle, &Spell::Recharge));
+    }
 }
