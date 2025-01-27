@@ -49,7 +49,7 @@ static SHIELD_ARMOR: i32 = 7;
 static POISON_DAMAGE: i32 = 3;
 static RECHARGE_MANA: i32 = 101;
 
-pub fn process_battle(battle: Battle) -> BattleResult {
+pub fn process_battle(battle: Battle, hard_mode: bool) -> BattleResult {
   let mut min_mana = i32::MAX;
   let mut queue = VecDeque::new();
 
@@ -64,6 +64,12 @@ pub fn process_battle(battle: Battle) -> BattleResult {
   }
 
   while let Some((mut battle, next_spell)) = queue.pop_front() {
+    if hard_mode {
+      battle.player_hp -= 1;
+      if battle.player_hp <= 0 {
+        continue;
+      }
+    }
     apply_effects(&mut battle);
 
     if battle.boss_hp <= 0 {

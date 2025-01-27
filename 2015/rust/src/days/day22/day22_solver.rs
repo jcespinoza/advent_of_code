@@ -42,24 +42,33 @@ impl SteppedSolver<Boss, Boss, i64, i64> for Day22Solver {
   }
 
   fn solve_part_one(&self, boss: Boss) -> i64 {
-    let battle = Battle {
-      player_hp: 50,
-      player_mana: 500,
-      player_armor: 0,
-      player_mana_spent: 0,
-      boss_hp: boss.hit_points,
-      boss_damage: boss.damage,
-      shield_timer: 0,
-      poison_timer: 0,
-      recharge_timer: 0,
-    };
+    let battle = create_battle(boss);
 
-    let result: BattleResult = process_battle(battle);
+    let result: BattleResult = process_battle(battle, false);
 
     result.mana_spent as i64
   }
 
   fn solve_part_two(&self, boss: Boss) -> i64 {
-    unimplemented!()
+    let battle = create_battle(boss);
+
+    let result: BattleResult = process_battle(battle, true);
+
+    result.mana_spent as i64
   }
+}
+
+fn create_battle(boss: Boss) -> Battle {
+  let battle = Battle {
+    player_hp: 50,
+    player_mana: 500,
+    player_armor: 0,
+    player_mana_spent: 0,
+    boss_hp: boss.hit_points,
+    boss_damage: boss.damage,
+    shield_timer: 0,
+    poison_timer: 0,
+    recharge_timer: 0,
+  };
+  battle
 }
