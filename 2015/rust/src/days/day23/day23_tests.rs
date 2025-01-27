@@ -8,8 +8,8 @@ const DAY_NUM: i32 = 23;
 
 #[test]
 fn sample_01_part_one() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec!["inc b", "jio b, +2", "tpl b", "inc b"];
+  let expected_output: i64 = 2;
 
   let solver = Day23Solver {
     day: DAY_NUM,
@@ -73,31 +73,6 @@ fn solution_part_two() {
   let result = solver.solve_part_two(input);
 
   assert_eq!(result, EXPECTED_SOLUTION_PART2);
-}
-
-#[test]
-#[ignore]
-fn examples_part_one() {
-  let examples: Vec<AocExample<i64>> = vec![AocExample {
-    raw_input: vec![],
-    expected_output: 0,
-  }];
-
-  let solver = Day23Solver {
-    day: DAY_NUM,
-    year: YEAR_NUM,
-  };
-
-  for (index, example) in examples.iter().enumerate() {
-    let input = solver.parse_input_one(example.raw_input.clone());
-    let result = solver.solve_part_one(input);
-
-    assert_eq!(
-      result, example.expected_output,
-      "Failed for Example: {:?}",
-      index
-    );
-  }
 }
 
 #[test]
