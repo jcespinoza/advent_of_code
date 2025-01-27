@@ -23,6 +23,7 @@ use crate::{
   days::day20::Day20Solver,
   days::day21::Day21Solver,
   days::day22::Day22Solver,
+  days::day23::Day23Solver,
   //NEXT_IMPORT
 };
 
@@ -50,6 +51,7 @@ pub enum DayNum {
   Day20 = 20,
   Day21 = 21,
   Day22 = 22,
+  Day23 = 23,
   //NEXT_ENUM_ENTRY
 }
 
@@ -80,6 +82,7 @@ impl TryFrom<i32> for DayNum {
       x if x == DayNum::Day20 as i32 => Ok(DayNum::Day20),
       x if x == DayNum::Day21 as i32 => Ok(DayNum::Day21),
       x if x == DayNum::Day22 as i32 => Ok(DayNum::Day22),
+      x if x == DayNum::Day23 as i32 => Ok(DayNum::Day23),
       //NEXT_ENUM_TRY_FROM
       _ => Err(()),
     }
@@ -130,6 +133,7 @@ pub fn create_solver(year: i32, day: i32) -> Box<dyn SolverRunner> {
     DayNum::Day20 => Box::new(Day20Solver { day: 20, year }),
     DayNum::Day21 => Box::new(Day21Solver { day: 21, year }),
     DayNum::Day22 => Box::new(Day22Solver { day: 22, year }),
+    DayNum::Day23 => Box::new(Day23Solver { day: 23, year }),
     //NEXT_ENUM_MATCH
   }
 }
