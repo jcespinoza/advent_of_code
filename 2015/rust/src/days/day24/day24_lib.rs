@@ -1,8 +1,8 @@
 use itertools::Itertools;
 
-pub fn get_lowest_entanglement(package_weights: Vec<i32>) -> i64 {
+pub fn get_lowest_entanglement(package_weights: Vec<i32>, group_count: i32) -> i64 {
   let total_weigth: i32 = package_weights.iter().sum();
-  let target_weight = total_weigth / 3;
+  let target_weight = total_weigth / group_count;
 
   let mut min_package_count = 1;
   let mut combo_with_lowest_entanglement: Option<i64>;

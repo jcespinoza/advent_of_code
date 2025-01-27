@@ -19,10 +19,10 @@ impl SteppedSolver<Vec<i32>, Vec<i32>, i64, i64> for Day24Solver {
   }
 
   fn solve_part_one(&self, package_weights: Vec<i32>) -> i64 {
-    get_lowest_entanglement(package_weights)
+    get_lowest_entanglement(package_weights, 3)
   }
 
   fn solve_part_two(&self, package_weights: Vec<i32>) -> i64 {
-    unimplemented!()
+    get_lowest_entanglement(package_weights, 4)
   }
 }
