@@ -286,3 +286,15 @@ pub mod day24 {
   mod day24_solver;
   mod day24_tests;
 }
+
+pub mod day25 {
+  pub use day25_impl::*;
+  pub use day25_lib::*;
+  pub use day25_solver::*;
+  pub use day25_tests::*;
+
+  mod day25_impl;
+  mod day25_lib;
+  mod day25_solver;
+  mod day25_tests;
+}
