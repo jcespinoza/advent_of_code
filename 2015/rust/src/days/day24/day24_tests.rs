@@ -8,8 +8,8 @@ const DAY_NUM: i32 = 24;
 
 #[test]
 fn sample_01_part_one() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec!["1", "2", "3", "4", "5", "7", "8", "9", "10", "11"];
+  let expected_output: i64 = 99;
 
   let solver = Day24Solver {
     day: DAY_NUM,
@@ -22,13 +22,12 @@ fn sample_01_part_one() {
 }
 
 #[test]
-#[ignore]
 fn solution_part_one() {
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART1: i64 = 0;
+  const EXPECTED_SOLUTION_PART1: i64 = 11846773891;
 
   let solver = Day24Solver {
     day: DAY_NUM,
