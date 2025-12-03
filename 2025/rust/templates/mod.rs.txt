@@ -1,0 +1,12 @@
+
+pub mod day00 {
+  pub use day00_impl::*;
+  pub use day00_lib::*;
+  pub use day00_solver::*;
+  pub use day00_tests::*;
+
+  mod day00_impl;
+  mod day00_lib;
+  mod day00_solver;
+  mod day00_tests;
+}
