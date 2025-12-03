@@ -14,20 +14,7 @@ namespace AdventOfCode.Commons;
 /// The type of the result of the puzzle
 /// </typeparam>
 public abstract class SteppedSolver<TParsedInputOne, TParsedInputTwo, TResultOne, TResultTwo>
-{
-    public abstract class WithExtraParams<TExtraParams> : SteppedSolver<TParsedInputOne, TParsedInputTwo, TResultOne, TResultTwo>
-    {
-        public TExtraParams ExtraParams { get; set; }
-
-        public WithExtraParams(int year, int day, TExtraParams extraParams) : base(year, day) {
-            ExtraParams = extraParams;
-        }
-
-        public WithExtraParams(string inputPath, TExtraParams extraParams) : base(inputPath) {
-            ExtraParams = extraParams;
-        }
-    }
-    
+{   
     /// <summary>
     /// The puzzle input reader strategy
     /// </summary>

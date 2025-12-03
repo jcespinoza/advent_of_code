@@ -5,7 +5,7 @@ namespace Advent24.Days
 {
     public class Day25Test : TestEngine<Day25Solver, List<Schematic>, long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 123;
+        private const long EXPECTED_SOLUTION_PART_1 = 3127;
         private const long EXPECTED_SOLUTION_PART_2 = 123;
 
         public Day25Test()
