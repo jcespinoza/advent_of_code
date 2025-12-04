@@ -103,6 +103,9 @@ impl PaperWarehouse {
   }
 
   // Traverse the warehouse and repeatedly remove all accessible rolls of paper until no more can be accessed. Mark removed rolls with 'x' (using the enum).
+  #[deprecated(
+    note = "Use `remove_accessible_rolls_queue` for better performance (avoids full-grid rescans)"
+  )]
   pub fn remove_accessible_rolls(&mut self) {
     loop {
       let mut was_any_roll_removed = false;
@@ -120,6 +123,70 @@ impl PaperWarehouse {
 
       if !was_any_roll_removed {
         break; // No more accessible rolls to remove
+      }
+    }
+  }
+
+  /// More efficient variant: use a queue to process accessible rolls and only
+  /// re-check neighbors of removed rolls. This avoids repeated full-grid scans.
+  pub fn remove_accessible_rolls_queue(&mut self) {
+    use std::collections::VecDeque;
+
+    let rows = self.grid.len();
+    if rows == 0 {
+      return;
+    }
+    let cols = self.grid[0].len();
+
+    // Track which positions have been enqueued to avoid duplicates.
+    let mut enqueued = vec![vec![false; cols]; rows];
+    let mut q: VecDeque<(usize, usize)> = VecDeque::new();
+
+    // Seed queue with all currently-accessible rolls.
+    for r in 0..rows {
+      for c in 0..cols {
+        if let SlotContent::Roll = self.grid[r][c] {
+          if self.is_accessible(r, c) {
+            q.push_back((r, c));
+            enqueued[r][c] = true;
+          }
+        }
+      }
+    }
+
+    // Process queue: remove accessible rolls and enqueue neighbors that might become accessible.
+    while let Some((r, c)) = q.pop_front() {
+      // We popped (r,c) from the queue; mark it as not in-queue so it can be
+      // re-enqueued later if it is not removed now but becomes accessible after
+      // further neighbor removals.
+      enqueued[r][c] = false;
+
+      // Only act if it's still a Roll and currently accessible under grid state.
+      if let SlotContent::Roll = self.grid[r][c] {
+        if self.is_accessible(r, c) {
+          // Remove the roll.
+          self.grid[r][c] = SlotContent::Removed;
+
+          // Enqueue all 8 neighbors (if they are rolls and not already enqueued).
+          for dr in -1isize..=1 {
+            for dc in -1isize..=1 {
+              if dr == 0 && dc == 0 {
+                continue;
+              }
+              let nr = r as isize + dr;
+              let nc = c as isize + dc;
+              if nr >= 0 && nr < rows as isize && nc >= 0 && nc < cols as isize {
+                let (nr_u, nc_u) = (nr as usize, nc as usize);
+                if !enqueued[nr_u][nc_u] {
+                  if let SlotContent::Roll = self.grid[nr_u][nc_u] {
+                    q.push_back((nr_u, nc_u));
+                    enqueued[nr_u][nc_u] = true;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

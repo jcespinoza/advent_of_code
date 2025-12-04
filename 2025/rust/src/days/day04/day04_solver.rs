@@ -22,7 +22,7 @@ impl SteppedSolver<PaperWarehouse, PaperWarehouse, i64, i64> for Day04Solver {
 
   fn solve_part_two(&self, warehouse: PaperWarehouse) -> i64 {
     let mut warehouse = warehouse.clone();
-    warehouse.remove_accessible_rolls();
+    warehouse.remove_accessible_rolls_queue();
     warehouse.count_removed_rolls()
   }
 }
