@@ -2,8 +2,6 @@ pub struct BatteryBank {
   pub batteries: Vec<u8>,
 }
 
-use itertools::Itertools;
-
 impl From<&str> for BatteryBank {
   fn from(s: &str) -> Self {
     let batteries = s.chars().map(|c| c.to_digit(10).unwrap() as u8).collect();
@@ -15,29 +13,59 @@ impl BatteryBank {
   // Calculates which N batteries provide the maximum total charge
   // The selected batteries must be returned in the same order as they appear in the bank
   pub fn top_n_batteries(&self, n: usize) -> Vec<u8> {
-    // The total charge between the selected batteries is calculated by concatenating the digits
-    // represented by the batteries and interpreting the result as a decimal number. Therefore sorting them first
-    // is not enough to find which batteries to select. For example, in the bank 8912, 8 and 9 are the two largest batteries, but the best choice of two batteries is 9 and 2 which gives a total charge of 92
-    // We need to generate all combinations of n batteries and find the one that gives the maximum charge
-    let mut best_combination: Vec<u8> = Vec::new();
-    let mut best_charge: i64 = -1;
+    // Efficient selection: choose the lexicographically largest subsequence of length `n`
+    // while preserving order. Concatenation of single-digit numbers corresponds to
+    // lexicographic order for equal-length sequences, so a greedy scan works:
+    // for each slot pick the largest digit available within the window that leaves
+    // enough elements to fill the remaining slots.
     let len = self.batteries.len();
-    let indices: Vec<usize> = (0..len).collect();
-    // Use the `combinations` adapter from `Itertools` on the iterator of indices
-    for combo in indices.iter().combinations(n) {
-      // `combo` is a `Vec<&usize>`; copy the indices and select batteries preserving order
-      let selected_batteries: Vec<u8> = combo
-        .into_iter()
-        .copied()
-        .map(|i| self.batteries[i])
-        .collect();
-      let charge_str: String = selected_batteries.iter().map(|b| b.to_string()).collect();
-      let charge = charge_str.parse::<i64>().unwrap();
-      if charge > best_charge {
-        best_charge = charge;
-        best_combination = selected_batteries;
-      }
+    if n >= len {
+      // If n is greater than or equal to the number of batteries, return all batteries
+      return self.batteries.clone();
     }
-    best_combination
+
+    let mut result: Vec<u8> = Vec::with_capacity(n);
+    let mut start: usize = 0;
+    let mut remaining = n;
+
+    while remaining > 0 {
+      // `max_pos` is the last index we may pick for this slot so that
+      // there are still `remaining - 1` elements left for the following slots.
+      let max_pos = len - remaining; // inclusive
+
+      // `best_idx` will record the index of the best digit found in the window.
+      let mut best_idx = start;
+
+      // `best_val` is the digit at `best_idx`; initialize to the first candidate.
+      let mut best_val = self.batteries[start];
+
+      // Scan the window from `start` to `max_pos` (inclusive) to find the maximum digit.
+      for i in start..=max_pos {
+        // current digit at position `i`.
+        let v = self.batteries[i];
+
+        // If this digit is greater than the best seen so far, update the best.
+        if v > best_val {
+          best_val = v;
+          best_idx = i;
+
+          // If we found a 9, it is the maximum possible digit — stop scanning early.
+          if best_val == 9 {
+            break; // early exit, can't do better than 9
+          }
+        }
+      }
+
+      // Append the chosen best digit for this slot to the result.
+      result.push(best_val);
+
+      // Move `start` to the next element after the chosen index so we preserve order.
+      start = best_idx + 1;
+
+      // One less slot to fill.
+      remaining -= 1;
+    }
+
+    result
   }
 }

@@ -71,7 +71,7 @@ fn solution_part_two() {
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART2: i64 = 0;
+  const EXPECTED_SOLUTION_PART2: i64 = 169685670469164;
 
   let solver = Day03Solver {
     day: DAY_NUM,
