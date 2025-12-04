@@ -8,10 +8,15 @@ use std::{
   path::Path,
 };
 
+/// PuzzleInputReaderStrategy defines the interface for reading puzzle inputs
+/// from different sources.
 pub trait PuzzleInputReaderStrategy {
   fn read_input(&self) -> io::Result<Vec<String>>;
 }
 
+/// LocalPuzzleInputReaderStrategy reads puzzle input from a local file.
+/// The file path is provided during the struct initialization.
+/// It reads the file line by line and returns a vector of strings.
 pub struct LocalPuzzleInputReaderStrategy {
   pub input_path: String,
 }
@@ -25,6 +30,10 @@ impl PuzzleInputReaderStrategy for LocalPuzzleInputReaderStrategy {
   }
 }
 
+/// RemotePuzzleInputReaderStrategy fetches puzzle input from the Advent of Code website.
+/// It requires an environment variable `AOC_COOKIE` to authenticate the request.
+/// It also caches the input locally in the `inputs/puzzle_inputs` directory
+/// to avoid redundant network requests.
 pub struct RemotePuzzleInputReaderStrategy {
   pub year: i32,
   pub day: i32,
@@ -114,27 +123,34 @@ impl PuzzleInputReaderStrategy for RemotePuzzleInputReaderStrategy {
   }
 }
 
+/// The PuzzleInputProvider struct uses a strategy pattern to read puzzle inputs
+/// from different sources (local file or remote server).
+/// It delegates the reading operation to the selected strategy.
 pub struct PuzzleInputProvider {
   puzzle_input_reader: Box<dyn PuzzleInputReaderStrategy>,
 }
 
 impl PuzzleInputProvider {
+  /// Creates a new PuzzleInputProvider that reads input from a local file.
   pub fn new_local(input_path: String) -> Self {
     let reader = Box::new(LocalPuzzleInputReaderStrategy { input_path });
     Self::new(reader)
   }
 
+  /// Creates a new PuzzleInputProvider that reads input from the Advent of Code website.
   pub fn new_remote(year: i32, day: i32) -> Self {
     let reader = Box::new(RemotePuzzleInputReaderStrategy { year, day });
     Self::new(reader)
   }
 
+  /// Internal constructor to initialize the PuzzleInputProvider with a given strategy.
   fn new(puzzle_input_reader: Box<dyn PuzzleInputReaderStrategy>) -> Self {
     PuzzleInputProvider {
       puzzle_input_reader,
     }
   }
 
+  /// Reads the puzzle input using the selected strategy.
   pub fn read_input(&self) -> io::Result<Vec<String>> {
     self.puzzle_input_reader.read_input()
   }
