@@ -4,7 +4,7 @@ namespace Advent.Days
 {
     public class Day00Solver : Solver<object[], long>
     {
-        public Day00Solver() : base(2025, 00) { }
+        public Day00Solver() : base(AocConstants.Year, 00) { }
 
         public override object[] ParseInput(IEnumerable<string> input)
             => input.ToArray();

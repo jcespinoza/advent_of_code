@@ -4,7 +4,7 @@ namespace Advent.Days
 {
     public class Day04Solver : Solver<PaperWarehouse, long>
     {
-        public Day04Solver() : base(2025, 04) { }
+        public Day04Solver() : base(AocConstants.Year, 04) { }
 
         public override PaperWarehouse ParseInput(IEnumerable<string> input)
             => PaperWarehouse.FromLines(input);
