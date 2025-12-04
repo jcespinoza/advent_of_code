@@ -2,22 +2,23 @@
 
 namespace Advent.Days
 {
-    public class Day04Solver : Solver<object[], long>
+    public class Day04Solver : Solver<PaperWarehouse, long>
     {
         public Day04Solver() : base(2025, 04) { }
 
-        public override object[] ParseInput(IEnumerable<string> input)
-            => input.ToArray();
+        public override PaperWarehouse ParseInput(IEnumerable<string> input)
+            => PaperWarehouse.FromLines(input);
 
-
-        public override long PartOne(object[] input)
+        public override long PartOne(PaperWarehouse input)
         {
-            throw new NotImplementedException();
+            return input.CountAccessibleRolls();
         }
 
-        public override long PartTwo(object[] input)
+        public override long PartTwo(PaperWarehouse input)
         {
-            throw new NotImplementedException();
+            var warehouse = input.Clone();
+            warehouse.RemoveAccessibleRollsQueue();
+            return warehouse.CountRemovedRolls();
         }
     }
 }

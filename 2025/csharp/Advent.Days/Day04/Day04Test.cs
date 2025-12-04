@@ -3,10 +3,10 @@ using dotenv.net;
 
 namespace Advent.Days
 {
-    public class Day04Test : TestEngine<Day04Solver, object[], long>
+    public class Day04Test : TestEngine<Day04Solver, PaperWarehouse, long>
     {
-        private const long EXPECTED_SOLUTION_PART_1 = 123;
-        private const long EXPECTED_SOLUTION_PART_2 = 123;
+        private const long EXPECTED_SOLUTION_PART_1 = 1553;
+        private const long EXPECTED_SOLUTION_PART_2 = 8442;
 
         public Day04Test()
         {
@@ -15,12 +15,22 @@ namespace Advent.Days
 
         public override Puzzle PartOne => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
                 RawInput = [
+                    "..@@.@@@@.",
+                    "@@@.@.@.@@",
+                    "@@@@@.@.@@",
+                    "@.@@@@..@.",
+                    "@@.@@@@.@@",
+                    ".@@@@@@@.@",
+                    ".@.@.@.@@@",
+                    "@.@@@.@@@@",
+                    ".@@@@@@@@.",
+                    "@.@.@@@.@.",
                 ],
-                Result = 8,
+                Result = 13,
             },
             Examples = [
             ],
@@ -29,12 +39,22 @@ namespace Advent.Days
 
         public override Puzzle PartTwo => new()
         {
-            ShouldSkipTests = true,
+            ShouldSkipTests = false,
             Example = new()
             {
                 RawInput = [
+                    "..@@.@@@@.",
+                    "@@@.@.@.@@",
+                    "@@@@@.@.@@",
+                    "@.@@@@..@.",
+                    "@@.@@@@.@@",
+                    ".@@@@@@@.@",
+                    ".@.@.@.@@@",
+                    "@.@@@.@@@@",
+                    ".@@@@@@@@.",
+                    "@.@.@@@.@.",
                 ],
-                Result = 8,
+                Result = 43,
             },
             Solution = EXPECTED_SOLUTION_PART_2,
         };
