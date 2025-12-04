@@ -1,10 +1,13 @@
+#[derive(Clone, Debug)]
 pub struct PaperWarehouse {
   pub grid: Vec<Vec<SlotContent>>, // 2D grid representing the paper rolls
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum SlotContent {
-  Empty, // Represented by a dot '.'
-  Roll,  // Represented by an '@' symbol
+  Empty,   // Represented by a dot '.'
+  Roll,    // Represented by an '@' symbol
+  Removed, // Represented by an 'x' symbol
 }
 
 impl From<&str> for SlotContent {
@@ -83,5 +86,41 @@ impl PaperWarehouse {
     }
 
     accessible_count
+  }
+
+  pub fn count_removed_rolls(&self) -> i64 {
+    let mut removed_count = 0;
+
+    for row in &self.grid {
+      for slot in row {
+        if let SlotContent::Removed = slot {
+          removed_count += 1;
+        }
+      }
+    }
+
+    removed_count
+  }
+
+  // Traverse the warehouse and repeatedly remove all accessible rolls of paper until no more can be accessed. Mark removed rolls with 'x' (using the enum).
+  pub fn remove_accessible_rolls(&mut self) {
+    loop {
+      let mut was_any_roll_removed = false;
+
+      for row_idx in 0..self.grid.len() {
+        for col_idx in 0..self.grid[0].len() {
+          if let SlotContent::Roll = self.grid[row_idx][col_idx] {
+            if self.is_accessible(row_idx, col_idx) {
+              self.grid[row_idx][col_idx] = SlotContent::Removed;
+              was_any_roll_removed = true;
+            }
+          }
+        }
+      }
+
+      if !was_any_roll_removed {
+        break; // No more accessible rolls to remove
+      }
+    }
   }
 }
