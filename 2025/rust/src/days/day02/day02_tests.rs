@@ -8,8 +8,8 @@ const DAY_NUM: i32 = 2;
 
 #[test]
 fn sample_01_part_one() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec!["11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124"];
+  let expected_output: i64 = 1227775554;
 
   let solver = Day02Solver {
     day: DAY_NUM,
@@ -22,14 +22,13 @@ fn sample_01_part_one() {
 }
 
 #[test]
-#[ignore]
 fn solution_part_one() {
   #[allow(dead_code)]
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART1: i64 = 0;
+  const EXPECTED_SOLUTION_PART1: i64 = 31000881061;
 
   let solver = Day02Solver {
     day: DAY_NUM,
@@ -77,12 +76,53 @@ fn solution_part_two() {
 }
 
 #[test]
-#[ignore]
 fn examples_part_one() {
-  let examples: Vec<AocExample<i64>> = vec![AocExample {
-    raw_input: vec![],
-    expected_output: 0,
-  }];
+  let examples: Vec<AocExample<i64>> = vec![
+    AocExample {
+      raw_input: vec!["11-22"],
+      expected_output: 33,
+    },
+    AocExample {
+      raw_input: vec!["95-115"],
+      expected_output: 99,
+    },
+    AocExample {
+      raw_input: vec!["998-1012"],
+      expected_output: 1010,
+    },
+    AocExample {
+      raw_input: vec!["1188511880-1188511890"],
+      expected_output: 1188511885,
+    },
+    AocExample {
+      raw_input: vec!["222220-222224"],
+      expected_output: 222222,
+    },
+    AocExample {
+      raw_input: vec!["1698522-1698528"],
+      expected_output: 0,
+    },
+    AocExample {
+      raw_input: vec!["446443-446449"],
+      expected_output: 446446,
+    },
+    AocExample {
+      raw_input: vec!["38593856-38593862"],
+      expected_output: 38593859,
+    },
+    AocExample {
+      raw_input: vec!["565653-565659"],
+      expected_output: 0,
+    },
+    AocExample {
+      raw_input: vec!["824824821-824824827"],
+      expected_output: 0,
+    },
+    AocExample {
+      raw_input: vec!["2121212118-2121212124"],
+      expected_output: 0,
+    },
+  ];
 
   let solver = Day02Solver {
     day: DAY_NUM,
