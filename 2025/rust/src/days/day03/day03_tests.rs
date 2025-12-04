@@ -46,10 +46,14 @@ fn solution_part_one() {
 }
 
 #[test]
-#[ignore]
 fn sample_01_part_two() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec![
+    "987654321111111",
+    "811111111111119",
+    "234234234234278",
+    "818181911112111",
+  ];
+  let expected_output: i64 = 3121910778619;
 
   let solver = Day03Solver {
     day: DAY_NUM,
@@ -62,7 +66,6 @@ fn sample_01_part_two() {
 }
 
 #[test]
-#[ignore]
 fn solution_part_two() {
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
@@ -119,12 +122,25 @@ fn examples_part_one() {
 }
 
 #[test]
-#[ignore]
 fn examples_part_two() {
-  let examples: Vec<AocExample<i64>> = vec![AocExample {
-    raw_input: vec![],
-    expected_output: 0,
-  }];
+  let examples: Vec<AocExample<i64>> = vec![
+    AocExample {
+      raw_input: vec!["987654321111111"],
+      expected_output: 987654321111,
+    },
+    AocExample {
+      raw_input: vec!["811111111111119"],
+      expected_output: 811111111119,
+    },
+    AocExample {
+      raw_input: vec!["234234234234278"],
+      expected_output: 434234234278,
+    },
+    AocExample {
+      raw_input: vec!["818181911112111"],
+      expected_output: 888911112111,
+    },
+  ];
 
   let solver = Day03Solver {
     day: DAY_NUM,
