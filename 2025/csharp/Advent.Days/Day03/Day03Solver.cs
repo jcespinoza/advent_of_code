@@ -2,22 +2,43 @@
 
 namespace Advent.Days
 {
-    public class Day03Solver : Solver<object[], long>
+    public class Day03Solver : Solver<BatteryBank[], long>
     {
         public Day03Solver() : base(2025, 03) { }
 
-        public override object[] ParseInput(IEnumerable<string> input)
-            => input.ToArray();
+        public override BatteryBank[] ParseInput(IEnumerable<string> input)
+            => input.Select(BatteryBank.From).ToArray();
 
-
-        public override long PartOne(object[] input)
+        public override long PartOne(BatteryBank[] input)
         {
-            throw new NotImplementedException();
+            var numberOfBatteries = 2;
+            long totalCharge = 0;
+
+            foreach (var bank in input)
+            {
+                var top = bank.TopNBatteries(numberOfBatteries);
+                var chargeStr = string.Concat(top.Select(d => d.ToString()));
+                var charge = long.Parse(chargeStr);
+                totalCharge += charge;
+            }
+
+            return totalCharge;
         }
 
-        public override long PartTwo(object[] input)
+        public override long PartTwo(BatteryBank[] input)
         {
-            throw new NotImplementedException();
+            var numberOfBatteries = 12;
+            long totalCharge = 0;
+
+            foreach (var bank in input)
+            {
+                var top = bank.TopNBatteries(numberOfBatteries);
+                var chargeStr = string.Concat(top.Select(d => d.ToString()));
+                var charge = long.Parse(chargeStr);
+                totalCharge += charge;
+            }
+
+            return totalCharge;
         }
     }
 }
