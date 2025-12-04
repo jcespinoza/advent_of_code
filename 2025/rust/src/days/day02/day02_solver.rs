@@ -1,7 +1,7 @@
 #![allow(unused)]
 use crate::{
   common::SteppedSolver,
-  days::day02::{identify_invalid_ids_part_one, identify_invalid_ids_part_two, Range},
+  days::day02::{identify_invalid_ids, Range, ValidationStrategy},
 };
 
 #[derive(Debug)]
@@ -28,7 +28,7 @@ impl SteppedSolver<Vec<Range>, Vec<Range>, i64, i64> for Day02Solver {
     let mut invalid_ids: Vec<i64> = Vec::new();
 
     for range in input.iter() {
-      let mut ids = identify_invalid_ids_part_one(range);
+      let mut ids = identify_invalid_ids(range, ValidationStrategy::HalvesMatch);
       invalid_ids.append(&mut ids);
     }
 
@@ -39,7 +39,7 @@ impl SteppedSolver<Vec<Range>, Vec<Range>, i64, i64> for Day02Solver {
     let mut invalid_ids: Vec<i64> = Vec::new();
 
     for range in input.iter() {
-      let mut ids = identify_invalid_ids_part_two(range);
+      let mut ids = identify_invalid_ids(range, ValidationStrategy::RepeatingPattern);
       invalid_ids.append(&mut ids);
     }
 
