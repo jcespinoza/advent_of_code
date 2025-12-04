@@ -43,10 +43,11 @@ fn solution_part_one() {
 }
 
 #[test]
-#[ignore]
 fn sample_01_part_two() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec![
+    "L68", "L30", "R48", "L5", "R60", "L55", "L1", "L99", "R14", "L82",
+  ];
+  let expected_output: i64 = 6;
 
   let solver = Day01Solver {
     day: DAY_NUM,
@@ -59,13 +60,12 @@ fn sample_01_part_two() {
 }
 
 #[test]
-#[ignore]
 fn solution_part_two() {
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART2: i64 = 0;
+  const EXPECTED_SOLUTION_PART2: i64 = 5941;
 
   let solver = Day01Solver {
     day: DAY_NUM,
@@ -78,11 +78,10 @@ fn solution_part_two() {
 }
 
 #[test]
-#[ignore]
 fn examples_part_two() {
   let examples: Vec<AocExample<i64>> = vec![AocExample {
-    raw_input: vec![],
-    expected_output: 0,
+    raw_input: vec!["R1000"],
+    expected_output: 10,
   }];
 
   let solver = Day01Solver {
