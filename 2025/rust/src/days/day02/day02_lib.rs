@@ -13,10 +13,10 @@ impl From<&str> for Range {
   }
 }
 
-pub fn identify_invalid_ids(range: &Range) -> Vec<i64> {
+pub fn identify_invalid_ids_part_one(range: &Range) -> Vec<i64> {
   let mut invalid_ids = Vec::new();
   for id in range.start..=range.end {
-    if !is_id_valid(id) {
+    if !is_id_valid_part_one(id) {
       invalid_ids.push(id);
     }
   }
@@ -24,7 +24,7 @@ pub fn identify_invalid_ids(range: &Range) -> Vec<i64> {
 }
 
 // An id is valid if when their digits are split into two halves, the resulting numbers are different
-fn is_id_valid(id: i64) -> bool {
+fn is_id_valid_part_one(id: i64) -> bool {
   let id_str = id.to_string();
   let len = id_str.len();
 
