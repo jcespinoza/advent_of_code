@@ -35,10 +35,7 @@ impl RemotePuzzleInputReaderStrategy {
 
   fn get_cookie_value() -> Result<String, io::Error> {
     env::var("AOC_COOKIE").map_err(|_| {
-      io::Error::new(
-        io::ErrorKind::Other,
-        "You need to specify your cookie in order to get your input puzzle",
-      )
+      io::Error::other("You need to specify your cookie in order to get your input puzzle")
     })
   }
 
@@ -52,7 +49,7 @@ impl RemotePuzzleInputReaderStrategy {
         headers
       })
       .build()
-      .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
+      .map_err(|e| io::Error::other(e.to_string()))?;
     Ok(client)
   }
 
@@ -88,16 +85,15 @@ impl RemotePuzzleInputReaderStrategy {
       .get(&url)
       .send()
       .await
-      .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
+      .map_err(|e| io::Error::other(e.to_string()))?;
     let string_result = response
       .text()
       .await
-      .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
+      .map_err(|e| io::Error::other(e.to_string()))?;
 
     // If the response starts with the text "Puzzle inputs differ by user", throw an error
     if string_result.starts_with("Puzzle inputs differ by user") {
-      return Err(io::Error::new(
-        io::ErrorKind::Other,
+      return Err(io::Error::other(
         "Unable to fetch the puzzle input. Please make sure you have the correct cookie",
       ));
     }
