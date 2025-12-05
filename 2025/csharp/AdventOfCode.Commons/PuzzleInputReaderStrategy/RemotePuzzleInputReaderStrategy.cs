@@ -51,17 +51,17 @@ public class RemotePuzzleInputReaderStrategy : IPuzzleInputReaderStrategy
     /// </exception>
     private static CookieContainer GetCookieContainer()
     {
-        var container = new CookieContainer();
+        DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false, probeForEnv: true, probeLevelsToSearch: 4));
 
-        string? cookieValue = Configuration.CookieValue;
+        var container = new CookieContainer();
 
         container.Add(new Cookie
         {
             Name = "session",
             Domain = ".adventofcode.com",
-            Value = string.IsNullOrEmpty(cookieValue)
+            Value = string.IsNullOrEmpty(Configuration.CookieValue)
                 ? throw new Exception("You need to specify your cookie in order to get your input puzzle")
-                : cookieValue,
+                : Configuration.CookieValue,
         });
 
         return container;
@@ -70,38 +70,44 @@ public class RemotePuzzleInputReaderStrategy : IPuzzleInputReaderStrategy
     /// <inheritdoc />
     public IEnumerable<string> ReadInput()
     {
-        if (Day <= 0) throw new InvalidOperationException("Day must be a positive integer");
+        // Prefer a local cached file when available. This avoids network calls during tests.
+        DotEnv.Load();
+        var inputsPath = Environment.GetEnvironmentVariable("AOC_INPUT_PATH") ?? "inputs";
+        var filePath = Path.Combine(inputsPath, "puzzle_inputs", $"{Year}_{Day}.txt");
+
+        if (File.Exists(filePath))
+        {
+            var content = File.ReadAllLines(filePath);
+            return content;
+        }
 
         var task = Task.Run(async () =>
         {
-            DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false, probeForEnv: true, probeLevelsToSearch: 4));
-
-            string inputsPath = Configuration.InputPath ?? "inputs";
-
-            // check if the file already exists
-            if (File.Exists($"{inputsPath}/puzzle_inputs/{Year}_{Day}.txt"))
-            {
-                return File.ReadAllText($"{inputsPath}/puzzle_inputs/{Year}_{Day}.txt");
-            }
-
             var response = await Client.GetAsync($"/{Year}/day/{Day}/input");
 
-            var stringResult = await response.EnsureSuccessStatusCode()
+            return await response.EnsureSuccessStatusCode()
                 .Content
                 .ReadAsStringAsync();
-
-            if (!string.IsNullOrWhiteSpace(stringResult))
-            {
-                // store in a temporary file
-                File.WriteAllText($"{inputsPath}/puzzle_inputs/{Year}_{Day}.txt", stringResult);
-            }
-
-            return stringResult;
         });
 
         task.Wait();
 
-        var content = task.Result;
-        return content.Split("\n")[..^1];
+        var contentStr = task.Result ?? string.Empty;
+
+        // Normalize lines: split and remove trailing empty line if present
+        var lines = contentStr.Split('\n');
+        if (lines.Length > 0 && string.IsNullOrWhiteSpace(lines[^1]))
+        {
+            lines = lines[..^1];
+        }
+
+        // Cache to inputs path if non-empty
+        if (!string.IsNullOrWhiteSpace(contentStr))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? inputsPath);
+            File.WriteAllText(filePath, contentStr);
+        }
+
+        return lines;
     }
 }

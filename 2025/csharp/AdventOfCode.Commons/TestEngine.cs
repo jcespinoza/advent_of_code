@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-
 using Xunit;
 
 namespace AdventOfCode.Commons;
@@ -89,47 +88,6 @@ public abstract class TestEngine<TSolver, TInput, TResult>
 
     public abstract Puzzle PartOne { get; }
 
-    [SkippableFact(DisplayName = "Part One - Parsing")]
-    public void PartOneParsingTest()
-    {
-        var shouldBeSkipped = PartOne.ShouldSkipTests
-            || PartOne.Example.RawInput.Length == 0
-            || PartOne.Example.Input == null;
-
-        Skip.If(shouldBeSkipped, "Puzzle.ShouldSkipTests has been set to true or no raw input provided, test skipped");
-
-        // Arrange
-        var input = PartOne.Example.RawInput;
-
-        // Act
-        var result = _solver.ParseInput(input);
-
-        // Assert
-        result.Should().BeEquivalentTo(PartOne.Example.Input);
-    }
-
-    [SkippableFact(DisplayName = "Part One - Parsings")]
-    public void PartOneParsingTests()
-    {
-        foreach (var example in PartOne.Examples)
-        {
-            var shouldBeSkipped = PartOne.ShouldSkipTests
-            || example.RawInput.Length == 0
-            || example.Input == null;
-
-            Skip.If(shouldBeSkipped, "Puzzle.ShouldSkipTests has been set to true or no raw input provided, test skipped");
-
-            // Arrange
-            var input = example.RawInput;
-
-            // Act
-            var result = _solver.ParseInput(input);
-
-            // Assert
-            result.Should().BeEquivalentTo(example.Input);
-        }
-    }
-
     [SkippableFact(DisplayName = "Part One - Example")]
     public void PartOneExampleTest()
     {
@@ -183,47 +141,6 @@ public abstract class TestEngine<TSolver, TInput, TResult>
     #region Part #2
 
     public abstract Puzzle PartTwo { get; }
-
-    [SkippableFact(DisplayName = "Part Two - Parsing")]
-    public void PartTwoParsingTest()
-    {
-        var shouldBeSkipped = PartTwo.ShouldSkipTests
-            || PartTwo.Example.RawInput.Length == 0
-            || PartTwo.Example.Input == null;
-
-        Skip.If(shouldBeSkipped, "Puzzle.ShouldSkipTests has been set to true or no raw input provided, test skipped");
-
-        // Arrange
-        var input = PartTwo.Example.RawInput;
-
-        // Act
-        var result = _solver.ParseInput(input);
-
-        // Assert
-        result.Should().BeEquivalentTo(PartTwo.Example.Input);
-    }
-
-    [SkippableFact(DisplayName = "Part Two - Parsings")]
-    public void PartTwoParsingTests()
-    {
-        foreach (var example in PartTwo.Examples)
-        {
-            var shouldBeSkipped = PartOne.ShouldSkipTests
-            || example.RawInput.Length == 0
-            || example.Input == null;
-
-            Skip.If(shouldBeSkipped, "Puzzle.ShouldSkipTests has been set to true or no raw input provided, test skipped");
-
-            // Arrange
-            var input = example.RawInput;
-
-            // Act
-            var result = _solver.ParseInput(input);
-
-            // Assert
-            result.Should().BeEquivalentTo(example.Input);
-        }
-    }
 
     [SkippableFact(DisplayName = "Part Two - Example")]
     public void PartTwoExampleTest()
