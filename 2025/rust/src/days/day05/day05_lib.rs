@@ -54,20 +54,31 @@ pub fn merge_ranges(ranges: &Vec<(i64, i64)>) -> Vec<(i64, i64)> {
   }
 
   let mut sorted_ranges = ranges.clone();
+  // Sort ranges by their start value so we can merge in a single pass.
   sorted_ranges.sort_by_key(|k| k.0);
 
+  // `merged_ranges` will collect the resulting non-overlapping ranges.
   let mut merged_ranges = Vec::new();
+
+  // Start with the first (lowest-start) range as the current one to compare against.
   let mut current_range = sorted_ranges[0];
 
+  // Iterate the remaining ranges and merge them into `current_range` when they
+  // overlap or are contiguous (i.e., the next start is <= current end + 1).
   for &range in sorted_ranges.iter().skip(1) {
+    // If the next range starts before or immediately after the current range ends,
+    // extend the `current_range` to include it (take the max end).
     if range.0 <= current_range.1 + 1 {
       current_range.1 = current_range.1.max(range.1);
     } else {
+      // Otherwise, the ranges are disjoint: push the finished `current_range`
+      // and begin a new one.
       merged_ranges.push(current_range);
       current_range = range;
     }
   }
 
+  // Push the last accumulated range and return the merged list.
   merged_ranges.push(current_range);
   merged_ranges
 }
