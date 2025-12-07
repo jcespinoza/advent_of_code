@@ -1,5 +1,8 @@
 #![allow(unused)]
-use crate::{common::SteppedSolver, days::day05::IngrendientDb};
+use crate::{
+  common::SteppedSolver,
+  days::day05::{merge_ranges, IngrendientDb},
+};
 
 #[derive(Debug)]
 pub struct Day05Solver {
@@ -34,6 +37,12 @@ impl SteppedSolver<IngrendientDb, IngrendientDb, i64, i64> for Day05Solver {
   }
 
   fn solve_part_two(&self, input: IngrendientDb) -> i64 {
-    unimplemented!()
+    let merged_ranges = merge_ranges(&input.fresh_id_ranges);
+
+    // Now sum up the total number of fresh IDs in the merged ranges
+    merged_ranges
+      .iter()
+      .map(|&(start, end)| end - start + 1)
+      .sum()
   }
 }

@@ -46,3 +46,28 @@ impl From<Vec<&str>> for IngrendientDb {
     }
   }
 }
+
+/// Returns a new list of ranges that merges overlapping and contiguous ranges
+pub fn merge_ranges(ranges: &Vec<(i64, i64)>) -> Vec<(i64, i64)> {
+  if ranges.is_empty() {
+    return Vec::new();
+  }
+
+  let mut sorted_ranges = ranges.clone();
+  sorted_ranges.sort_by_key(|k| k.0);
+
+  let mut merged_ranges = Vec::new();
+  let mut current_range = sorted_ranges[0];
+
+  for &range in sorted_ranges.iter().skip(1) {
+    if range.0 <= current_range.1 + 1 {
+      current_range.1 = current_range.1.max(range.1);
+    } else {
+      merged_ranges.push(current_range);
+      current_range = range;
+    }
+  }
+
+  merged_ranges.push(current_range);
+  merged_ranges
+}
