@@ -8,8 +8,25 @@ const DAY_NUM: i32 = 7;
 
 #[test]
 fn sample_01_part_one() {
-  let raw_input = vec![];
-  let expected_output: i64 = 0;
+  let raw_input = vec![
+    ".......S.......",
+    "...............",
+    ".......^.......",
+    "...............",
+    "......^.^......",
+    "...............",
+    ".....^.^.^.....",
+    "...............",
+    "....^.^...^....",
+    "...............",
+    "...^.^...^.^...",
+    "...............",
+    "..^...^.....^..",
+    "...............",
+    ".^.^.^.^.^...^.",
+    "...............",
+  ];
+  let expected_output: i64 = 21;
 
   let solver = Day07Solver {
     day: DAY_NUM,
@@ -22,14 +39,13 @@ fn sample_01_part_one() {
 }
 
 #[test]
-#[ignore]
 fn solution_part_one() {
   #[allow(dead_code)]
   let remote_input = PuzzleInputProvider::new_remote(YEAR_NUM, DAY_NUM)
     .read_input()
     .unwrap();
   let raw_input = remote_input.iter().map(|x| x.as_str()).collect();
-  const EXPECTED_SOLUTION_PART1: i64 = 0;
+  const EXPECTED_SOLUTION_PART1: i64 = 1533;
 
   let solver = Day07Solver {
     day: DAY_NUM,
@@ -44,7 +60,24 @@ fn solution_part_one() {
 #[test]
 #[ignore]
 fn sample_01_part_two() {
-  let raw_input = vec![];
+  let raw_input = vec![
+    ".......S.......",
+    "...............",
+    ".......^.......",
+    "...............",
+    "......^.^......",
+    "...............",
+    ".....^.^.^.....",
+    "...............",
+    "....^.^...^....",
+    "...............",
+    "...^.^...^.^...",
+    "...............",
+    "..^...^.....^..",
+    "...............",
+    ".^.^.^.^.^...^.",
+    "...............",
+  ];
   let expected_output: i64 = 0;
 
   let solver = Day07Solver {

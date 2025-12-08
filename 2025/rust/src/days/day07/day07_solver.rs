@@ -1,5 +1,5 @@
 #![allow(unused)]
-use crate::common::SteppedSolver;
+use crate::{common::SteppedSolver, days::day07::TachyonManifold};
 
 #[derive(Debug)]
 pub struct Day07Solver {
@@ -7,20 +7,24 @@ pub struct Day07Solver {
   pub year: i32,
 }
 
-impl SteppedSolver<Vec<i32>, Vec<i32>, i64, i64> for Day07Solver {
-  fn parse_input_one(&self, input: Vec<&str>) -> Vec<i32> {
-    unimplemented!()
+impl SteppedSolver<TachyonManifold, TachyonManifold, i64, i64> for Day07Solver {
+  fn parse_input_one(&self, input: Vec<&str>) -> TachyonManifold {
+    TachyonManifold::from(input.join("\n").as_str())
   }
 
-  fn parse_input_two(&self, input: Vec<&str>) -> Vec<i32> {
-    unimplemented!()
+  fn parse_input_two(&self, input: Vec<&str>) -> TachyonManifold {
+    self.parse_input_one(input)
   }
 
-  fn solve_part_one(&self, input: Vec<i32>) -> i64 {
-    unimplemented!()
+  fn solve_part_one(&self, mut input: TachyonManifold) -> i64 {
+    // trigger the beam and extend the tachyon paths
+    input.extend_tachyon_beams();
+
+    // Count the number of splitters that were hit by tachyons
+    input.count_hit_splitters()
   }
 
-  fn solve_part_two(&self, input: Vec<i32>) -> i64 {
+  fn solve_part_two(&self, input: TachyonManifold) -> i64 {
     unimplemented!()
   }
 }
