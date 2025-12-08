@@ -71,3 +71,15 @@ pub mod day06 {
   mod day06_solver;
   mod day06_tests;
 }
+
+pub mod day07 {
+  pub use day07_impl::*;
+  pub use day07_lib::*;
+  pub use day07_solver::*;
+  pub use day07_tests::*;
+
+  mod day07_impl;
+  mod day07_lib;
+  mod day07_solver;
+  mod day07_tests;
+}
