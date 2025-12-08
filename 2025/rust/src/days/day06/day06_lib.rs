@@ -80,9 +80,9 @@ fn cephalopod_form_read(input: Vec<&str>, problems: &mut Vec<Problem>) {
   // The start index is where the operation symbol lies in the last row.
   // The end of the column is 1 minus the location of the operation symbol of the next column (or the end of the line for the last column).
   // The start and end indices should never be the same
-  let last_row = input.len() - 1;
+  let last_row_index = input.len() - 1;
   let mut col_start_end_indices: Vec<(usize, usize)> = Vec::new();
-  let last_line = input[last_row];
+  let last_line = input[last_row_index];
 
   let mut current_start: Option<usize> = None;
   for (idx, ch) in last_line.chars().enumerate() {
@@ -118,8 +118,7 @@ fn cephalopod_form_read(input: Vec<&str>, problems: &mut Vec<Problem>) {
     for char_index in *start..*end {
       // keep track of the digits that we find at the current char_index in all rows
       let mut number_str = String::new();
-      for row_idx in 0..last_row {
-        let line = input[row_idx];
+      for line in input.iter().take(last_row_index) {
         // add it to the number string if it's not a space
         if line.chars().nth(char_index).unwrap() != ' ' {
           number_str.push(line.chars().nth(char_index).unwrap());
