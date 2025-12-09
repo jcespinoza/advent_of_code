@@ -25,6 +25,6 @@ impl SteppedSolver<TachyonManifold, TachyonManifold, i64, i64> for Day07Solver {
   }
 
   fn solve_part_two(&self, input: TachyonManifold) -> i64 {
-    unimplemented!()
+    input.compute_timeline_count()
   }
 }
